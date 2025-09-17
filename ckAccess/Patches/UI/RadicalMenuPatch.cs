@@ -64,6 +64,27 @@ namespace ckAccess.Patches.UI
                 UIManager.Speak(UIManager.GetLocalizedText("delete"));
                 return;
             }
+
+            if (selectedOption is PugOther.SaveSlotPlayOption saveSlotPlay)
+            {
+                if (saveSlotPlay.text.localize) // Slot is empty
+                {
+                    UIManager.Speak(UIManager.GetLocalizedText(saveSlotPlay.text.GetText()));
+                }
+                else // Slot has a character
+                {
+                    string characterName = saveSlotPlay.characterName.ProcessText();
+                    string characterType = saveSlotPlay.characterType.ProcessText();
+                    UIManager.Speak($"{characterName}, {characterType}");
+                }
+                return;
+            }
+            if (selectedOption is PugOther.SaveSlotDeleteOption)
+            {
+                UIManager.Speak(UIManager.GetLocalizedText("delete"));
+                return;
+            }
+
             if (selectedOption is PugOther.RadicalJoinGameMenu_JoinMethodDropdown joinMethodDropdown)
             {
                 // Announce the current value of the dropdown.

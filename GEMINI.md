@@ -3,7 +3,12 @@
 * al ejecutar una tarea que el usuario pida, siempre estudiar la mejor forma de implementar, que sea menos invasiva para el juego y estudiar el código que están en las carpetas ck code 1 y ck code 2. En caso de no poder accederse a campos y métodos privados, usar reflexión. también no olvidar/tocar los alias en el csproj, que ya están puestos aí.
 * Siempre procurar hacer el código por parches pequeños, analizando bien la estructura de las carpetas y de los parches anteriores para tomarse como ejemplo.
 * Los parches de menús deben ser lo menos invasivo posible para evitar cambios en el comportamiento del juego.
+* Al buscar en el código del juego, ignorar siempre los patrones de .gitignore para asegurar un análisis completo.
 
+---
+### Información del Repositorio
+*   **URL:** git@github.com:Ali-Bueno/CkAccess.git
+*   **Rama Principal:** main
 ---
 ### Principios de Accesibilidad
 
@@ -29,25 +34,34 @@ Este es el parche universal que se encarga de verbalizar las opciones de los men
         *   `WorldSlotMoreOption` y `WorldSlotDeleteOption`: Anuncia un texto localizado o manual para estos botones, que carecen de texto visible.
         *   **`RadicalJoinGameMenu_JoinMethodDropdown`:** Se ha añadido un parche específico para este componente. En lugar de parchear el menú principal, se parchea el método `NavigateInternally` del propio dropdown. Esto permite interceptar la navegación con flechas *dentro* de la lista de opciones (ID o IP) y anunciar el texto del elemento recién seleccionado, solucionando el problema de la falta de verbalización.
 
-#### 2. Gestión del Foco Inicial (`MenuActivatePatches.cs`)
+#### 2. Gestión del Foco Inicial
 
-Este archivo centraliza todos los parches responsables de asegurar que la navegación por teclado funcione correctamente al entrar o regresar a un menú.
+Este apartado describe los parches responsables de asegurar que la navegación por teclado funcione correctamente al entrar o regresar a un menú.
 
-*   **Objetivo:** Varios menús (`WorldSettingsMenu`, `CharacterCustomizationMenu`, `SelectWorldMenu`, `RadicalJoinGameMenu`, etc.).
-*   **Método Parcheado:** `Activate` en cada menú objetivo.
-*   **Funcionamiento:** Utiliza corrutinas para ejecutar la lógica de enfoque después de que el menú se haya inicializado completamente. Se emplean diferentes estrategias según las necesidades de cada menú:
-    *   **`ForceSelectionCoroutine`:** La corrutina estándar. Deselecciona cualquier elemento que el juego haya podido enfocar automáticamente y luego selecciona la primera opción del menú. Se usa en la mayoría de los menús para garantizar un punto de partida limpio.
-    *   **`UndoAndForceSelectionCoroutine`:** Una corrutina más agresiva, diseñada para menús con campos de texto como `CharacterCustomizationMenu` y `RadicalJoinGameMenu`. Desactiva a la fuerza el "modo de escritura" del juego (`Manager.input.SetActiveInputField(null)`) antes de seleccionar una opción segura (la primera que no sea un campo de texto). Esto es crucial para evitar el bloqueo del teclado.
+*   **`MenuActivatePatches.cs`:**
+    *   **Objetivo:** Varios menús (`WorldSettingsMenu`, `CharacterCustomizationMenu`, `SelectWorldMenu`, `CharacterTypeSelectionMenu`, `ChooseCharacterMenu`, `SelectWorldMenu`).
+    *   **Método Parcheado:** `Activate` en cada menú objetivo.
+    *   **Funcionamiento:** Utiliza una corrutina (`ForceSafeSelectionCoroutine`) para ejecutar la lógica de enfoque después de que el menú se haya inicializado completamente. Desactiva a la fuerza el "modo de escritura" del juego (`Manager.input.SetActiveInputField(null)`) y selecciona la primera opción interactuable que no sea un campo de texto, o la primera opción disponible como fallback. Esto es crucial para evitar el bloqueo del teclado.
+
+*   **`WorldSettingsMenuPatches.cs`:**
+    *   **Objetivo:** `PugOther.WorldSettingsMenu`
+    *   **Método Parcheado:** `ActivateMenuIndex`
+    *   **Funcionamiento:** Utiliza una corrutina (`DelayedFocusReset`) lanzada desde un `Postfix` para asegurar que, después de cambiar de pestaña en el menú de ajustes del mundo, el foco se restablezca correctamente. Desactiva cualquier campo de texto activo y selecciona la primera opción interactuable en la nueva pestaña, previniendo bloqueos de input.
 
 ### Plan de Desarrollo
 
 - **Completado:** Refactorización y centralización de todos los parches de menús.
 - **Completado:** Accesibilidad del menú principal, menú de ajustes, slots de mundo, selección de tipo de personaje y menú de personalización de personaje.
 - **Completado:** Accesibilidad del menú de unirse a partida, incluyendo la navegación por teclado y la lectura de opciones del dropdown.
+- **Completado:** Accesibilizar los slots de personajes.
 
 ### Próximos Pasos
 
 1.  **Accesibilizar el inventario del jugador:** Analizar la estructura del inventario y aplicar parches para leer la información de los objetos (nombre, cantidad, descripción).
 2.  **Mejorar personalización de personaje:** Investigar cómo obtener los nombres o descripciones de las opciones de apariencia (ej. "Pelo largo", "Rojo") en lugar de solo "Estilo X de Y".
-3.  **Accesibilizar los slots de personajes:** Aplicar el mismo enfoque centralizado para leer la información de cada slot de personaje.
-4.  **Verificar y pulir:** Probar exhaustivamente todos los menús para asegurar que la lectura sea fluida y no haya regresiones.
+3.  **Verificar y pulir:** Probar exhaustivamente todos los menús para asegurar que la lectura sea fluida y no haya regresiones.
+
+---
+### Workaround Temporal
+
+*   **Menú "Unirse a la Partida":** Actualmente, para que la navegación por teclado funcione correctamente en el menú "Unirse a la Partida", es necesario mantener el cursor del ratón en el centro de la pantalla. Si el ratón se encuentra en los bordes superior o inferior de la ventana del juego, la navegación con las flechas del teclado puede bloquearse. Este es un comportamiento temporal mientras se investiga una solución más permanente.

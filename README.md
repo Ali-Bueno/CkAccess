@@ -38,3 +38,8 @@ Make sure the paths to these libraries are correct in your development environme
 2.  **Improve character customization:** Investigate how to get the names or descriptions of appearance options (e.g., "Long Hair", "Red") instead of just "Style X of Y".
 3.  **Make character slots accessible:** Apply the same centralized approach to read the information for each character slot.
 4.  **Verify and polish:** Thoroughly test all menus to ensure that the reading is fluid and there are no regressions.
+
+---
+### Temporary Workaround
+
+*   **"Join Game" Menu:** Currently, for keyboard navigation to work correctly in the "Join Game" menu, you need to keep the mouse cursor in the center of the screen. If the mouse is at the top or bottom edges of the game window, navigation with the arrow keys may be blocked. This is a temporary behavior while a more permanent solution is being investigated.
