@@ -67,9 +67,9 @@ Se ha detectado que en ciertos menús, como los slots de mundo y personaje, el e
 - **Completado:** Accesibilidad del menú de unirse a partida, incluyendo la navegación por teclado y la lectura de opciones del dropdown.
 - **Completado:** Accesibilizar los slots de personajes.
 - **Completado:** Refactorización del código para eliminar duplicados en la gestión del foco de los menús.
-- **Completado:** Accesibilidad del inventario.
+- **Completado:** Accesibilidad del inventario y pestañas de personaje.
   - **Completado:** Lectura de nombre, cantidad, durabilidad, atributos y tooltip de los objetos en los slots.
-  - **Completado:** Accesibilidad de las pestañas de personaje (Equipamiento, Habilidades) para mando y ratón.
+  - **Completado:** Accesibilidad de las pestañas de personaje (Equipamiento, Habilidades) y su contenido para mando y ratón.
 
 ### Próximos Pasos
 

@@ -50,14 +50,14 @@ namespace ckAccess.Patches.UI
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(PugOther.UIelement), "OnSelected")]
-        public static void OnSelected_Postfix(PugOther.UIelement __instance)
+        [HarmonyPatch(typeof(PugOther.UIManager), "OnUIElementSelected")]
+        public static void OnUIElementSelected_Postfix(PugOther.UIelement uiElement)
         {
-            if (__instance is PugOther.CharacterWindowTab tab)
+            if (uiElement is PugOther.CharacterWindowTab tab)
             {
                 AnnounceTabInfo(tab);
             }
-            else if (__instance is PugOther.SkillUIElement skill)
+            else if (uiElement is PugOther.SkillUIElement skill)
             {
                 AnnounceSkillInfo(skill);
             }
