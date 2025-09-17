@@ -9,17 +9,23 @@ namespace ckAccess.Patches.UI
 {
     public static class MenuActivatePatches
     {
-        private static IEnumerator ForceSafeSelectionCoroutine(PugOther.RadicalMenu menu)
+        public static IEnumerator ForceSafeSelectionCoroutine(PugOther.RadicalMenu menu)
         {
             yield return new WaitForEndOfFrame();
             PugOther.Manager.input.SetActiveInputField(null);
 
-            if (menu.selectedIndex != -1 && menu.GetSelectedMenuOption()?.IsSelectionEnabled() == true)
+            var menuOptions = (menu is PugOther.WorldSettingsMenu wsm) ? wsm.GetAllCurrentlyActiveMenuOptions() : menu.menuOptions;
+
+            if (menu.selectedIndex != -1)
             {
-                yield break;
+                var selectedOption = menu.GetSelectedMenuOption();
+                if (selectedOption != null && selectedOption.IsSelectionEnabled())
+                {
+                    yield break;
+                }
             }
 
-            var safeOption = menu.menuOptions.FirstOrDefault(opt => !(opt is PugOther.RadicalMenuOptionTextInput) && opt.IsSelectionEnabled());
+            var safeOption = menuOptions.FirstOrDefault(opt => !(opt is PugOther.RadicalMenuOptionTextInput) && opt.IsSelectionEnabled());
             if (safeOption != null)
             {
                 int index = menu.GetIndexForOption(safeOption);
@@ -27,7 +33,7 @@ namespace ckAccess.Patches.UI
             }
             else
             {
-                var firstEnabled = menu.menuOptions.FirstOrDefault(opt => opt.IsSelectionEnabled());
+                var firstEnabled = menuOptions.FirstOrDefault(opt => opt.IsSelectionEnabled());
                 if (firstEnabled != null)
                 {
                     int index = menu.GetIndexForOption(firstEnabled);

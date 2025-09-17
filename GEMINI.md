@@ -54,6 +54,7 @@ Este apartado describe los parches responsables de asegurar que la navegación p
 - **Completado:** Accesibilidad del menú principal, menú de ajustes, slots de mundo, selección de tipo de personaje y menú de personalización de personaje.
 - **Completado:** Accesibilidad del menú de unirse a partida, incluyendo la navegación por teclado y la lectura de opciones del dropdown.
 - **Completado:** Accesibilizar los slots de personajes.
+- **Completado:** Refactorización del código para eliminar duplicados en la gestión del foco de los menús.
 
 ### Próximos Pasos
 
