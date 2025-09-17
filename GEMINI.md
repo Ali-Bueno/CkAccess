@@ -19,7 +19,7 @@
 ---
 ### Arquitectura de Parches de UI
 
-Se ha implementado una arquitectura de parches centralizada y robusta para gestionar la accesibilidad de los menús del juego. Este enfoque se divide en dos responsabilidades principales: la **lectura de opciones** y la **gestión del foco inicial**.
+Se ha implementado una arquitectura de parches centralizada y robusta para gestionar la accesibilidad de los menús del juego. Este enfoque se divide en dos responsabilidades principales: la **lectura de opciones**, la **gestión del foco inicial** y la **corrección de anuncios duplicados**.
 
 #### 1. Lectura de Opciones (`RadicalMenuPatch.cs`)
 
@@ -48,6 +48,16 @@ Este apartado describe los parches responsables de asegurar que la navegación p
     *   **Objetivo:** `PugOther.WorldSettingsMenu`
     *   **Método Parcheado:** `ActivateMenuIndex`
     *   **Funcionamiento:** Utiliza una corrutina (`DelayedFocusReset`) lanzada desde un `Postfix` para asegurar que, después de cambiar de pestaña en el menú de ajustes del mundo, el foco se restablezca correctamente. Desactiva cualquier campo de texto activo y selecciona la primera opción interactuable en la nueva pestaña, previniendo bloqueos de input.
+
+#### 3. Corrección de Anuncios Duplicados (Debounce)
+
+Se ha detectado que en ciertos menús, como los slots de mundo y personaje, el evento `OnSelectedOptionChanged` se dispara dos veces consecutivas, provocando que el lector de pantalla anuncie la misma opción dos veces.
+
+*   **Solución:** Se ha implementado una técnica de "debounce" en `RadicalMenuPatch.cs`.
+*   **Funcionamiento:**
+    1.  Se guarda una marca de tiempo (`lastAnnounceTime`) y el texto del último anuncio (`lastAnnouncedText`).
+    2.  Antes de verbalizar una nueva opción, se comprueba si el texto es idéntico al anterior y si ha transcurrido un tiempo mínimo (50 milisegundos).
+    3.  Si ambas condiciones se cumplen, el segundo anuncio se ignora. Esto filtra eficazmente las llamadas duplicadas sin afectar la capacidad de respuesta del usuario.
 
 ### Plan de Desarrollo
 

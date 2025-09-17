@@ -6,6 +6,7 @@ using BepInEx.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace ckAccess.Patches.UI
 {
@@ -13,6 +14,21 @@ namespace ckAccess.Patches.UI
     public static class RadicalMenuPatch
     {
         private static ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("RadicalMenuPatch");
+        private static string lastAnnouncedText = "";
+        private static float lastAnnounceTime = 0f;
+        private const float debounceTime = 0.05f; // 50ms
+
+        private static void DebouncedSpeak(string text)
+        {
+            if (text == lastAnnouncedText && Time.unscaledTime - lastAnnounceTime < debounceTime)
+            {
+                return;
+            }
+            
+            UIManager.Speak(text);
+            lastAnnouncedText = text;
+            lastAnnounceTime = Time.unscaledTime;
+        }
 
         [HarmonyPostfix]
         [HarmonyPatch("OnSelectedOptionChanged")]
@@ -40,94 +56,85 @@ namespace ckAccess.Patches.UI
             var selectedOption = __instance.GetSelectedMenuOption();
             if (selectedOption == null) return;
 
-            // --- Specific Handlers ---
+            string textToSpeak = GetTextForOption(selectedOption, valueOnly);
 
-            if (selectedOption is PugOther.CharacterCustomizationOption_Selection customOption)
+            if (!string.IsNullOrEmpty(textToSpeak))
             {
-                HandleCharacterCustomizationOption(customOption, valueOnly);
-                return;
+                DebouncedSpeak(textToSpeak);
             }
-            if (selectedOption is PugOther.CharacterTypeOption_Selection characterTypeOption)
+        }
+
+        private static string GetTextForOption(PugOther.RadicalMenuOption option, bool valueOnly)
+        {
+            // --- Specific Handlers ---
+            if (option is PugOther.CharacterCustomizationOption_Selection customOption)
+            {
+                return HandleCharacterCustomizationOption(customOption, valueOnly);
+            }
+            if (option is PugOther.CharacterTypeOption_Selection characterTypeOption)
             {
                 string type = UIManager.GetLocalizedText(characterTypeOption.typeText.GetText());
                 string desc = UIManager.GetLocalizedText(characterTypeOption.typeDescText.GetText());
-                UIManager.Speak(valueOnly ? type : $"{type}, {desc}");
-                return;
+                return valueOnly ? type : $"{type}, {desc}";
             }
-            if (selectedOption is PugOther.WorldSlotMoreOption)
+            if (option is PugOther.WorldSlotMoreOption)
             {
-                UIManager.Speak(GetMoreOptionsTranslation());
-                return;
+                return GetMoreOptionsTranslation();
             }
-            if (selectedOption is PugOther.WorldSlotDeleteOption)
+            if (option is PugOther.WorldSlotDeleteOption)
             {
-                UIManager.Speak(UIManager.GetLocalizedText("delete"));
-                return;
+                return UIManager.GetLocalizedText("delete");
             }
-
-            if (selectedOption is PugOther.SaveSlotPlayOption saveSlotPlay)
+            if (option is PugOther.SaveSlotPlayOption saveSlotPlay)
             {
                 if (saveSlotPlay.text.localize) // Slot is empty
                 {
-                    UIManager.Speak(UIManager.GetLocalizedText(saveSlotPlay.text.GetText()));
+                    return UIManager.GetLocalizedText(saveSlotPlay.text.GetText());
                 }
                 else // Slot has a character
                 {
                     string characterName = saveSlotPlay.characterName.ProcessText();
                     string characterType = saveSlotPlay.characterType.ProcessText();
-                    UIManager.Speak($"{characterName}, {characterType}");
+                    return $"{characterName}, {characterType}";
                 }
-                return;
             }
-            if (selectedOption is PugOther.SaveSlotDeleteOption)
+            if (option is PugOther.SaveSlotDeleteOption)
             {
-                UIManager.Speak(UIManager.GetLocalizedText("delete"));
-                return;
+                return UIManager.GetLocalizedText("delete");
             }
-
-            if (selectedOption is PugOther.RadicalJoinGameMenu_JoinMethodDropdown joinMethodDropdown)
+            if (option is PugOther.RadicalJoinGameMenu_JoinMethodDropdown joinMethodDropdown)
             {
-                // Announce the current value of the dropdown.
-                // The announcement of the options *inside* the dropdown is handled in the patch below.
-                string label = joinMethodDropdown.textResult.ProcessText();
-                UIManager.Speak(label);
-                return;
+                return joinMethodDropdown.textResult.ProcessText();
             }
 
             // --- General Handler ---
             try
             {
-                var pugTexts = selectedOption.GetComponentsInChildren<PugOther.PugText>(true);
-                if (pugTexts == null || pugTexts.Length == 0) return;
+                var pugTexts = option.GetComponentsInChildren<PugOther.PugText>(true);
+                if (pugTexts == null || pugTexts.Length == 0) return "";
 
                 var textParts = new List<string>();
                 foreach (var pugText in pugTexts)
                 {
-                    // Use ProcessText to get the final, formatted string.
-                    string processedText = pugText.ProcessText(); 
+                    string processedText = pugText.ProcessText();
                     if (!string.IsNullOrWhiteSpace(processedText))
                     {
                         textParts.Add(processedText.Trim());
                     }
                 }
-
-                if (textParts.Any())
-                {
-                    string textToSpeak = string.Join(", ", textParts.Distinct());
-                    UIManager.Speak(textToSpeak);
-                }
+                return textParts.Any() ? string.Join(", ", textParts.Distinct()) : "";
             }
             catch (System.Exception e)
             {
-                Logger.LogError($"Exception in AnnounceSelectedOption for {selectedOption.GetType().Name}: {e}");
+                Logger.LogError($"Exception in GetTextForOption for {option.GetType().Name}: {e}");
+                return "";
             }
         }
 
-        private static void HandleCharacterCustomizationOption(PugOther.CharacterCustomizationOption_Selection option, bool valueOnly)
+        private static string HandleCharacterCustomizationOption(PugOther.CharacterCustomizationOption_Selection option, bool valueOnly)
         {
             if (option.changesCharacterRole)
             {
-                // For roles, read all available text fields using ProcessText to get formatted strings.
                 var sb = new StringBuilder();
                 sb.Append(option.roleTitleText.ProcessText());
                 sb.Append(", ").Append(option.roleTitleDesc.ProcessText());
@@ -140,23 +147,22 @@ namespace ckAccess.Patches.UI
                         sb.Append(", ").Append(itemDesc.ProcessText());
                     }
                 }
-                UIManager.Speak(sb.ToString());
+                return sb.ToString();
             }
             else
             {
-                // For appearance, we build the text manually.
                 int currentIndex = option.customizationTable.GetIndexFromId(option.bodyPartType, option.playerController.GetActiveCustomizableBodypart(option.bodyPartType)) + 1;
                 int maxVariations = option.customizationTable.GetMaxVariations(option.bodyPartType, 0);
                 string valueText = $"Style {currentIndex} of {maxVariations}";
 
                 if (valueOnly)
                 {
-                    UIManager.Speak(valueText);
+                    return valueText;
                 }
                 else
                 {
                     string labelText = UIManager.GetLocalizedText(option.labelText.GetText());
-                    UIManager.Speak($"{labelText}, {valueText}");
+                    return $"{labelText}, {valueText}";
                 }
             }
         }
