@@ -4,6 +4,7 @@
 * Siempre procurar hacer el código por parches pequeños, analizando bien la estructura de las carpetas y de los parches anteriores para tomarse como ejemplo.
 * Los parches de menús deben ser lo menos invasivo posible para evitar cambios en el comportamiento del juego.
 * Al buscar en el código del juego, ignorar siempre los patrones de .gitignore para asegurar un análisis completo.
+* Al compilar, ignorar las advertencias de BepInEx si la compilación se completa correctamente.
 
 ---
 ### Información del Repositorio

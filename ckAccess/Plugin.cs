@@ -15,14 +15,12 @@ namespace ckAccess
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin
     {
-        public new static ManualLogSource Logger;
         public static Plugin Instance { get; private set; }
         private Harmony harmony;
 
         private void Awake()
         {
             // Plugin startup logic
-            Logger = base.Logger;
             Instance = this;
             Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
