@@ -15,7 +15,7 @@
 ### Principios de Accesibilidad
 
 *   **Librería de Salida:** Se utiliza **Tolk** como única librería para la comunicación con lectores de pantalla.
-*   **Implementación:** No es necesario implementar nuevos sistemas de accesibilidad. La verbalización de los elementos de la interfaz se gestiona a través de la clase `UIManager`, que centraliza las llamadas a Tolk. Para añadir accesibilidad a un nuevo menú, se debe seguir el patrón de los parches existentes.
+*   **Implementación:** No es necesario implementar nuevos sistemas de accesibilidad. La verbalización de los elementos de la interfaz se gestiona través de la clase `UIManager`, que centraliza las llamadas a Tolk. Para añadir accesibilidad a un nuevo menú, se debe seguir el patrón de los parches existentes.
 
 ---
 ### Arquitectura de Parches de UI
@@ -60,6 +60,29 @@ Se ha detectado que en ciertos menús, como los slots de mundo y personaje, el e
     2.  Antes de verbalizar una nueva opción, se comprueba si el texto es idéntico al anterior y si ha transcurrido un tiempo mínimo (50 milisegundos).
     3.  Si ambas condiciones se cumplen, el segundo anuncio se ignora. Esto filtra eficazmente las llamadas duplicadas sin afectar la capacidad de respuesta del usuario.
 
+#### 4. Navegación por Teclado y D-Pad en Inventarios (`UIMouseInputPatch.cs`)
+
+Se ha implementado un sistema para permitir la navegación por los slots del inventario, crafteo y menús similares utilizando el teclado (WASD/Flechas) y el D-Pad del mando.
+
+*   **Objetivo:** `PugOther.UIMouse`
+*   **Método Parcheado:** `UpdateMouseUIInput` (con un parche `Prefix`).
+*   **Funcionamiento:**
+    1.  **Estrategia `Prefix`:** Se utiliza un parche `Prefix` para interceptar el input *antes* de que el método original del juego se ejecute. Esto es crucial para evitar conflictos, ya que el juego consume el input del mando, impidiendo que un parche `Postfix` lo detecte.
+    2.  **Condición de Alcance:** El parche se desactiva inmediatamente si no hay ninguna ventana de inventario abierta (`Manager.ui.isAnyInventoryShowing`). Esto asegura que la navegación solo afecte a los menús relevantes y no al juego normal.
+    3.  **Detección de Input:**
+        *   **Teclado:** Se utiliza `UnityEngine.Input.GetKeyDown()` para detectar pulsaciones únicas de las teclas WASD y las flechas.
+        *   **D-Pad:** Tras un proceso de depuración, se descubrió que el D-Pad no está vinculado a las acciones de navegación del joystick (`MENU_UP`, etc.). Para identificar las acciones correctas, se implementó un "escucha" de eventos universal de Rewired (`player.AddInputEventDelegate`). El análisis del log reveló que, en el inventario, el D-Pad está mapeado a acciones no intuitivas:
+            *   **Arriba:** `SwapNextHotbar`
+            *   **Abajo:** `SwapPreviousHotbar`
+            *   **Izquierda:** `QuickStack`
+            *   **Derecha:** `Sort`
+        El parche utiliza `ReInput.players.GetPlayer(0).GetButtonDown()` con estos nombres de acción para detectar pulsaciones únicas del D-Pad.
+    4.  **Lógica de Navegación:**
+        *   Si se detecta una pulsación (de teclado o D-Pad), se utiliza el método nativo del juego `currentSelectedUIElement.GetAdjacentUIElement()` para encontrar el siguiente slot en la dirección deseada.
+        *   Se actualiza la posición del puntero del ratón (`__instance.pointer.position`) para que coincida con la del nuevo slot.
+        *   Se invoca el método privado `TrySelectNewElement()` mediante reflexión para seleccionar oficialmente el nuevo slot y disparar todos los eventos asociados (como la verbalización del contenido del slot).
+    5.  **Control de Flujo:** Si el parche maneja una entrada de navegación, devuelve `false`, lo que **impide que el método original `UpdateMouseUIInput` se ejecute**. Esto evita que el juego procese el input dos veces o que el ratón interfiera con la selección. Si no se detecta ninguna entrada de navegación, el parche devuelve `true`, permitiendo que el juego funcione con normalidad.
+
 ### Plan de Desarrollo
 
 - **Completado:** Refactorización y centralización de todos los parches de menús.
@@ -70,13 +93,13 @@ Se ha detectado que en ciertos menús, como los slots de mundo y personaje, el e
 - **Completado:** Accesibilidad del inventario y pestañas de personaje.
   - **Completado:** Lectura de nombre, cantidad, durabilidad, atributos y tooltip de los objetos en los slots.
   - **Completado:** Accesibilidad de las pestañas de personaje (Equipamiento, Habilidades) y su contenido para mando y ratón.
+- **Completado:** Implementada navegación por teclado (WASD/Flechas) y D-Pad en todos los menús de inventario.
 
 ### Próximos Pasos
 
-1.  **Implementar navegación por teclado (WASD/D-Pad):** Investigar un método robusto para la navegación por teclado en todos los menús.
-2.  **Accesibilizar la mesa de crafteo.**
-3.  **Mejorar personalización de personaje:** Investigar cómo obtener los nombres o descripciones de las opciones de apariencia (ej. "Pelo largo", "Rojo") en lugar de solo "Estilo X de Y".
-4.  **Verificar y pulir:** Probar exhaustivamente todos los menús para asegurar que la lectura sea fluida y no haya regresiones.
+1.  **Accesibilizar la mesa de crafteo.**
+2.  **Mejorar personalización de personaje:** Investigar cómo obtener los nombres o descripciones de las opciones de apariencia (ej. "Pelo largo", "Rojo") en lugar de solo "Estilo X de Y".
+3.  **Verificar y pulir:** Probar exhaustivamente todos los menús para asegurar que la lectura sea fluida y no haya regresiones.
 
 ---
 ### Workaround Temporal

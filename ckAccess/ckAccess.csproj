@@ -68,6 +68,11 @@
       <Private>false</Private>
       <Aliases>PugComps</Aliases>
     </Reference>
+    <Reference Include="Pug.UnityExtensions">
+      <HintPath>..\references\Pug.UnityExtensions.dll</HintPath>
+      <Private>false</Private>
+      <Aliases>PugUnExt</Aliases>
+    </Reference>
     <Reference Include="Unity.Entities">
       <HintPath>..\references\Unity.Entities.dll</HintPath>
       <Private>false</Private>
@@ -79,6 +84,7 @@
     <Reference Include="Microsoft.CSharp">
       <Private>false</Private>
     </Reference>
+    <Compile Include="..\ck code 2\RewiredConsts\*.cs" />
     
     
   </ItemGroup>
