@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>ckAccess</AssemblyName>
+    <Product>ckAccess</Product>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>ckAccess</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Unity.Mono" Version="6.0.0-be.*" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    
+    <Reference Include="Pug.Other">
+      <HintPath>..\references\Pug.Other.dll</HintPath>
+      <Private>false</Private>
+      <Aliases>PugOther,Game</Aliases>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\references\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+      <Aliases>Core</Aliases>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\references\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TolkDotNet">
+      <HintPath>..\references\tolk\TolkDotNet.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="I2.Loc">
+      <HintPath>..\references\I2.dll</HintPath>
+      <Private>false</Private>
+      <Aliases>I2Loc</Aliases>
+    </Reference>
+    <Reference Include="Pug.Base">
+      <HintPath>..\references\Pug.Base.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>false</Private>
+    </Reference>
+    
+    
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\ckAccess.dll&quot;" />
+  </Target>
+</Project>

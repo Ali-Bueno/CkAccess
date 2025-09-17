@@ -1,0 +1,21 @@
+public enum SecondaryUseTerm
+{
+	None,
+	ChargedMultishot,
+	PiercingShot,
+	ExplosiveBolt,
+	ArcSlash,
+	ChargedShot,
+	ChargedThrust,
+	TrailingCrystals,
+	MeleeMinion,
+	RangedMinion,
+	OrbitingMinion,
+	BouncingShot,
+	EqiupGear,
+	PoisonMinion,
+	FireMiteMinion,
+	TrailingSong,
+	SpinFlurry,
+	WindupThrow
+}

@@ -1,0 +1,25 @@
+# Folders to ignore for this project
+/ck code 1/
+/ck code 2/
+/references/
+
+# Common C# and Unity ignores
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# MemoryCaptures can be huge
+/[Mm]emoryCaptures/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userprefs
+*.csproj.user
+*.sln.docstates

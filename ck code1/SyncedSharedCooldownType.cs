@@ -1,0 +1,26 @@
+public enum SyncedSharedCooldownType
+{
+	Invalid,
+	NonUsableSlot,
+	MeleeWeaponSlot,
+	ShovelSlot,
+	PlaceObjectSlot,
+	EatableSlot,
+	WaterCanSlot,
+	RangeWeaponSlot,
+	HoeSlot,
+	CastingSlot,
+	PaintToolSlot,
+	FishingRodSlot,
+	Shield,
+	BugNet,
+	InstrumentSlot,
+	BucketSlot,
+	RoofingToolSlot,
+	ObjectID,
+	HealingPotion,
+	CupidBow,
+	SummoningWeaponSlot,
+	EquipGearSlot,
+	NUM_TYPES
+}

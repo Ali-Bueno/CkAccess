@@ -1,0 +1,19 @@
+public enum PaintableColor
+{
+	Unpainted,
+	Yellow,
+	Green,
+	Red,
+	Purple,
+	Blue,
+	Brown,
+	White,
+	Black,
+	Orange,
+	Cyan,
+	Pink,
+	Gray,
+	Peach,
+	Teal,
+	__max__
+}
