@@ -63,6 +63,10 @@
       <HintPath>..\references\Pug.Base.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="Pug.ECS.Components">
+      <HintPath>..\references\Pug.ECS.Components.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>false</Private>
     </Reference>

@@ -3,7 +3,7 @@
 * al ejecutar una tarea que el usuario pida, siempre estudiar la mejor forma de implementar, que sea menos invasiva para el juego y estudiar el código que están en las carpetas ck code 1 y ck code 2. En caso de no poder accederse a campos y métodos privados, usar reflexión. también no olvidar/tocar los alias en el csproj, que ya están puestos aí.
 * Siempre procurar hacer el código por parches pequeños, analizando bien la estructura de las carpetas y de los parches anteriores para tomarse como ejemplo.
 * Los parches de menús deben ser lo menos invasivo posible para evitar cambios en el comportamiento del juego.
-* Al buscar en el código del juego, ignorar siempre los patrones de .gitignore para asegurar un análisis completo.
+* Al buscar en el código del juego, ignorar siempre los patrones de .gitignore para asegurar un análisis completo. **Recordatorio: Forzar siempre la opción para ignorar .gitignore en las herramientas de búsqueda de archivos, ya que a veces se olvida.**
 * Al compilar, ignorar las advertencias de BepInEx si la compilación se completa correctamente.
 
 ---
@@ -66,12 +66,16 @@ Se ha detectado que en ciertos menús, como los slots de mundo y personaje, el e
 - **Completado:** Accesibilidad del menú de unirse a partida, incluyendo la navegación por teclado y la lectura de opciones del dropdown.
 - **Completado:** Accesibilizar los slots de personajes.
 - **Completado:** Refactorización del código para eliminar duplicados en la gestión del foco de los menús.
+- **En Progreso:** Accesibilidad del inventario.
+  - **Completado:** Lectura de nombre, cantidad y tooltip de los objetos en los slots.
+  - **Pendiente:** Accesibilidad de las pestañas y botones superiores (Crafteo, Equipamiento, etc.).
 
 ### Próximos Pasos
 
-1.  **Accesibilizar el inventario del jugador:** Analizar la estructura del inventario y aplicar parches para leer la información de los objetos (nombre, cantidad, descripción).
-2.  **Mejorar personalización de personaje:** Investigar cómo obtener los nombres o descripciones de las opciones de apariencia (ej. "Pelo largo", "Rojo") en lugar de solo "Estilo X de Y".
-3.  **Verificar y pulir:** Probar exhaustivamente todos los menús para asegurar que la lectura sea fluida y no haya regresiones.
+1.  **Completar accesibilidad del inventario:** Investigar y parchear las pestañas superiores de la interfaz de inventario.
+2.  **Accesibilizar la mesa de crafteo.**
+3.  **Mejorar personalización de personaje:** Investigar cómo obtener los nombres o descripciones de las opciones de apariencia (ej. "Pelo largo", "Rojo") en lugar de solo "Estilo X de Y".
+4.  **Verificar y pulir:** Probar exhaustivamente todos los menús para asegurar que la lectura sea fluida y no haya regresiones.
 
 ---
 ### Workaround Temporal
