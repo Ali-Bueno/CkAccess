@@ -5,6 +5,7 @@
 * Los parches de menús deben ser lo menos invasivo posible para evitar cambios en el comportamiento del juego.
 * Al buscar en el código del juego, ignorar siempre los patrones de .gitignore para asegurar un análisis completo. **Recordatorio: Forzar siempre la opción para ignorar .gitignore en las herramientas de búsqueda de archivos, ya que a veces se olvida.**
 * Al compilar, ignorar las advertencias de BepInEx si la compilación se completa correctamente.
+*   **Convención de Referencias:** Todas las clases de la interfaz de usuario (UI) del juego se encuentran en el ensamblado `Pug.Other.dll`. Para acceder a ellas, se debe utilizar el alias `PugOther` (ej. `PugOther.InventorySlotUI`). No existe un `Pug.UI.dll` separado.
 
 ---
 ### Información del Repositorio
@@ -66,13 +67,13 @@ Se ha detectado que en ciertos menús, como los slots de mundo y personaje, el e
 - **Completado:** Accesibilidad del menú de unirse a partida, incluyendo la navegación por teclado y la lectura de opciones del dropdown.
 - **Completado:** Accesibilizar los slots de personajes.
 - **Completado:** Refactorización del código para eliminar duplicados en la gestión del foco de los menús.
-- **En Progreso:** Accesibilidad del inventario.
-  - **Completado:** Lectura de nombre, cantidad y tooltip de los objetos en los slots.
-  - **Pendiente:** Accesibilidad de las pestañas y botones superiores (Crafteo, Equipamiento, etc.).
+- **Completado:** Accesibilidad del inventario.
+  - **Completado:** Lectura de nombre, cantidad, durabilidad, atributos y tooltip de los objetos en los slots.
+  - **Completado:** Accesibilidad de las pestañas de personaje (Equipamiento, Habilidades) para mando y ratón.
 
 ### Próximos Pasos
 
-1.  **Completar accesibilidad del inventario:** Investigar y parchear las pestañas superiores de la interfaz de inventario.
+1.  **Implementar navegación por teclado (WASD/D-Pad):** Investigar un método robusto para la navegación por teclado en todos los menús.
 2.  **Accesibilizar la mesa de crafteo.**
 3.  **Mejorar personalización de personaje:** Investigar cómo obtener los nombres o descripciones de las opciones de apariencia (ej. "Pelo largo", "Rojo") en lugar de solo "Estilo X de Y".
 4.  **Verificar y pulir:** Probar exhaustivamente todos los menús para asegurar que la lectura sea fluida y no haya regresiones.

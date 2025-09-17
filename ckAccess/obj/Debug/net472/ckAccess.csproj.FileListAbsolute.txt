@@ -8,3 +8,4 @@ D:\code\unity and such\Core Keeper Access\ckAccess\bin\Debug\net472\ckAccess.dll
 D:\code\unity and such\Core Keeper Access\ckAccess\bin\Debug\net472\ckAccess.pdb
 D:\code\unity and such\Core Keeper Access\ckAccess\obj\Debug\net472\ckAccess.dll
 D:\code\unity and such\Core Keeper Access\ckAccess\obj\Debug\net472\ckAccess.pdb
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Debug\net472\ckAccess.sourcelink.json

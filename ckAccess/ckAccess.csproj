@@ -66,6 +66,15 @@
     <Reference Include="Pug.ECS.Components">
       <HintPath>..\references\Pug.ECS.Components.dll</HintPath>
       <Private>false</Private>
+      <Aliases>PugComps</Aliases>
+    </Reference>
+    <Reference Include="Unity.Entities">
+      <HintPath>..\references\Unity.Entities.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Rewired_Core">
+      <HintPath>..\references\Rewired_Core.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>false</Private>

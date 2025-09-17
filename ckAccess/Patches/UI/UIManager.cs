@@ -15,6 +15,10 @@ namespace ckAccess.Patches.UI
         public static void Speak(string text, bool interrupt = true)
         {
             if (string.IsNullOrWhiteSpace(text)) return;
+
+            // Always interrupt previous speech by default.
+            DavyKager.Tolk.Silence();
+
             if (interrupt)
             {
                 DavyKager.Tolk.Output(text);
