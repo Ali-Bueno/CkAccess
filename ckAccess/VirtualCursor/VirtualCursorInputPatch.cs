@@ -16,6 +16,11 @@ namespace ckAccess.VirtualCursor
         private static float lastInputTime = 0f;
         private static KeyCode lastPressedKey = KeyCode.None;
         private const float INPUT_DEBOUNCE_TIME = 0.1f; // 100ms between inputs
+
+        // Sistema para rastrear teclas mantenidas actualmente
+        private static bool _uKeyHeld = false;
+        private static bool _oKeyHeld = false;
+        private static bool _eKeyHeld = false;
         [HarmonyPatch("UpdateMouseUIInput")]
         [HarmonyPostfix]
         public static void UpdateMouseUIInput_Postfix(PugOther.UIMouse __instance)
@@ -60,8 +65,11 @@ namespace ckAccess.VirtualCursor
             return Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.J) ||
                    Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.L) ||
                    Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.U) ||
-                   Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.P) ||
-                   Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.M);
+                   Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.E) ||
+                   Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.T) ||
+                   Input.GetKeyDown(KeyCode.M) ||
+                   // También detectar teclas soltadas para acciones
+                   Input.GetKeyUp(KeyCode.U) || Input.GetKeyUp(KeyCode.O) || Input.GetKeyUp(KeyCode.E);
         }
 
         private static void HandleVirtualCursorInput()
@@ -90,13 +98,36 @@ namespace ckAccess.VirtualCursor
             {
                 VirtualCursor.ResetToPlayer();
             }
-            else if (Input.GetKeyDown(KeyCode.U) && CanProcessInput(KeyCode.U, currentTime))
+            // Manejar teclas de acción - detectar presión inicial y estado mantenido
+            if (Input.GetKeyDown(KeyCode.U) && CanProcessInput(KeyCode.U, currentTime))
             {
+                _uKeyHeld = true;
                 VirtualCursor.PrimaryAction(); // Left click equivalent
+            }
+            else if (Input.GetKeyUp(KeyCode.U))
+            {
+                _uKeyHeld = false;
+                VirtualCursor.StopPrimaryAction(); // Stop action when key released
             }
             else if (Input.GetKeyDown(KeyCode.O) && CanProcessInput(KeyCode.O, currentTime))
             {
-                VirtualCursor.SecondaryAction(); // Right click equivalent
+                _oKeyHeld = true;
+                VirtualCursor.SecondaryAction(); // Right click equivalent (usar objetos)
+            }
+            else if (Input.GetKeyUp(KeyCode.O))
+            {
+                _oKeyHeld = false;
+                VirtualCursor.StopSecondaryAction();
+            }
+            else if (Input.GetKeyDown(KeyCode.E) && CanProcessInput(KeyCode.E, currentTime))
+            {
+                _eKeyHeld = true;
+                VirtualCursor.InteractionAction(); // Interaction key equivalent (interactuar con objetos)
+            }
+            else if (Input.GetKeyUp(KeyCode.E))
+            {
+                _eKeyHeld = false;
+                VirtualCursor.StopInteractionAction();
             }
             else if (Input.GetKeyDown(KeyCode.P) && CanProcessInput(KeyCode.P, currentTime))
             {
@@ -120,11 +151,33 @@ namespace ckAccess.VirtualCursor
             {
                 return false;
             }
-            
+
             // Update last input tracking
             lastInputTime = currentTime;
             lastPressedKey = key;
             return true;
+        }
+
+        /// <summary>
+        /// Verifica si alguna tecla de acción está siendo mantenida
+        /// </summary>
+        public static bool IsAnyActionKeyHeld()
+        {
+            return _uKeyHeld || _oKeyHeld || _eKeyHeld;
+        }
+
+        /// <summary>
+        /// Verifica si una tecla específica está siendo mantenida
+        /// </summary>
+        public static bool IsKeyHeld(KeyCode key)
+        {
+            switch (key)
+            {
+                case KeyCode.U: return _uKeyHeld;
+                case KeyCode.O: return _oKeyHeld;
+                case KeyCode.E: return _eKeyHeld;
+                default: return false;
+            }
         }
         
         private static bool IsInExcludedMenu()

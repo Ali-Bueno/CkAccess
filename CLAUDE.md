@@ -124,18 +124,27 @@ Se ha implementado un sistema para permitir la navegación por los slots del inv
 - **Localización:** Nombres en español con fallback a inglés
 - **Archivos:** `VirtualCursor.cs`, `VirtualCursorInputPatch.cs`, `SimpleWorldReader.cs`, helpers varios
 
-#### Módulo 2 – Integración de acciones primarias y secundarias (Gameplay) 🔄 **PRÓXIMO PASO**
+#### Módulo 2 – Integración de acciones primarias y secundarias (Gameplay) ✅ **COMPLETADO**
 **Objetivo:** Que U y O funcionen como clicks en el mundo.
-- U → simular click izquierdo:
+- ✅ U → simular click izquierdo (INTERACT):
   - Minar bloques si es tile destructible.
   - Atacar si es enemigo.
   - Si no hay nada → dejar que el juego haga la animación estándar de golpear en el aire.
-- O → simular click derecho:
-  - Ejecutar interacción (cofres, mesas de trabajo, antorchas, etc.).
-  - Priorizar entidades sobre tiles en caso de conflicto.
-- Validar que esto funcione en gameplay normal.
+- ✅ O → simular click derecho (SECOND_INTERACT):
+  - Usar objetos equipados en la posición del cursor.
+  - Colocar bloques, usar herramientas, etc.
+- ✅ E → simular interacción (INTERACT_WITH_OBJECT):
+  - Abrir cofres, puertas, mesas de trabajo, etc.
+  - Interactuar con NPCs y objetos del mundo.
+- ✅ **Funcionalidad de teclas mantenidas:** Emula el comportamiento original del juego cuando mantienes presionados los botones del ratón.
 
-#### Módulo 3 – Integración con Inventario y UI de Crafting
+**Implementación Técnica:**
+- **Archivos:** `PlayerInputPatch.cs`, `SendClientInputSystemPatch.cs`
+- **Sistema de parches duales:** Intercepta tanto la detección de input (`PlayerInput`) como la posición de ejecución (`SendClientInputSystem`)
+- **Gestión de estados:** Sistema robusto que detecta presión inicial (`WasButtonPressedDownThisFrame`) y estado continuo (`IsButtonCurrentlyDown`)
+- **Posicionamiento:** Las acciones se ejecutan en la posición del cursor virtual, no del jugador
+
+#### Módulo 3 – Integración con Inventario y UI de Crafting 🔄 **PRÓXIMO PASO**
 **Objetivo:** Que U y O sirvan dentro del inventario/estaciones de trabajo.
 - Mapear el cursor virtual a la cuadrícula de slots de inventario.
 - U → selección primaria:

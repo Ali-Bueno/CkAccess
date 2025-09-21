@@ -1,5 +1,6 @@
 extern alias PugOther;
 extern alias Core;
+extern alias PugUnExt;
 using ckAccess.Patches.UI;
 using ckAccess.MapReader;
 using Unity.Mathematics;
@@ -97,6 +98,7 @@ namespace ckAccess.VirtualCursor
 
         /// <summary>
         /// Acción primaria en la posición del cursor (tecla U).
+        /// Simula click izquierdo en la posición del cursor virtual.
         /// </summary>
         public static void PrimaryAction()
         {
@@ -106,12 +108,23 @@ namespace ckAccess.VirtualCursor
                 return;
             }
 
-            UIManager.Speak("Acción primaria");
-            // TODO: Implementar click izquierdo simulado
+            try
+            {
+                // Usar el nuevo sistema de parches para simular la acción
+                var worldPos = new float3(_currentPosition.x, _currentPosition.y, _currentPosition.z);
+                SendClientInputSystemPatch.SetVirtualCursorPrimaryAction(worldPos);
+
+                // Removed verbose debug message to avoid spam when holding keys
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak($"Error en acción primaria: {ex.Message}");
+            }
         }
 
         /// <summary>
         /// Acción secundaria en la posición del cursor (tecla O).
+        /// Simula click derecho en la posición del cursor virtual para usar objetos equipados.
         /// </summary>
         public static void SecondaryAction()
         {
@@ -121,8 +134,143 @@ namespace ckAccess.VirtualCursor
                 return;
             }
 
-            UIManager.Speak("Acción secundaria");
-            // TODO: Implementar click derecho simulado
+            try
+            {
+                // Usar el nuevo sistema de parches para simular la acción secundaria (usar objetos)
+                var worldPos = new float3(_currentPosition.x, _currentPosition.y, _currentPosition.z);
+                SendClientInputSystemPatch.SetVirtualCursorSecondaryAction(worldPos);
+
+                // Removed verbose debug message to avoid spam when holding keys
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak($"Error en acción secundaria: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Acción de interacción en la posición del cursor (equivalente a tecla E).
+        /// Interactúa con objetos, cofres, puertas, etc.
+        /// </summary>
+        public static void InteractionAction()
+        {
+            if (!_isInitialized)
+            {
+                Initialize();
+                return;
+            }
+
+            try
+            {
+                // Usar el nuevo sistema de parches para simular la interacción
+                var worldPos = new float3(_currentPosition.x, _currentPosition.y, _currentPosition.z);
+                SendClientInputSystemPatch.SetVirtualCursorInteraction(worldPos);
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak($"Error en interacción: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Detiene la acción primaria (cuando se suelta la tecla U)
+        /// </summary>
+        public static void StopPrimaryAction()
+        {
+            try
+            {
+                SendClientInputSystemPatch.StopVirtualCursorAction();
+                PlayerInputPatch.StopAllSimulations();
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak($"Error deteniendo acción primaria: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Detiene la acción secundaria (cuando se suelta la tecla O)
+        /// </summary>
+        public static void StopSecondaryAction()
+        {
+            try
+            {
+                SendClientInputSystemPatch.StopVirtualCursorAction();
+                PlayerInputPatch.StopAllSimulations();
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak($"Error deteniendo acción secundaria: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Detiene la interacción (cuando se suelta la tecla E)
+        /// </summary>
+        public static void StopInteractionAction()
+        {
+            try
+            {
+                SendClientInputSystemPatch.StopVirtualCursorAction();
+                PlayerInputPatch.StopAllSimulations();
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak($"Error deteniendo interacción: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region Funciones auxiliares para simulación de clicks
+
+        /// <summary>
+        /// Convierte una posición del mundo a coordenadas de pantalla para el mouse
+        /// </summary>
+        private static Vector3 WorldToScreenPosition(Vector3 worldPosition)
+        {
+            try
+            {
+                var camera = PugOther.Manager.camera?.gameCamera;
+                if (camera != null)
+                {
+                    // Convertir posición del mundo a coordenadas de pantalla
+                    var screenPos = camera.WorldToScreenPoint(worldPosition);
+                    return screenPos;
+                }
+                return Vector3.zero;
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak($"Error convirtiendo coordenadas: {ex.Message}");
+                return Vector3.zero;
+            }
+        }
+
+
+        /// <summary>
+        /// Programa la restauración de la posición del mouse
+        /// </summary>
+        private static void ScheduleMouseRestore(PugOther.UIMouse uiMouse, Vector3 originalPosition)
+        {
+            var timer = new System.Timers.Timer(50); // 50ms después
+            timer.Elapsed += (sender, e) =>
+            {
+                try
+                {
+                    if (uiMouse?.pointer != null)
+                    {
+                        uiMouse.pointer.position = originalPosition;
+                    }
+                    timer.Dispose();
+                }
+                catch (System.Exception ex)
+                {
+                    UIManager.Speak($"Error restaurando mouse: {ex.Message}");
+                }
+            };
+            timer.AutoReset = false;
+            timer.Start();
         }
 
         #endregion

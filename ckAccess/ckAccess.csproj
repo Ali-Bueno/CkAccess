@@ -77,6 +77,10 @@
       <HintPath>..\references\Unity.Entities.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>..\references\Unity.Mathematics.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="Rewired_Core">
       <HintPath>..\references\Rewired_Core.dll</HintPath>
       <Private>false</Private>
