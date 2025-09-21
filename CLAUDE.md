@@ -109,15 +109,22 @@ Se ha implementado un sistema para permitir la navegación por los slots del inv
 ---
 ### Plan de Desarrollo: Cursor Virtual
 
-#### Módulo 1 – Cursor Virtual Básico
+#### Módulo 1 – Cursor Virtual Básico ✅ **COMPLETADO**
 **Objetivo:** Tener un cursor que se mueve alrededor del jugador con I, J, K, L y que puede resetearse con R.
-- Crear una entidad interna que represente el cursor virtual.
-- El cursor se mueve en pasos de tile.
-- El cursor siempre está limitado al Tilemap jugable.
-- R coloca el cursor en la posición exacta del jugador.
-- Probar que al mover el cursor se detecta correctamente qué tile hay debajo (para narrar con TTS).
+- ✅ Crear una entidad interna que represente el cursor virtual.
+- ✅ El cursor se mueve en pasos de tile.
+- ✅ El cursor siempre está limitado al Tilemap jugable.
+- ✅ R coloca el cursor en la posición exacta del jugador.
+- ✅ Probar que al mover el cursor se detecta correctamente qué tile hay debajo (para narrar con TTS).
 
-#### Módulo 2 – Integración de acciones primarias y secundarias (Gameplay)
+**Implementación Actual:**
+- **Controles:** I/J/K/L para movimiento (estilo vim), R para resetear al jugador
+- **Detección:** Sistema `SimpleWorldReader` con prioridades: Interactuables > Enemigos > Paredes/Minerales > Tiles
+- **Funciones adicionales:** M (posición detallada del jugador), P (debug de posición del cursor), T (test de coordenadas)
+- **Localización:** Nombres en español con fallback a inglés
+- **Archivos:** `VirtualCursor.cs`, `VirtualCursorInputPatch.cs`, `SimpleWorldReader.cs`, helpers varios
+
+#### Módulo 2 – Integración de acciones primarias y secundarias (Gameplay) 🔄 **PRÓXIMO PASO**
 **Objetivo:** Que U y O funcionen como clicks en el mundo.
 - U → simular click izquierdo:
   - Minar bloques si es tile destructible.
