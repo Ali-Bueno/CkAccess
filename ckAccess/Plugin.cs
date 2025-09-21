@@ -7,6 +7,7 @@ using DavyKager;
 using HarmonyLib;
 using BepInEx.Unity.Mono;
 using ckAccess.Patches.UI;
+using ckAccess.MapReader;
 using System.Reflection;
 using System;
 
@@ -31,6 +32,9 @@ namespace ckAccess
             Tolk.Load();
             Logger.LogInfo($"Tolk loaded. Detected screen reader: {Tolk.DetectScreenReader()}");
             Tolk.Output("C K Access loaded");
+
+            Logger.LogInfo("SimpleWorldReader accessibility system initialized.");
+
         }
 
         private void OnDestroy()

@@ -17,12 +17,43 @@ namespace ckAccess.Patches.UI
             rightClickWasUsed = false;
 
             var uiManager = PugOther.Manager.ui;
-            if (uiManager == null || !uiManager.isAnyInventoryShowing || uiManager.currentSelectedUIElement == null)
+
+            // OPTIMIZACIÓN: Solo procesar si realmente hay un inventario abierto
+            // Esto evita interferencia con la quick bar y otros elementos UI
+            if (uiManager == null || !uiManager.isAnyInventoryShowing)
             {
-                return true; // Let the original method run
+                return true; // Let the original method run - no inventory open
             }
 
+            // Verificar que hay un elemento seleccionado válido
+            if (uiManager.currentSelectedUIElement == null)
+            {
+                return true; // Let the original method run - no valid UI element
+            }
+
+            // OPTIMIZACIÓN ADICIONAL: Solo procesar si hay input de navegación
+            // Esto reduce la interferencia con el ratón cuando no hay input de teclado/gamepad
+            bool hasNavigationInput = Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) ||
+                                     Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) ||
+                                     Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) ||
+                                     Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D);
+
             var player = ReInput.players.GetPlayer(0);
+            if (player != null)
+            {
+                hasNavigationInput = hasNavigationInput ||
+                                   player.GetButtonDown("SwapNextHotbar") ||
+                                   player.GetButtonDown("SwapPreviousHotbar") ||
+                                   player.GetButtonDown("QuickStack") ||
+                                   player.GetButtonDown("Sort");
+            }
+
+            // Si no hay input de navegación, dejar que el método original maneje todo
+            if (!hasNavigationInput)
+            {
+                return true; // Let the original method run - no navigation input
+            }
+
             if (player == null)
             {
                 return true; // Let the original method run
