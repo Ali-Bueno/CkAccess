@@ -144,6 +144,11 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
   - **Completado:** Anuncios de apertura/cierre de árboles de talento.
   - **Completado:** Lectura completa de talentos incluyendo nombre, efectos y descripción.
   - **Completado:** Interacción con talentos mediante tecla U para invertir puntos.
+- **Completado:** Sistema completo de cursor virtual para gameplay.
+  - **Completado:** Cursor virtual con movimiento I/J/K/L y detección de mundo.
+  - **Completado:** Acciones U/O/E en el mundo (minar, atacar, interactuar, colocar).
+  - **Completado:** Integración completa con sistema de inventario y UI mediante U/O.
+  - **Completado:** Soporte para teclas mantenidas emulando comportamiento de ratón.
 
 ### Próximos Pasos
 
