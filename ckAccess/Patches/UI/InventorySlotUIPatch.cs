@@ -68,7 +68,13 @@ namespace ckAccess.Patches
                     }
                 }
 
-                // 4. Tooltip / Description
+                // 4. Equipment and Quick Slot information
+                AddEquipmentInfo(sb, instance, containedObject);
+
+                // 5. Condition/enchantments info
+                AddConditionInfo(sb, containedObject);
+
+                // 5. Tooltip / Description
                 var description = instance.GetHoverDescription();
                 if (description != null)
                 {
@@ -84,6 +90,88 @@ namespace ckAccess.Patches
                 UIManager.Speak(sb.ToString());
                 lastAnnouncedSlot = itemIdentifier;
             }
+        }
+
+        private static void AddEquipmentInfo(StringBuilder sb, PugOther.InventorySlotUI instance, object containedObject)
+        {
+            try
+            {
+                // Verificar si el objeto está equipado
+                if (IsEquipmentSlot(instance.slotType))
+                {
+                    sb.Append(", equipado");
+                }
+
+                // Por ahora, comentamos las verificaciones complejas que requieren más investigación
+                // TODO: Implementar detección de quick slots y equipability
+
+                // Verificar si es un objeto equipable pero no está equipado
+                // if (!IsEquipmentSlot(instance.slotType) && IsEquippableItem(containedObject.objectID))
+                // {
+                //     sb.Append(", equipable");
+                // }
+            }
+            catch
+            {
+                // Error silencioso para no interrumpir la lectura principal
+            }
+        }
+
+        private static bool IsEquipmentSlot(PugOther.ItemSlotsUIType slotType)
+        {
+            return slotType == PugOther.ItemSlotsUIType.HelmSlot ||
+                   slotType == PugOther.ItemSlotsUIType.BreastSlot ||
+                   slotType == PugOther.ItemSlotsUIType.PantsSlot ||
+                   slotType == PugOther.ItemSlotsUIType.NecklaceSlot ||
+                   slotType == PugOther.ItemSlotsUIType.RingSlot1 ||
+                   slotType == PugOther.ItemSlotsUIType.RingSlot2 ||
+                   slotType == PugOther.ItemSlotsUIType.OffhandSlot ||
+                   slotType == PugOther.ItemSlotsUIType.BagSlot ||
+                   slotType == PugOther.ItemSlotsUIType.PetSlot ||
+                   slotType == PugOther.ItemSlotsUIType.LanternSlot ||
+                   slotType == PugOther.ItemSlotsUIType.HelmVanitySlot ||
+                   slotType == PugOther.ItemSlotsUIType.BreastVanitySlot ||
+                   slotType == PugOther.ItemSlotsUIType.PantsVanitySlot;
+        }
+
+        private static bool IsEquippableItem(ObjectID objectID)
+        {
+            try
+            {
+                var objectInfo = PugOther.PugDatabase.GetObjectInfo(objectID);
+                if (objectInfo == null) return false;
+
+                // Verificar si tiene componentes de equipamiento
+                return PugOther.PugDatabase.HasComponent<PugComps.EquipmentCD>(objectID);
+                // TODO: Añadir más verificaciones cuando estén disponibles los tipos
+                // PugOther.PugDatabase.HasComponent<PugComps.ArmorCD>(objectID) ||
+                // PugOther.PugDatabase.HasComponent<PugComps.WeaponCD>(objectID) ||
+                // PugOther.PugDatabase.HasComponent<PugComps.ToolCD>(objectID);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static void AddConditionInfo(StringBuilder sb, object containedObject)
+        {
+            try
+            {
+                // Por ahora, implementación básica
+                // TODO: Añadir información sobre encantamientos, condiciones especiales, etc.
+            }
+            catch
+            {
+                // Error silencioso
+            }
+        }
+
+        private static int GetQuickSlotIndex(object containedObject)
+        {
+            // TODO: Implementar verificación de quick slots
+            // Esta funcionalidad requiere más investigación sobre la estructura de datos del hotbar
+            return -1;
         }
 
         private static string GetSlotTypeName(PugOther.ItemSlotsUIType slotType)

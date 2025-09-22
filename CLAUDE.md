@@ -83,6 +83,46 @@ Se ha implementado un sistema para permitir la navegación por los slots del inv
         *   Se invoca el método privado `TrySelectNewElement()` mediante reflexión para seleccionar oficialmente el nuevo slot y disparar todos los eventos asociados (como la verbalización del contenido del slot).
     5.  **Control de Flujo:** Si el parche maneja una entrada de navegación, devuelve `false`, lo que **impide que el método original `UpdateMouseUIInput` se ejecute**. Esto evita que el juego procese el input dos veces o que el ratón interfiera con la selección. Si no se detecta ninguna entrada de navegación, el parche devuelve `true`, permitiendo que el juego funcione con normalidad.
 
+#### 5. Accesibilidad de Habilidades y Talentos
+
+Se ha implementado un sistema completo para la accesibilidad de habilidades (Skills) y sus árboles de talento correspondientes.
+
+##### 5.1. Accesibilidad de Habilidades (`SkillAccessibilityPatch.cs`)
+
+*   **Objetivo:** `PugOther.ButtonUIElement` (componente base de las habilidades)
+*   **Método Parcheado:** `OnSelected`, `OnDeselected`
+*   **Funcionamiento:**
+    1.  **Detección Específica:** El parche detecta cuando un `ButtonUIElement` tiene un componente `SkillUIElement` asociado y está en contexto de inventario.
+    2.  **Información Completa:** Al seleccionar una habilidad, se anuncia:
+        *   Nombre de la habilidad con nivel actual
+        *   Puntos de talento disponibles para esa habilidad
+        *   Estadísticas y efectos actuales
+        *   Descripción de la habilidad (filtrando instrucciones de click)
+    3.  **Cache Inteligente:** Previene anuncios duplicados usando un identificador único por habilidad.
+
+##### 5.2. Árboles de Talento (`SkillTalentTreePatch.cs`)
+
+*   **Objetivo:** `PugOther.SkillTalentTreeUI` y `PugOther.SkillTalentUIElement`
+*   **Métodos Parcheados:**
+    *   `ShowTalentTree`, `HideTalentTree` (para el árbol completo)
+    *   `OnSelected`, `OnDeselected`, `OnLeftClicked` (para elementos individuales)
+*   **Funcionamiento:**
+    1.  **Apertura/Cierre de Árboles:** Anuncia cuando se abre o cierra un árbol de talentos, incluyendo el nombre de la habilidad.
+    2.  **Información de Talentos:** Al navegar por los talentos individuales, se anuncia:
+        *   Nombre del talento
+        *   Efectos/estadísticas que proporciona
+        *   Descripción detallada del talento
+    3.  **Confirmación de Acciones:** Al usar U en un talento, se confirma la acción realizada (invertir punto de talento).
+
+##### 5.3. Integración con Sistema de Interacción (`InventoryUIInputPatch.cs`)
+
+*   **Integración U/O:** Las teclas U y O se integran perfectamente con el sistema de habilidades:
+    *   **U en Habilidad:** Abre el árbol de talentos correspondiente
+    *   **U en Talento:** Invierte un punto de talento (si es posible)
+    *   **O:** Acciones secundarias contextuales
+*   **Detección Automática:** El sistema detecta automáticamente el tipo de elemento seleccionado y ejecuta la acción apropiada.
+*   **Feedback Inmediato:** Cada acción proporciona confirmación por TTS.
+
 ### Plan de Desarrollo
 
 - **Completado:** Refactorización y centralización de todos los parches de menús.
@@ -94,6 +134,16 @@ Se ha implementado un sistema para permitir la navegación por los slots del inv
   - **Completado:** Lectura de nombre, cantidad, durabilidad, atributos y tooltip de los objetos en los slots.
   - **Completado:** Accesibilidad de las pestañas de personaje (Equipamiento, Habilidades) y su contenido para mando y ratón.
 - **Completado:** Implementada navegación por teclado (WASD/Flechas) y D-Pad en todos los menús de inventario.
+- **Completado:** Sistema de interacción con inventario mediante teclas U y O.
+  - **Completado:** U para seleccionar objetos, cambiar pestañas y abrir árboles de talento.
+  - **Completado:** O para acciones secundarias (click derecho en slots).
+- **Completado:** Accesibilidad completa de las habilidades (Skills).
+  - **Completado:** Lectura detallada de información de habilidades con niveles y estadísticas.
+  - **Completado:** Apertura de árboles de talento con U en las habilidades.
+- **Completado:** Accesibilidad de árboles de talento (Skill Talent Trees).
+  - **Completado:** Anuncios de apertura/cierre de árboles de talento.
+  - **Completado:** Lectura completa de talentos incluyendo nombre, efectos y descripción.
+  - **Completado:** Interacción con talentos mediante tecla U para invertir puntos.
 
 ### Próximos Pasos
 
@@ -144,16 +194,24 @@ Se ha implementado un sistema para permitir la navegación por los slots del inv
 - **Gestión de estados:** Sistema robusto que detecta presión inicial (`WasButtonPressedDownThisFrame`) y estado continuo (`IsButtonCurrentlyDown`)
 - **Posicionamiento:** Las acciones se ejecutan en la posición del cursor virtual, no del jugador
 
-#### Módulo 3 – Integración con Inventario y UI de Crafting 🔄 **PRÓXIMO PASO**
+#### Módulo 3 – Integración con Inventario y UI de Crafting ✅ **COMPLETADO**
 **Objetivo:** Que U y O sirvan dentro del inventario/estaciones de trabajo.
-- Mapear el cursor virtual a la cuadrícula de slots de inventario.
-- U → selección primaria:
-  - Seleccionar ítems.
-  - Confirmar acciones (equipar, mover, navegar entre pestañas).
-- O → acciones secundarias:
-  - Dividir stacks.
-  - Acciones rápidas contextuales.
-- Validar que el cursor cambia su comportamiento al detectar UI activa.
+- ✅ U → selección primaria:
+  - Seleccionar ítems en slots de inventario.
+  - Cambiar entre pestañas (Equipamiento, Habilidades, Almas).
+  - Abrir árboles de talento desde habilidades.
+  - Invertir puntos de talento en árboles.
+- ✅ O → acciones secundarias:
+  - Click derecho en slots de inventario.
+  - Acciones contextuales en elementos UI.
+- ✅ El sistema detecta automáticamente el contexto UI activo y adapta el comportamiento.
+- ✅ Integración completa con sistema de habilidades y talentos.
+
+**Implementación Técnica:**
+- **Archivos:** `InventoryUIInputPatch.cs`, `SkillAccessibilityPatch.cs`, `SkillTalentTreePatch.cs`
+- **Detección contextual:** Automática según el tipo de elemento UI seleccionado
+- **Soporte para:** Slots de inventario, pestañas, habilidades, talentos
+- **Feedback:** Anuncios TTS confirmando cada acción realizada
 
 #### Módulo 4 – Exclusiones (menús que no deben usar este sistema)
 **Objetivo:** Asegurar que el sistema no interfiera en menús donde no corresponde.
