@@ -2,55 +2,57 @@ extern alias PugOther;
 
 using System.Collections.Generic;
 using PugTilemap;
+using ckAccess.Localization;
 
 namespace ckAccess.MapReader
 {
     /// <summary>
-    /// Helper para obtener nombres en español de los tipos de tiles.
+    /// Helper para obtener nombres localizados de los tipos de tiles.
+    /// Ahora usa el sistema de localización universal.
     /// </summary>
     public static class TileTypeHelper
     {
         /// <summary>
-        /// Diccionario con nombres en español para tipos de tiles.
+        /// Diccionario con claves de localización para tipos de tiles.
         /// </summary>
-        private static readonly Dictionary<TileType, string> SpanishNames = new Dictionary<TileType, string>
+        private static readonly Dictionary<TileType, string> LocalizationKeys = new Dictionary<TileType, string>
         {
-            { TileType.none, "Vacío" },
-            { TileType.ground, "Suelo" },
-            { TileType.wall, "Pared" },
-            { TileType.water, "Agua" },
-            { TileType.pit, "Hoyo" },
-            { TileType.bridge, "Puente" },
-            { TileType.floor, "Suelo construido" },
-            { TileType.roofHole, "Agujero en el techo" },
-            { TileType.thinWall, "Pared delgada" },
-            { TileType.dugUpGround, "Tierra excavada" },
-            { TileType.wateredGround, "Tierra regada" },
-            { TileType.circuitPlate, "Placa de circuito" },
-            { TileType.ancientCircuitPlate, "Placa de circuito antigua" },
-            { TileType.fence, "Valla" },
-            { TileType.rug, "Alfombra" },
-            { TileType.smallStones, "Piedras pequeñas" },
-            { TileType.smallGrass, "Hierba pequeña" },
-            { TileType.wallGrass, "Hierba de pared" },
-            { TileType.debris, "Escombros" },
-            { TileType.floorCrack, "Grieta en el suelo" },
-            { TileType.rail, "Riel" },
-            { TileType.greatWall, "Gran pared" },
-            { TileType.litFloor, "Suelo iluminado" },
-            { TileType.debris2, "Escombros" },
-            { TileType.looseFlooring, "Suelo suelto" },
-            { TileType.immune, "Zona inmune" },
-            { TileType.wallCrack, "Grieta en la pared" },
-            { TileType.ore, "Veta de mineral" },
-            { TileType.bigRoot, "Raíz grande" },
-            { TileType.groundSlime, "Rastro de slime" },
-            { TileType.ancientCrystal, "Cristal antiguo" },
-            { TileType.chrysalis, "Crisálida" }
+            { TileType.none, "tile_none" },
+            { TileType.ground, "tile_ground" },
+            { TileType.wall, "tile_wall" },
+            { TileType.water, "tile_water" },
+            { TileType.pit, "tile_pit" },
+            { TileType.bridge, "tile_bridge" },
+            { TileType.floor, "tile_floor" },
+            { TileType.roofHole, "tile_roof_hole" },
+            { TileType.thinWall, "tile_thin_wall" },
+            { TileType.dugUpGround, "tile_dug_up_ground" },
+            { TileType.wateredGround, "tile_watered_ground" },
+            { TileType.circuitPlate, "tile_circuit_plate" },
+            { TileType.ancientCircuitPlate, "tile_ancient_circuit_plate" },
+            { TileType.fence, "tile_fence" },
+            { TileType.rug, "tile_rug" },
+            { TileType.smallStones, "tile_small_stones" },
+            { TileType.smallGrass, "tile_small_grass" },
+            { TileType.wallGrass, "tile_wall_grass" },
+            { TileType.debris, "tile_debris" },
+            { TileType.floorCrack, "tile_floor_crack" },
+            { TileType.rail, "tile_rail" },
+            { TileType.greatWall, "tile_great_wall" },
+            { TileType.litFloor, "tile_lit_floor" },
+            { TileType.debris2, "tile_debris2" },
+            { TileType.looseFlooring, "tile_loose_flooring" },
+            { TileType.immune, "tile_immune" },
+            { TileType.wallCrack, "tile_wall_crack" },
+            { TileType.ore, "tile_ore" },
+            { TileType.bigRoot, "tile_big_root" },
+            { TileType.groundSlime, "tile_ground_slime" },
+            { TileType.ancientCrystal, "tile_ancient_crystal" },
+            { TileType.chrysalis, "tile_chrysalis" }
         };
 
         /// <summary>
-        /// Obtiene el nombre localizado de un tipo de tile usando el sistema del juego.
+        /// Obtiene el nombre localizado de un tipo de tile usando el sistema universal.
         /// </summary>
         /// <param name="tileType">Tipo de tile</param>
         /// <returns>Nombre localizado</returns>
@@ -58,18 +60,19 @@ namespace ckAccess.MapReader
         {
             try
             {
-                // Intentar obtener nombre localizado del sistema del juego
-                var localizedName = GetLocalizedTileName(tileType);
-                if (!string.IsNullOrEmpty(localizedName))
-                    return localizedName;
+                // Usar el sistema de localización universal
+                if (LocalizationKeys.TryGetValue(tileType, out var localizationKey))
+                {
+                    return LocalizationManager.GetText(localizationKey);
+                }
             }
             catch (System.Exception)
             {
                 // Fallback silencioso
             }
 
-            // Fallback al sistema español manual
-            return SpanishNames.TryGetValue(tileType, out var name) ? name : tileType.ToString();
+            // Último fallback al nombre del enum
+            return tileType.ToString();
         }
 
         /// <summary>
@@ -78,54 +81,6 @@ namespace ckAccess.MapReader
         public static string GetSpanishName(TileType tileType)
         {
             return GetLocalizedName(tileType);
-        }
-
-        /// <summary>
-        /// Obtiene el nombre localizado usando el sistema de localización del juego.
-        /// </summary>
-        private static string GetLocalizedTileName(TileType tileType)
-        {
-            try
-            {
-                // Usar reflexión para acceder al PugGlossary del juego
-                var glossaryType = System.Type.GetType("PugGlossary, Pug.Other");
-                if (glossaryType == null) return null;
-
-                var glossaryInstance = UnityEngine.Object.FindObjectOfType(glossaryType);
-                if (glossaryInstance == null) return null;
-
-                var getMethod = glossaryType.GetMethod("Get", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-                if (getMethod == null) return null;
-
-                // Intentar diferentes patrones de claves de localización
-                string[] possibleKeys = {
-                    $"Tiles/{tileType}",
-                    $"Tile/{tileType}",
-                    $"tiles/{tileType}",
-                    $"tile/{tileType}",
-                    tileType.ToString()
-                };
-
-                foreach (var key in possibleKeys)
-                {
-                    try
-                    {
-                        var localizedText = (string)getMethod.Invoke(glossaryInstance, new object[] { key });
-                        if (!string.IsNullOrEmpty(localizedText) && !localizedText.StartsWith("M`i`s`s`i`n`g"))
-                            return localizedText;
-                    }
-                    catch (System.Exception)
-                    {
-                        continue;
-                    }
-                }
-            }
-            catch (System.Exception)
-            {
-                // Fallback silencioso
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -233,20 +188,22 @@ namespace ckAccess.MapReader
         /// </summary>
         public static string GetMaterialCategory(TileType tileType)
         {
-            return tileType switch
+            string materialKey = tileType switch
             {
-                TileType.ground => "Tierra",
-                TileType.floor => "Construcción",
-                TileType.wall => "Piedra",
-                TileType.ore => "Mineral",
-                TileType.water => "Líquido",
-                TileType.bridge => "Construcción",
-                TileType.ancientCrystal => "Cristal",
-                TileType.bigRoot => "Orgánico",
-                // TileType.lava => "Líquido caliente", // No disponible en esta versión
-                // TileType.ice => "Hielo", // No disponible en esta versión
-                _ => "Desconocido"
+                TileType.ground => "material_earth",
+                TileType.floor => "material_construction",
+                TileType.wall => "material_stone",
+                TileType.ore => "material_mineral",
+                TileType.water => "material_liquid",
+                TileType.bridge => "material_construction",
+                TileType.ancientCrystal => "material_crystal",
+                TileType.bigRoot => "material_organic",
+                // TileType.lava => "material_liquid", // No disponible en esta versión
+                // TileType.ice => "material_liquid", // No disponible en esta versión
+                _ => "material_unknown"
             };
+
+            return LocalizationManager.GetText(materialKey);
         }
 
         /// <summary>
@@ -268,19 +225,21 @@ namespace ckAccess.MapReader
         /// </summary>
         public static string GetFootstepSound(TileType tileType)
         {
-            return tileType switch
+            string soundKey = tileType switch
             {
-                TileType.ground => "Tierra",
-                TileType.floor => "Piedra",
-                TileType.wall => "Piedra",
-                TileType.ore => "Metal",
-                TileType.water => "Chapoteo",
-                TileType.bridge => "Madera",
-                TileType.smallStones => "Grava",
-                TileType.rug => "Textil",
-                TileType.rail => "Metal",
-                _ => "Neutral"
+                TileType.ground => "sound_earth",
+                TileType.floor => "sound_stone",
+                TileType.wall => "sound_stone",
+                TileType.ore => "sound_metal",
+                TileType.water => "sound_splash",
+                TileType.bridge => "sound_wood",
+                TileType.smallStones => "sound_gravel",
+                TileType.rug => "sound_textile",
+                TileType.rail => "sound_metal",
+                _ => "sound_neutral"
             };
+
+            return LocalizationManager.GetText(soundKey);
         }
 
         /// <summary>
@@ -303,17 +262,19 @@ namespace ckAccess.MapReader
         /// </summary>
         public static string GetRecommendedTool(TileType tileType)
         {
-            return tileType switch
+            string toolKey = tileType switch
             {
-                TileType.ore => "Pico",
-                TileType.wall => "Pico",
-                TileType.ancientCrystal => "Pico de alta calidad",
-                TileType.bigRoot => "Hacha",
-                TileType.ground => "Pala",
-                TileType.dugUpGround => "Pala",
-                TileType.smallStones => "Pico o Pala",
-                _ => "Ninguna"
+                TileType.ore => "tool_pickaxe",
+                TileType.wall => "tool_pickaxe",
+                TileType.ancientCrystal => "tool_high_quality_pickaxe",
+                TileType.bigRoot => "tool_axe",
+                TileType.ground => "tool_shovel",
+                TileType.dugUpGround => "tool_shovel",
+                TileType.smallStones => "tool_pickaxe_or_shovel",
+                _ => "tool_none"
             };
+
+            return LocalizationManager.GetText(toolKey);
         }
     }
 }

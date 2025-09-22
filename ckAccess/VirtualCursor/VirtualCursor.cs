@@ -3,6 +3,7 @@ extern alias Core;
 extern alias PugUnExt;
 using ckAccess.Patches.UI;
 using ckAccess.MapReader;
+using ckAccess.Localization;
 using Unity.Mathematics;
 using Vector3 = Core::UnityEngine.Vector3;
 using Mathf = Core::UnityEngine.Mathf;
@@ -42,12 +43,12 @@ namespace ckAccess.VirtualCursor
             {
                 _currentPosition = SnapToTileGrid(playerPos);
                 _isInitialized = true;
-                UIManager.Speak("Cursor virtual inicializado");
+                UIManager.Speak(LocalizationManager.GetText("virtual_cursor_initialized"));
                 AnnounceTileAtPosition(_currentPosition);
             }
             else
             {
-                UIManager.Speak("Error inicializando cursor");
+                UIManager.Speak(LocalizationManager.GetText("cursor_initialization_error"));
             }
         }
 
@@ -63,12 +64,12 @@ namespace ckAccess.VirtualCursor
 
                 int tileX = (int)math.round(_currentPosition.x);
                 int tileZ = (int)math.round(_currentPosition.z);
-                UIManager.Speak($"Cursor reseteado: x={tileX}, z={tileZ}");
+                UIManager.Speak(LocalizationManager.GetText("cursor_reset", tileX, tileZ));
                 AnnounceTileAtPosition(_currentPosition);
             }
             else
             {
-                UIManager.Speak("Error reseteando cursor");
+                UIManager.Speak(LocalizationManager.GetText("cursor_reset_error"));
             }
         }
 
@@ -92,7 +93,7 @@ namespace ckAccess.VirtualCursor
             }
             else
             {
-                UIManager.Speak("Límite alcanzado");
+                UIManager.Speak(LocalizationManager.GetText("limit_reached"));
             }
         }
 
@@ -118,7 +119,7 @@ namespace ckAccess.VirtualCursor
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error en acción primaria: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("primary_action_error", ex.Message));
             }
         }
 
@@ -136,15 +137,23 @@ namespace ckAccess.VirtualCursor
 
             try
             {
+                // Anunciar posición al colocar objetos
+                int tileX = (int)math.round(_currentPosition.x);
+                int tileZ = (int)math.round(_currentPosition.z);
+                UIManager.Speak(LocalizationManager.GetText("placing_at_position", tileX, tileZ));
+
                 // Usar el nuevo sistema de parches para simular la acción secundaria (usar objetos)
                 var worldPos = new float3(_currentPosition.x, _currentPosition.y, _currentPosition.z);
                 SendClientInputSystemPatch.SetVirtualCursorSecondaryAction(worldPos);
+
+                // Programar actualización después de colocar objeto
+                SchedulePositionUpdate();
 
                 // Removed verbose debug message to avoid spam when holding keys
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error en acción secundaria: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("secondary_action_error", ex.Message));
             }
         }
 
@@ -168,7 +177,7 @@ namespace ckAccess.VirtualCursor
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error en interacción: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("interaction_error", ex.Message));
             }
         }
 
@@ -273,6 +282,32 @@ namespace ckAccess.VirtualCursor
             timer.Start();
         }
 
+        /// <summary>
+        /// Programa una actualización de la posición después de colocar un objeto
+        /// para detectar los cambios inmediatamente
+        /// </summary>
+        private static void SchedulePositionUpdate()
+        {
+            var timer = new System.Timers.Timer(100); // 100ms después para que el cambio se registre
+            timer.Elapsed += (sender, e) =>
+            {
+                try
+                {
+                    if (_isInitialized)
+                    {
+                        AnnounceTileAtPosition(_currentPosition);
+                    }
+                    timer.Dispose();
+                }
+                catch (System.Exception ex)
+                {
+                    UIManager.Speak($"Error actualizando posición: {ex.Message}");
+                }
+            };
+            timer.AutoReset = false;
+            timer.Start();
+        }
+
         #endregion
 
         // INFORMACIÓN DETALLADA ELIMINADA - Ya no necesaria con SimpleWorldReader
@@ -286,7 +321,7 @@ namespace ckAccess.VirtualCursor
         {
             if (!_isInitialized)
             {
-                UIManager.Speak("Cursor no inicializado");
+                UIManager.Speak(LocalizationManager.GetText("cursor_not_initialized"));
                 return;
             }
 
@@ -319,7 +354,7 @@ namespace ckAccess.VirtualCursor
             }
             catch
             {
-                UIManager.Speak("Error leyendo posición del jugador");
+                UIManager.Speak(LocalizationManager.GetText("position_reading_error"));
             }
         }
 
@@ -336,7 +371,7 @@ namespace ckAccess.VirtualCursor
 
             int currentX = (int)math.round(_currentPosition.x);
             int currentZ = (int)math.round(_currentPosition.z);
-            UIManager.Speak($"Posición actual: x={currentX}, z={currentZ}");
+            UIManager.Speak(LocalizationManager.GetText("current_position", currentX, currentZ));
         }
 
         #endregion

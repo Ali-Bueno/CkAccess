@@ -149,6 +149,41 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
   - **Completado:** Acciones U/O/E en el mundo (minar, atacar, interactuar, colocar).
   - **Completado:** Integración completa con sistema de inventario y UI mediante U/O.
   - **Completado:** Soporte para teclas mantenidas emulando comportamiento de ratón.
+- **Completado:** Correcciones finales de accesibilidad y estabilidad.
+  - **Completado:** Sistema de localización unificado con LocalizationManager.
+  - **Completado:** Detección correcta de presets de equipo con navegación por teclado.
+  - **Completado:** Anuncios correctos de apertura/cierre de árboles de talento.
+  - **Completado:** Nombres de skills localizados (eliminados errores "missing:").
+  - **Completado:** Limpieza de código: eliminado debug logging y código duplicado.
+
+---
+### Últimas Correcciones Técnicas (2024)
+
+#### Corrección de Presets de Equipo
+- **Problema**: Los presets de equipo saltaban a la pestaña de skills en lugar de cambiar el equipamiento.
+- **Causa**: La detección de presets se realizaba después de la detección de SkillUIElement.
+- **Solución**: Reordenadas las prioridades de detección en `HandleUInput()` para verificar presets ANTES que skills.
+- **Archivos modificados**: `InventoryUIInputPatch.cs`
+
+#### Corrección de Anuncios de Árboles de Talento
+- **Problema**: Solo anunciaba "Abriendo árbol de talentos", nunca el cierre.
+- **Causa**: Verificación incorrecta de `isAnyInventoryShowing` impedía anuncios de cierre.
+- **Solución**: Eliminada la verificación incorrecta en `HideTalentTree_Postfix()`.
+- **Archivos modificados**: `SkillTalentTreePatch.cs`
+
+#### Corrección de Nombres de Skills
+- **Problema**: Nombres aparecían como "missing: skill_Summoning".
+- **Causa**: Uso incorrecto de `UIManager.GetLocalizedText()` y mapeo incorrecto de enum SkillID.
+- **Solución**:
+  - Migrado a `LocalizationManager.GetText()`
+  - Corregidos valores de SkillID (Range vs Ranged)
+  - Agregadas todas las skills al sistema de localización
+- **Archivos modificados**: `SkillTalentTreePatch.cs`, `LocalizationManager.cs`
+
+#### Limpieza de Código
+- **Eliminado**: Debug logging excesivo de producción
+- **Eliminado**: Claves de localización sin usar (`opening_talent_tree_*`)
+- **Mejorado**: Manejo de errores y logging de exceptions
 
 ### Próximos Pasos
 

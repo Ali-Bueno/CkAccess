@@ -3,6 +3,7 @@ extern alias PugOther;
 using UnityEngine;
 using PugTilemap;
 using DavyKager;
+using ckAccess.Localization;
 
 namespace ckAccess.MapReader
 {
@@ -22,8 +23,8 @@ namespace ckAccess.MapReader
             {
                 if (PugOther.Manager.main?.player == null)
                 {
-                    Debug.LogWarning("[EnhancedWorldMapReader] No se pudo obtener la posición del jugador.");
-                    Tolk.Output("No se puede leer la posición del jugador");
+                    Debug.LogWarning("[EnhancedWorldMapReader] Could not get player position.");
+                    Tolk.Output(LocalizationManager.GetText("cannot_read_player_position"));
                     return;
                 }
 
@@ -40,8 +41,8 @@ namespace ckAccess.MapReader
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"[EnhancedWorldMapReader] Error anunciando posición del jugador: {e.Message}");
-                Tolk.Output("Error leyendo posición");
+                Debug.LogError($"[EnhancedWorldMapReader] Error announcing player position: {e.Message}");
+                Tolk.Output(LocalizationManager.GetText("position_reading_error_generic"));
             }
         }
 
@@ -62,7 +63,7 @@ namespace ckAccess.MapReader
             catch (System.Exception e)
             {
                 Debug.LogError($"[EnhancedWorldMapReader] Error: {e.Message}");
-                Tolk.Output("Error leyendo posición");
+                Tolk.Output(LocalizationManager.GetText("position_reading_error_generic"));
             }
         }
 
@@ -82,7 +83,7 @@ namespace ckAccess.MapReader
             catch (System.Exception e)
             {
                 Debug.LogError($"[EnhancedWorldMapReader] Error generando descripción: {e.Message}");
-                return "Error leyendo posición";
+                return LocalizationManager.GetText("position_reading_error_generic");
             }
         }
 
@@ -135,15 +136,15 @@ namespace ckAccess.MapReader
                 }
                 else
                 {
-                    var emptyMessage = "Área vacía alrededor";
+                    var emptyMessage = LocalizationManager.GetText("empty_area_around");
                     Debug.Log($"[EnhancedWorldMapReader] {emptyMessage}");
                     Tolk.Output(emptyMessage);
                 }
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"[EnhancedWorldMapReader] Error escaneando área: {e.Message}");
-                Tolk.Output("Error escaneando área");
+                Debug.LogError($"[EnhancedWorldMapReader] Error scanning area: {e.Message}");
+                Tolk.Output(LocalizationManager.GetText("area_scan_error"));
             }
         }
 

@@ -4,6 +4,7 @@ extern alias PugComps;
 
 using HarmonyLib;
 using ckAccess.Patches.UI;
+using ckAccess.Localization;
 using System.Text;
 
 namespace ckAccess.Patches
@@ -99,7 +100,7 @@ namespace ckAccess.Patches
                 // Verificar si el objeto está equipado
                 if (IsEquipmentSlot(instance.slotType))
                 {
-                    sb.Append(", equipado");
+                    sb.Append(LocalizationManager.GetText("equipped"));
                 }
 
                 // Por ahora, comentamos las verificaciones complejas que requieren más investigación

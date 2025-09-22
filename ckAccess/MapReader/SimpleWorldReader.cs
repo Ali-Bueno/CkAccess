@@ -7,6 +7,7 @@ using PugTilemap;
 using Unity.Mathematics;
 using UnityEngine;
 using DavyKager;
+using ckAccess.Localization;
 
 namespace ckAccess.MapReader
 {
@@ -32,13 +33,13 @@ namespace ckAccess.MapReader
                 }
                 else
                 {
-                    Tolk.Output("Vacío");
+                    Tolk.Output(LocalizationManager.GetText("empty"));
                 }
             }
             catch (Exception e)
             {
                 Debug.LogError($"[SimpleWorldReader] Error: {e.Message}");
-                Tolk.Output("Error de lectura");
+                Tolk.Output(LocalizationManager.GetText("reading_error"));
             }
         }
 
@@ -111,42 +112,43 @@ namespace ckAccess.MapReader
 
             // Núcleo principal
             if (name.Contains("core"))
-                return "El Núcleo (interactuable)";
+                return LocalizationManager.GetText("the_core");
 
             // Cofres y almacenamiento
             if (name.Contains("chest") || name.Contains("storage") || name.Contains("container"))
-                return $"{CleanName(name)} (almacenamiento)";
+                return LocalizationManager.GetText("work_station", CleanName(name));
 
             // Estaciones de trabajo
             if (name.Contains("workbench") || name.Contains("anvil") || name.Contains("furnace") ||
                 name.Contains("table") || name.Contains("forge") || name.Contains("station"))
-                return $"{CleanName(name)} (estación de trabajo)";
+                return LocalizationManager.GetText("work_station", CleanName(name));
 
             // Enemigos (excluyendo estatuas)
             if (!name.Contains("statue") && !name.Contains("trophy") &&
                 (name.Contains("slime") || name.Contains("spider") || name.Contains("larva") ||
                  name.Contains("grub") || name.Contains("mushroom") || name.Contains("scarab") ||
                  name.Contains("mold") || name.Contains("boss") || name.Contains("enemy")))
-                return $"{CleanName(name)} (enemigo)";
+                return LocalizationManager.GetText("enemy", CleanName(name));
 
             // Objetos recolectables
             if (name.Contains("pickup") || name.Contains("drop") || name.Contains("item"))
-                return $"{CleanName(name)} (objeto)";
+                return LocalizationManager.GetText("object", CleanName(name));
 
             // Plantas y árboles
             if (name.Contains("tree") || name.Contains("plant") || name.Contains("flower") || name.Contains("mushroom"))
-                return $"{CleanName(name)} (planta)";
+                return LocalizationManager.GetText("plant", CleanName(name));
 
             // Recursos minerales
             if (name.Contains("ore") || name.Contains("crystal") || name.Contains("mineral") || name.Contains("rock"))
-                return $"{CleanName(name)} (recurso)";
+                return LocalizationManager.GetText("resource", CleanName(name));
 
             // Cualquier otra entidad
-            return $"{CleanName(name)} (entidad)";
+            return LocalizationManager.GetText("entity", CleanName(name));
         }
 
         /// <summary>
         /// Obtiene descripción de tiles (simple y directo).
+        /// Actualizado para detectar mejor los tiles colocados recientemente.
         /// </summary>
         private static string GetTileDescription(Vector3 worldPosition)
         {
@@ -171,28 +173,28 @@ namespace ckAccess.MapReader
                 {
                     var tool = TileTypeHelper.GetRecommendedTool(topTile.tileType);
                     return string.IsNullOrEmpty(materialName)
-                        ? $"{tileName} destructible (usar {tool})"
-                        : $"{tileName} de {materialName} destructible (usar {tool})";
+                        ? LocalizationManager.GetText("destructible_tool", tileName, tool)
+                        : LocalizationManager.GetText("destructible_material_tool", tileName, materialName, tool);
                 }
 
                 if (TileTypeHelper.IsBlocking(topTile.tileType))
                 {
                     return string.IsNullOrEmpty(materialName)
-                        ? $"{tileName} (bloqueante)"
-                        : $"{tileName} de {materialName} (bloqueante)";
+                        ? LocalizationManager.GetText("blocking", tileName)
+                        : LocalizationManager.GetText("blocking_material", tileName, materialName);
                 }
 
                 if (TileTypeHelper.IsDangerous(topTile.tileType))
                 {
                     return string.IsNullOrEmpty(materialName)
-                        ? $"{tileName} (peligroso)"
-                        : $"{tileName} de {materialName} (peligroso)";
+                        ? LocalizationManager.GetText("dangerous", tileName)
+                        : LocalizationManager.GetText("dangerous_material", tileName, materialName);
                 }
 
                 // Tile normal
                 return string.IsNullOrEmpty(materialName)
                     ? tileName
-                    : $"{tileName} de {materialName}";
+                    : LocalizationManager.GetText("tile_with_material", tileName, materialName);
             }
             catch (Exception e)
             {
@@ -208,30 +210,37 @@ namespace ckAccess.MapReader
         {
             try
             {
-                // Intentar usar TilesetHelper existente
+                // PRIORIDAD 1: Usar LocalizationManager para consistencia
+                string tilesetKey = tileset switch
+                {
+                    0 => "tileset_dirt",        // Dirt
+                    1 => "tileset_stone",       // Stone
+                    2 => "tileset_obsidian",    // Obsidian
+                    3 => "tileset_lava",        // Lava
+                    8 => "tileset_nature",      // Nature
+                    9 => "tileset_mold",        // Mold
+                    10 => "tileset_sea",        // Sea
+                    12 => "tileset_sand",       // Sand
+                    26 => "tileset_desert",     // Desert
+                    31 => "tileset_snow",       // Snow
+                    34 => "tileset_crystal",    // Glass/Crystal
+                    59 => "tileset_dark_stone", // DarkStone
+                    _ => null
+                };
+
+                if (tilesetKey != null)
+                {
+                    return LocalizationManager.GetText(tilesetKey);
+                }
+
+                // FALLBACK: Solo usar TilesetHelper si nuestro sistema no conoce el tileset
                 var friendlyName = TilesetHelper.GetLocalizedName(tileset);
                 if (!string.IsNullOrEmpty(friendlyName) && friendlyName != $"Material {tileset}")
                     return friendlyName;
             }
             catch { }
 
-            // Fallback a mapeo manual simple
-            return tileset switch
-            {
-                0 => "tierra",       // Dirt
-                1 => "piedra",       // Stone
-                2 => "obsidiana",    // Obsidian
-                3 => "lava",         // Lava
-                8 => "naturaleza",   // Nature
-                9 => "moho",         // Mold
-                10 => "mar",         // Sea
-                12 => "arena",       // Sand
-                26 => "desierto",    // Desert
-                31 => "nieve",       // Snow
-                34 => "cristal",     // Glass/Crystal
-                59 => "piedra oscura", // DarkStone
-                _ => null
-            };
+            return null;
         }
 
         /// <summary>
@@ -242,20 +251,20 @@ namespace ckAccess.MapReader
             try
             {
                 var multiMap = PugOther.Manager.multiMap;
-                if (multiMap == null) return "Área no disponible";
+                if (multiMap == null) return LocalizationManager.GetText("area_not_available");
 
                 var tileLayerLookup = multiMap.GetTileLayerLookup();
                 var position = new int2(Mathf.RoundToInt(worldPosition.x), Mathf.RoundToInt(worldPosition.z));
                 var topTile = tileLayerLookup.GetTopTile(position);
 
                 if (topTile.tileType == TileType.none)
-                    return "Vacío";
+                    return LocalizationManager.GetText("empty");
 
                 return TileTypeHelper.GetLocalizedName(topTile.tileType);
             }
             catch
             {
-                return "Posición desconocida";
+                return LocalizationManager.GetText("unknown_position");
             }
         }
 
@@ -264,7 +273,7 @@ namespace ckAccess.MapReader
         /// </summary>
         private static string CleanName(string name)
         {
-            if (string.IsNullOrEmpty(name)) return "Desconocido";
+            if (string.IsNullOrEmpty(name)) return LocalizationManager.GetText("unknown");
 
             // Capitalizar primera letra de cada palabra
             var words = name.Split(' ');

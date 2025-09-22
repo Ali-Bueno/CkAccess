@@ -1,5 +1,6 @@
 extern alias PugOther;
 using HarmonyLib;
+using ckAccess.Localization;
 
 namespace ckAccess.Patches.UI
 {
@@ -20,11 +21,11 @@ namespace ckAccess.Patches.UI
             {
                 // Obtener el nombre de la habilidad
                 string skillName = GetSkillName(skillToShow);
-                UIManager.Speak($"Árbol de talentos abierto: {skillName}");
+                UIManager.Speak(LocalizationManager.GetText("talent_tree_opened", skillName));
             }
             catch
             {
-                UIManager.Speak("Árbol de talentos abierto");
+                UIManager.Speak(LocalizationManager.GetText("talent_tree_opened_generic"));
             }
         }
 
@@ -37,7 +38,9 @@ namespace ckAccess.Patches.UI
         {
             try
             {
-                UIManager.Speak("Árbol de talentos cerrado.");
+                // Siempre anunciar el cierre del árbol de talentos
+                // La verificación anterior era incorrecta porque impedía anuncios legítimos
+                UIManager.Speak(LocalizationManager.GetText("talent_tree_closed"));
             }
             catch
             {
@@ -52,17 +55,25 @@ namespace ckAccess.Patches.UI
         {
             try
             {
-                // Intentar obtener el nombre desde el sistema de localización
-                string skillKey = $"skill_{skillToShow}";
-                string localizedName = UIManager.GetLocalizedText(skillKey);
-
-                if (!string.IsNullOrEmpty(localizedName) && localizedName != skillKey)
+                // Mapeo directo de SkillID a nombres legibles
+                string skillName = skillToShow switch
                 {
-                    return localizedName;
-                }
+                    SkillID.Mining => LocalizationManager.GetText("skill_mining"),
+                    SkillID.Running => LocalizationManager.GetText("skill_running"),
+                    SkillID.Melee => LocalizationManager.GetText("skill_melee"),
+                    SkillID.Vitality => LocalizationManager.GetText("skill_vitality"),
+                    SkillID.Crafting => LocalizationManager.GetText("skill_crafting"),
+                    SkillID.Range => LocalizationManager.GetText("skill_range"),
+                    SkillID.Gardening => LocalizationManager.GetText("skill_gardening"),
+                    SkillID.Fishing => LocalizationManager.GetText("skill_fishing"),
+                    SkillID.Cooking => LocalizationManager.GetText("skill_cooking"),
+                    SkillID.Magic => LocalizationManager.GetText("skill_magic"),
+                    SkillID.Summoning => LocalizationManager.GetText("skill_summoning"),
+                    SkillID.Explosives => LocalizationManager.GetText("skill_explosives"),
+                    _ => skillToShow.ToString()
+                };
 
-                // Fallback al nombre del enum
-                return skillToShow.ToString();
+                return skillName;
             }
             catch
             {
@@ -135,12 +146,12 @@ namespace ckAccess.Patches.UI
                     string talentName = ProcessTalentText(hoverTitle.text, hoverTitle.formatFields);
 
                     // Confirmar la acción (el juego ya manejó si era válida)
-                    UIManager.Speak($"Acción en talento: {talentName}");
+                    UIManager.Speak(LocalizationManager.GetText("talent_action", talentName));
                 }
             }
             catch
             {
-                UIManager.Speak("Talento seleccionado");
+                UIManager.Speak(LocalizationManager.GetText("talent_selected"));
             }
         }
 
@@ -199,11 +210,11 @@ namespace ckAccess.Patches.UI
                 }
 
                 string result = sb.ToString();
-                return !string.IsNullOrEmpty(result) ? result : "Talento";
+                return !string.IsNullOrEmpty(result) ? result : LocalizationManager.GetText("talent");
             }
             catch
             {
-                return "Talento";
+                return LocalizationManager.GetText("talent");
             }
         }
 

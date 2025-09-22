@@ -4,6 +4,7 @@ using HarmonyLib;
 using UnityEngine;
 using Rewired;
 using System.Linq;
+using ckAccess.Localization;
 
 namespace ckAccess.Patches.UI
 {
@@ -191,7 +192,47 @@ namespace ckAccess.Patches.UI
                     {
                         string buttonText = UIManager.GetLocalizedText(hoverTitle.text);
                         if (string.IsNullOrEmpty(buttonText)) buttonText = hoverTitle.text;
-                        UIManager.Speak($"Botón: {buttonText}");
+
+                        // Detectar tipos específicos de botones por su texto
+                        string lowerText = buttonText.ToLower();
+                        if (lowerText.Contains("stats") || lowerText.Contains("estadística"))
+                        {
+                            UIManager.Speak(LocalizationManager.GetText("stats_button", buttonText));
+                        }
+                        else if (lowerText.Contains("preset") || lowerText.Contains("equip"))
+                        {
+                            UIManager.Speak(LocalizationManager.GetText("equipment_preset", buttonText));
+                        }
+                        else if (lowerText.Contains("craft") || lowerText.Contains("fabricar"))
+                        {
+                            UIManager.Speak(LocalizationManager.GetText("crafting_button", buttonText));
+                        }
+                        else if (lowerText.Contains("sort") || lowerText.Contains("organizar"))
+                        {
+                            UIManager.Speak(LocalizationManager.GetText("organize_button", buttonText));
+                        }
+                        else if (lowerText.Contains("quick") || lowerText.Contains("rápido"))
+                        {
+                            UIManager.Speak(LocalizationManager.GetText("quick_action_button", buttonText));
+                        }
+                        else
+                        {
+                            UIManager.Speak(LocalizationManager.GetText("button", buttonText));
+                        }
+                        return;
+                    }
+                }
+
+                // Verificar si es una pestaña (tab)
+                var tab = element.GetComponent<PugOther.CharacterWindowTab>();
+                if (tab != null)
+                {
+                    var hoverTitle = tab.GetHoverTitle();
+                    if (hoverTitle != null && !string.IsNullOrEmpty(hoverTitle.text))
+                    {
+                        string tabText = UIManager.GetLocalizedText(hoverTitle.text);
+                        if (string.IsNullOrEmpty(tabText)) tabText = hoverTitle.text;
+                        UIManager.Speak(LocalizationManager.GetText("tab", tabText));
                         return;
                     }
                 }
@@ -202,11 +243,32 @@ namespace ckAccess.Patches.UI
                     !objectName.StartsWith("GameObject") &&
                     !ShouldIgnoreElement(objectName))
                 {
-                    // Solo anunciar si parece ser algo significativo y no es redundante
-                    if (objectName.ToLower().Contains("button") ||
-                        objectName.ToLower().Contains("tab"))
+                    string lowerName = objectName.ToLower();
+
+                    // Detectar elementos específicos por nombre
+                    if (lowerName.Contains("preset"))
                     {
-                        UIManager.Speak($"Elemento: {objectName}");
+                        UIManager.Speak(LocalizationManager.GetText("preset", CleanObjectName(objectName)));
+                    }
+                    else if (lowerName.Contains("stats") || lowerName.Contains("statistics"))
+                    {
+                        UIManager.Speak(LocalizationManager.GetText("statistics", CleanObjectName(objectName)));
+                    }
+                    else if (lowerName.Contains("pouch") || lowerName.Contains("bag"))
+                    {
+                        UIManager.Speak(LocalizationManager.GetText("bag", CleanObjectName(objectName)));
+                    }
+                    else if (lowerName.Contains("shortcut"))
+                    {
+                        UIManager.Speak(LocalizationManager.GetText("shortcut", CleanObjectName(objectName)));
+                    }
+                    else if (lowerName.Contains("button"))
+                    {
+                        UIManager.Speak(LocalizationManager.GetText("button", CleanObjectName(objectName)));
+                    }
+                    else if (lowerName.Contains("tab"))
+                    {
+                        UIManager.Speak(LocalizationManager.GetText("tab", CleanObjectName(objectName)));
                     }
                     // NO anunciar slots normales - ya tienen su propio parche
                 }
@@ -215,6 +277,30 @@ namespace ckAccess.Patches.UI
             {
                 // Error silencioso
             }
+        }
+
+        /// <summary>
+        /// Limpia el nombre del objeto para mejor legibilidad
+        /// </summary>
+        private static string CleanObjectName(string objectName)
+        {
+            if (string.IsNullOrEmpty(objectName)) return "Desconocido";
+
+            // Remover sufijos comunes de Unity
+            objectName = objectName.Replace("(Clone)", "")
+                                  .Replace("UI", "")
+                                  .Replace("Element", "")
+                                  .Replace("Button", "")
+                                  .Replace("Tab", "")
+                                  .Trim();
+
+            // Capitalizar primera letra
+            if (objectName.Length > 0)
+            {
+                objectName = char.ToUpper(objectName[0]) + objectName.Substring(1);
+            }
+
+            return objectName;
         }
 
         /// <summary>

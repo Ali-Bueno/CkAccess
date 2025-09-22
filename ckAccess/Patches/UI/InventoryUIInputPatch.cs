@@ -2,6 +2,7 @@ extern alias PugOther;
 using HarmonyLib;
 using UnityEngine;
 using Rewired;
+using ckAccess.Localization;
 
 namespace ckAccess.Patches.UI
 {
@@ -39,23 +40,35 @@ namespace ckAccess.Patches.UI
         {
             try
             {
-                // Verificar si estamos en una pestaña de la ventana de personaje
+                // PRIORIDAD 1: Verificar si estamos en una pestaña de preset de equipo
                 if (uiManager.characterWindow != null && uiManager.characterWindow.isShowing)
                 {
                     var selectedTab = uiManager.currentSelectedUIElement?.GetComponent<PugOther.CharacterWindowTab>();
                     if (selectedTab != null)
                     {
-                        HandleTabNavigation(uiManager);
-                        return;
+                        // Verificar si es un preset ANTES de tratar como navegación de pestañas
+                        bool isPreset = IsEquipmentPresetTab(selectedTab);
+
+                        if (isPreset)
+                        {
+                            HandleEquipmentPresetSelection(selectedTab, uiManager);
+                            return;
+                        }
+                        else
+                        {
+                            HandleTabNavigation(uiManager);
+                            return;
+                        }
                     }
                 }
 
-                // Si no estamos en una pestaña, manejar selección de objetos
+                // PRIORIDAD 2: Si no estamos en una pestaña, manejar selección de objetos
                 HandleItemSelection(uiManager);
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error en input U: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("selection_error", ex.Message));
+                UnityEngine.Debug.LogError($"Exception in HandleUInput: {ex}");
             }
         }
 
@@ -69,7 +82,7 @@ namespace ckAccess.Patches.UI
                 var characterWindow = uiManager.characterWindow;
                 if (characterWindow?.windowTabs == null || characterWindow.windowTabs.Count == 0)
                 {
-                    UIManager.Speak("No hay pestañas disponibles");
+                    UIManager.Speak(LocalizationManager.GetText("no_tabs_available"));
                     return;
                 }
 
@@ -104,12 +117,12 @@ namespace ckAccess.Patches.UI
                 }
                 else
                 {
-                    UIManager.Speak("No hay más pestañas disponibles");
+                    UIManager.Speak(LocalizationManager.GetText("no_more_tabs"));
                 }
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error navegando pestañas: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("navigation_error", ex.Message));
             }
         }
 
@@ -173,24 +186,24 @@ namespace ckAccess.Patches.UI
                 {
                     case 0: // Equipamiento
                         characterWindow.ShowEquipmentWindow();
-                        UIManager.Speak("Pestaña: Equipamiento");
+                        UIManager.Speak(LocalizationManager.GetText("tab_equipment"));
                         break;
                     case 1: // Habilidades
                         characterWindow.ShowSkillsWindow();
-                        UIManager.Speak("Pestaña: Habilidades");
+                        UIManager.Speak(LocalizationManager.GetText("tab_skills"));
                         break;
                     case 2: // Almas
                         characterWindow.ShowSoulsWindow();
-                        UIManager.Speak("Pestaña: Almas");
+                        UIManager.Speak(LocalizationManager.GetText("tab_souls"));
                         break;
                     default:
-                        UIManager.Speak($"Pestaña {tabIndex + 1}");
+                        UIManager.Speak(LocalizationManager.GetText("tab_number", tabIndex + 1));
                         break;
                 }
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error cambiando pestaña: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("navigation_error", ex.Message));
             }
         }
 
@@ -203,11 +216,24 @@ namespace ckAccess.Patches.UI
             {
                 if (uiManager.currentSelectedUIElement == null)
                 {
-                    UIManager.Speak("Ningún elemento seleccionado");
+                    UIManager.Speak(LocalizationManager.GetText("no_element_selected"));
                     return;
                 }
 
-                // Verificar si es un slot de inventario
+                // PRIORIDAD 1: Verificar si es una pestaña de preset de equipo (DEBE ser primera verificación)
+                var presetTab = uiManager.currentSelectedUIElement.GetComponent<PugOther.CharacterWindowTab>();
+                if (presetTab != null)
+                {
+                    bool isPreset = IsEquipmentPresetTab(presetTab);
+
+                    if (isPreset)
+                    {
+                        HandleEquipmentPresetSelection(presetTab, uiManager);
+                        return; // IMPORTANTE: Salir aquí para evitar verificaciones adicionales
+                    }
+                }
+
+                // PRIORIDAD 2: Verificar si es un slot de inventario
                 var inventorySlot = uiManager.currentSelectedUIElement.GetComponent<PugOther.InventorySlotUI>();
                 if (inventorySlot != null)
                 {
@@ -215,15 +241,29 @@ namespace ckAccess.Patches.UI
                     return;
                 }
 
-                // Verificar si es una habilidad (skill)
+                // PRIORIDAD 3: Verificar si es un botón de estadísticas
+                if (IsStatsButton(uiManager.currentSelectedUIElement))
+                {
+                    HandleStatsButtonSelection(uiManager);
+                    return;
+                }
+
+                // PRIORIDAD 4: Verificar si es una habilidad (skill) - SOLO si no es preset
                 var skillElement = uiManager.currentSelectedUIElement.GetComponent<PugOther.SkillUIElement>();
                 if (skillElement != null)
                 {
+                    // Double-check: Asegurar que no es un preset tab que también tiene SkillUIElement
+                    if (presetTab != null && IsEquipmentPresetTab(presetTab))
+                    {
+                        HandleEquipmentPresetSelection(presetTab, uiManager);
+                        return;
+                    }
+
                     HandleSkillSelection(skillElement);
                     return;
                 }
 
-                // Verificar si es un talento en el árbol de talentos
+                // PRIORIDAD 5: Verificar si es un talento en el árbol de talentos
                 var talentElement = uiManager.currentSelectedUIElement as PugOther.SkillTalentUIElement;
                 if (talentElement != null)
                 {
@@ -231,12 +271,13 @@ namespace ckAccess.Patches.UI
                     return;
                 }
 
-                // Si no es un elemento específico, simular click izquierdo genérico
+                // PRIORIDAD 6: Si no es un elemento específico, simular click izquierdo genérico
                 SimulateLeftClick(uiManager);
             }
             catch (System.Exception ex)
             {
                 UIManager.Speak($"Error seleccionando objeto: {ex.Message}");
+                UnityEngine.Debug.LogError($"Exception in HandleItemSelection: {ex}");
             }
         }
 
@@ -251,7 +292,7 @@ namespace ckAccess.Patches.UI
 
                 if (containedObject.objectID == ObjectID.None)
                 {
-                    UIManager.Speak("Slot vacío");
+                    UIManager.Speak(LocalizationManager.GetText("empty_slot"));
                     return;
                 }
 
@@ -278,11 +319,11 @@ namespace ckAccess.Patches.UI
 
                 // Anunciar la acción
                 var objectName = PugOther.PlayerController.GetObjectName(containedObject, true);
-                UIManager.Speak($"Seleccionado: {objectName.text}");
+                UIManager.Speak(LocalizationManager.GetText("selected_item", objectName.text));
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error en selección de slot: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("slot_selection_error", ex.Message));
             }
         }
 
@@ -294,35 +335,15 @@ namespace ckAccess.Patches.UI
             try
             {
                 // Llamar directamente al método OnLeftClicked de la habilidad
+                // El SkillTalentTreePatch se encargará de anunciar si se abre o cierra el árbol
                 skill.OnLeftClicked(false, false);
 
-                // Obtener información básica de la habilidad para confirmar
-                var hoverTitle = skill.GetHoverTitle();
-                if (hoverTitle != null && !string.IsNullOrEmpty(hoverTitle.text))
-                {
-                    string skillName = UIManager.GetLocalizedText(hoverTitle.text);
-                    if (string.IsNullOrEmpty(skillName))
-                    {
-                        skillName = PugOther.PugText.ProcessText(hoverTitle.text, hoverTitle.formatFields, true, false);
-                    }
-
-                    if (!string.IsNullOrEmpty(skillName))
-                    {
-                        UIManager.Speak($"Abriendo árbol de talentos: {skillName}");
-                    }
-                    else
-                    {
-                        UIManager.Speak("Abriendo árbol de talentos");
-                    }
-                }
-                else
-                {
-                    UIManager.Speak("Abriendo árbol de talentos");
-                }
+                // NO anunciar aquí - dejar que SkillTalentTreePatch maneje los anuncios
+                // de apertura/cierre del árbol de talentos correctamente
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error abriendo habilidad: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("skill_error", ex.Message));
             }
         }
 
@@ -359,7 +380,7 @@ namespace ckAccess.Patches.UI
             {
                 if (uiManager.currentSelectedUIElement == null)
                 {
-                    UIManager.Speak("Ningún elemento seleccionado para acción secundaria");
+                    UIManager.Speak(LocalizationManager.GetText("no_element_selected_secondary"));
                     return;
                 }
 
@@ -376,7 +397,7 @@ namespace ckAccess.Patches.UI
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error en acción secundaria: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("secondary_action_error_ui", ex.Message));
             }
         }
 
@@ -391,7 +412,7 @@ namespace ckAccess.Patches.UI
 
                 if (containedObject.objectID == ObjectID.None)
                 {
-                    UIManager.Speak("Slot vacío, no hay acción disponible");
+                    UIManager.Speak(LocalizationManager.GetText("empty_slot_no_action"));
                     return;
                 }
 
@@ -416,11 +437,11 @@ namespace ckAccess.Patches.UI
                     clickHandler?.OnPointerClick(clickEvent);
                 }
 
-                UIManager.Speak("Acción secundaria realizada");
+                UIManager.Speak(LocalizationManager.GetText("secondary_action_performed"));
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error en acción secundaria de slot: {ex.Message}");
+                UIManager.Speak(LocalizationManager.GetText("secondary_slot_error", ex.Message));
             }
         }
 
@@ -465,11 +486,11 @@ namespace ckAccess.Patches.UI
                     string talentName = ProcessTalentText(hoverTitle.text, hoverTitle.formatFields);
 
                     // Confirmar la acción (el juego ya manejó si era válida)
-                    UIManager.Speak($"Acción en talento: {talentName}");
+                    UIManager.Speak(LocalizationManager.GetText("talent_action", talentName));
                 }
                 else
                 {
-                    UIManager.Speak("Talento seleccionado");
+                    UIManager.Speak(LocalizationManager.GetText("talent_selected"));
                 }
             }
             catch (System.Exception ex)
@@ -531,6 +552,163 @@ namespace ckAccess.Patches.UI
                 case 2: return "Habilidades";
                 case 3: return "Crafteo";
                 default: return $"Pestaña {tabIndex + 1}";
+            }
+        }
+
+        /// <summary>
+        /// Verifica si la pestaña es un preset de equipo
+        /// </summary>
+        private static bool IsEquipmentPresetTab(PugOther.CharacterWindowTab tab)
+        {
+            try
+            {
+                // Método 1: Verificar usando characterWindow.presetTabs (más confiable)
+                var characterWindow = PugOther.Manager.ui.characterWindow;
+                if (characterWindow?.presetTabs != null)
+                {
+                    bool isInPresetTabs = characterWindow.presetTabs.Contains(tab);
+                    if (isInPresetTabs)
+                    {
+                        return true;
+                    }
+                }
+
+                // Método 2: Verificar por posición en ventana
+                if (characterWindow != null)
+                {
+                    var allTabs = characterWindow.GetComponentsInChildren<PugOther.CharacterWindowTab>(true);
+                    for (int i = 0; i < allTabs.Length; i++)
+                    {
+                        if (allTabs[i] == tab)
+                        {
+                            // Los presets suelen estar en índices específicos (0-5)
+                            if (i >= 0 && i <= 5)
+                            {
+                                string tabName = tab.gameObject.name.ToLower();
+                                bool isPresetByName = tabName.Contains("preset") ||
+                                                     tabName.Contains("loadout") ||
+                                                     tabName.StartsWith("tab") ||
+                                                     System.Text.RegularExpressions.Regex.IsMatch(tabName, @"tab[_\s]*[0-9]");
+
+                                if (isPresetByName)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Método 3: Verificar por nombre de GameObject (fallback)
+                string simpleName = tab.gameObject.name.ToLower();
+                return simpleName.Contains("preset") || simpleName.Contains("equipment");
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Exception in IsEquipmentPresetTab: {ex}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Maneja la selección de presets de equipo
+        /// </summary>
+        private static void HandleEquipmentPresetSelection(PugOther.CharacterWindowTab presetTab, PugOther.UIManager uiManager)
+        {
+            try
+            {
+                // Obtener la ventana de personaje
+                var characterWindow = uiManager.characterWindow;
+                if (characterWindow?.presetTabs == null)
+                {
+                    UIManager.Speak(LocalizationManager.GetText("equipment_preset_error"));
+                    return;
+                }
+
+                // Encontrar el índice del preset seleccionado
+                int presetIndex = characterWindow.presetTabs.IndexOf(presetTab);
+                if (presetIndex < 0)
+                {
+                    UIManager.Speak(LocalizationManager.GetText("equipment_preset_not_found"));
+                    return;
+                }
+
+                // Cambiar al preset usando el método correcto del juego
+                characterWindow.SetActivePreset(presetIndex);
+
+                // Buscar información del preset para anunciar
+                var hoverTitle = presetTab.GetHoverTitle();
+                if (hoverTitle != null && !string.IsNullOrEmpty(hoverTitle.text))
+                {
+                    string presetName = UIManager.GetLocalizedText(hoverTitle.text);
+                    if (string.IsNullOrEmpty(presetName)) presetName = hoverTitle.text;
+                    UIManager.Speak(LocalizationManager.GetText("equipment_preset_selected", presetName));
+                }
+                else
+                {
+                    UIManager.Speak(LocalizationManager.GetText("equipment_preset_selected_generic", presetIndex + 1));
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak(LocalizationManager.GetText("equipment_preset_error", ex.Message));
+            }
+        }
+
+        /// <summary>
+        /// Verifica si el elemento es un botón de estadísticas
+        /// </summary>
+        private static bool IsStatsButton(PugOther.UIelement element)
+        {
+            try
+            {
+                string elementName = element.gameObject.name.ToLower();
+                return elementName.Contains("stats") ||
+                       elementName.Contains("statistics") ||
+                       elementName.Contains("character") && elementName.Contains("window");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Maneja la selección del botón de estadísticas
+        /// </summary>
+        private static void HandleStatsButtonSelection(PugOther.UIManager uiManager)
+        {
+            try
+            {
+                // Intentar acceder al método ToggleStatsWindow en CharacterWindowUI
+                var characterWindow = uiManager.characterWindow;
+                if (characterWindow != null)
+                {
+                    // Usar reflection para acceder al método ToggleStatsWindow
+                    var toggleMethod = typeof(PugOther.CharacterWindowUI).GetMethod("ToggleStatsWindow",
+                        System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+                    if (toggleMethod != null)
+                    {
+                        toggleMethod.Invoke(characterWindow, null);
+                        UIManager.Speak(LocalizationManager.GetText("stats_window_toggled"));
+                    }
+                    else
+                    {
+                        // Fallback: simular click genérico
+                        SimulateLeftClick(uiManager);
+                        UIManager.Speak(LocalizationManager.GetText("stats"));
+                    }
+                }
+                else
+                {
+                    SimulateLeftClick(uiManager);
+                    UIManager.Speak(LocalizationManager.GetText("stats_button_activated"));
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak(LocalizationManager.GetText("stats_error", ex.Message));
             }
         }
     }

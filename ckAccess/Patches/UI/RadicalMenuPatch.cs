@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using ckAccess.Localization;
 
 namespace ckAccess.Patches.UI
 {
@@ -169,20 +170,7 @@ namespace ckAccess.Patches.UI
 
         private static string GetMoreOptionsTranslation()
         {
-            string lang = PugOther.Manager.prefs.language;
-            switch (lang)
-            {
-                case "es": return "Más opciones";
-                case "fr": return "Plus d'options";
-                case "de": return "Weitere Optionen";
-                case "it": return "Altre opzioni";
-                case "pt": return "Mais opções";
-                case "ru": return "Дополнительные параметры";
-                case "zh-Hans": return "更多选项";
-                case "ja": return "その他のオプション";
-                case "ko": return "추가 옵션";
-                case "en": default: return "More options";
-            }
+            return LocalizationManager.GetText("more_options");
         }
     }
 

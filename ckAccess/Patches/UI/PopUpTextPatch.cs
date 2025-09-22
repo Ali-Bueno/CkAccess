@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using ckAccess.Localization;
 
 namespace ckAccess.Patches.UI
 {
@@ -54,22 +55,7 @@ namespace ckAccess.Patches.UI
 
         private static string GetHoldToConfirmHint()
         {
-            string lang = PugOther.Manager.prefs.language;
-            switch (lang)
-            {
-                case "es": return "mantén pulsado para confirmar";
-                case "fr": return "maintenir pour confirmer";
-                case "de": return "zum Bestätigen gedrückt halten";
-                case "it": return "tieni premuto per confermare";
-                case "pt": return "segure para confirmar";
-                case "ru": return "удерживайте для подтверждения";
-                case "zh-Hans": return "按住以确认";
-                case "ja": return "長押しして確認";
-                case "ko": return "길게 눌러 확인";
-                case "en": 
-                default: 
-                    return "hold to confirm";
-            }
+            return LocalizationManager.GetText("hold_to_confirm");
         }
     }
 }

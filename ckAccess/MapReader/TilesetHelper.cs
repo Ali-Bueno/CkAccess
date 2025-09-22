@@ -1,6 +1,7 @@
 extern alias PugOther;
 
 using System.Collections.Generic;
+using ckAccess.Localization;
 
 namespace ckAccess.MapReader
 {
@@ -80,35 +81,31 @@ namespace ckAccess.MapReader
             string result;
             try
             {
-                // PRIORIDAD 1: Usar el sistema nativo del juego - TilesetTypeUtility.GetFriendlyName()
-                var friendlyName = GetTilesetFriendlyName(tilesetIndex);
-                if (!string.IsNullOrEmpty(friendlyName))
+                // PRIORIDAD 1: Usar nuestro LocalizationManager (más confiable)
+                result = GetFallbackLocalizedName(tilesetIndex);
+
+                // Si nuestro sistema no tiene el tileset, usar el sistema nativo como fallback
+                if (result.StartsWith("Material "))
                 {
-                    result = friendlyName;
-                }
-                else
-                {
-                    // PRIORIDAD 2: Intentar obtener nombre localizado del PugGlossary
-                    var localizedName = GetLocalizedTilesetName(tilesetIndex);
-                    if (!string.IsNullOrEmpty(localizedName))
+                    var friendlyName = GetTilesetFriendlyName(tilesetIndex);
+                    if (!string.IsNullOrEmpty(friendlyName))
                     {
-                        result = localizedName;
+                        result = friendlyName;
                     }
                     else
                     {
-                        // FALLBACK: Usar mapeo directo de tilesets
-                        result = TilesetToMaterialMap.TryGetValue(tilesetIndex, out var name)
-                            ? name
-                            : $"Material {tilesetIndex}";
+                        var localizedName = GetLocalizedTilesetName(tilesetIndex);
+                        if (!string.IsNullOrEmpty(localizedName))
+                        {
+                            result = localizedName;
+                        }
                     }
                 }
             }
             catch (System.Exception)
             {
                 // Fallback silencioso
-                result = TilesetToMaterialMap.TryGetValue(tilesetIndex, out var name)
-                    ? name
-                    : $"Material {tilesetIndex}";
+                result = GetFallbackLocalizedName(tilesetIndex);
             }
 
             // OPTIMIZACIÓN: Cachear resultado para futuras consultas
@@ -282,6 +279,39 @@ namespace ckAccess.MapReader
                 >= 6 => 3, // Tilesets especiales - mayor prioridad
                 _ => 0
             };
+        }
+
+        /// <summary>
+        /// Obtiene el nombre fallback usando LocalizationManager.
+        /// </summary>
+        private static string GetFallbackLocalizedName(int tilesetIndex)
+        {
+            string tilesetKey = tilesetIndex switch
+            {
+                0 => "tileset_dirt",        // Dirt
+                1 => "tileset_stone",       // Stone
+                2 => "tileset_obsidian",    // Obsidian
+                3 => "tileset_lava",        // Lava
+                8 => "tileset_nature",      // Nature
+                9 => "tileset_mold",        // Mold
+                10 => "tileset_sea",        // Sea
+                12 => "tileset_sand",       // Sand
+                26 => "tileset_desert",     // Desert
+                31 => "tileset_snow",       // Snow
+                34 => "tileset_crystal",    // Glass/Crystal
+                59 => "tileset_dark_stone", // DarkStone
+                _ => null
+            };
+
+            if (tilesetKey != null)
+            {
+                return LocalizationManager.GetText(tilesetKey);
+            }
+
+            // Si no hay mapeo, usar el mapeo hardcodeado como último recurso
+            return TilesetToMaterialMap.TryGetValue(tilesetIndex, out var name)
+                ? name
+                : $"Material {tilesetIndex}";
         }
     }
 }
