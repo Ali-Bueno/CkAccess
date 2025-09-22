@@ -95,5 +95,9 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\ckAccess.dll&quot;" />
+    <Exec Command="if not exist &quot;$(TargetDir)Localization\Languages&quot; mkdir &quot;$(TargetDir)Localization\Languages&quot;" />
+    <Exec Command="copy /Y &quot;$(ProjectDir)Localization\Languages\*.txt&quot; &quot;$(TargetDir)Localization\Languages\&quot;" />
+    <Exec Command="if not exist &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\Localization\Languages&quot; mkdir &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\Localization\Languages&quot;" />
+    <Exec Command="copy /Y &quot;$(ProjectDir)Localization\Languages\*.txt&quot; &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\Localization\Languages\&quot;" />
   </Target>
 </Project>

@@ -1,0 +1,215 @@
+# Archivo de localización en español para Core Keeper Accessibility Mod
+# Formato: clave=valor
+# Las líneas que empiecen con # son comentarios
+
+# Mensajes del Cursor Virtual
+virtual_cursor_initialized=Cursor virtual inicializado
+cursor_initialization_error=Error inicializando cursor
+cursor_reset=Cursor reseteado: x={0}, z={1}
+cursor_reset_error=Error reseteando cursor
+limit_reached=Límite alcanzado
+primary_action_error=Error en acción primaria: {0}
+placing_at_position=Colocando en posición x={0}, z={1}
+secondary_action_error=Error en acción secundaria: {0}
+interaction_error=Error en interacción: {0}
+cursor_not_initialized=Cursor no inicializado
+current_position=Posición actual: x={0}, z={1}
+position_reading_error=Error leyendo posición del jugador
+
+# Mensajes de Navegación UI
+no_tabs_available=No hay pestañas disponibles
+no_more_tabs=No hay más pestañas disponibles
+tab_equipment=Pestaña: Equipamiento
+tab_skills=Pestaña: Habilidades
+tab_souls=Pestaña: Almas
+tab_number=Pestaña {0}
+navigation_error=Error navegando pestañas: {0}
+selection_error=Error seleccionando objeto: {0}
+empty_slot=Slot vacío
+slot_selection_error=Error en selección de slot: {0}
+skill_error=Error abriendo habilidad: {0}
+click_simulation_error=Error simulando click: {0}
+no_element_selected=Ningún elemento seleccionado
+no_element_selected_secondary=Ningún elemento seleccionado para acción secundaria
+secondary_action_error_ui=Error en acción secundaria: {0}
+empty_slot_no_action=Slot vacío, no hay acción disponible
+secondary_action_performed=Acción secundaria realizada
+secondary_slot_error=Error en acción secundaria de slot: {0}
+right_click_simulation_error=Error simulando click derecho: {0}
+talent_action=Acción en talento: {0}
+talent_selected=Talento seleccionado
+talent_selection_error=Error seleccionando talento: {0}
+skills=Habilidades
+preset_selection_error=Error seleccionando preset: {0}
+preset_selected=Preset seleccionado: {0}
+equipment_preset_selected=Preset de equipo seleccionado
+equipment_preset_selected_generic=Preset de equipo {0} seleccionado
+equipment_preset_error=Error con preset de equipo: {0}
+equipment_preset_not_found=Preset de equipo no encontrado
+stats_window_toggled=Ventana de estadísticas alternada
+stats=Estadísticas
+stats_button_activated=Botón de estadísticas activado
+stats_error=Error abriendo estadísticas: {0}
+selected_item=Seleccionado: {0}
+
+# Mensajes de Habilidades y Talentos
+talent_tree_opened=Árbol de talentos abierto: {0}
+talent_tree_opened_generic=Árbol de talentos abierto
+talent_tree_closed=Árbol de talentos cerrado
+talent=Talento
+
+# Nombres de Habilidades
+skill_mining=Minería
+skill_running=Correr
+skill_melee=Combate Cuerpo a Cuerpo
+skill_vitality=Vitalidad
+skill_crafting=Fabricación
+skill_range=Combate a Distancia
+skill_gardening=Jardinería
+skill_fishing=Pesca
+skill_cooking=Cocina
+skill_magic=Magia
+skill_summoning=Invocación
+skill_explosives=Explosivos
+
+# Mensajes del Lector de Mundo
+empty=Vacío
+reading_error=Error de lectura
+the_core=El Núcleo (interactuable)
+work_station={0} (estación de trabajo)
+enemy={0} (enemigo)
+object={0} (objeto)
+plant={0} (planta)
+resource={0} (recurso)
+entity={0} (entidad)
+destructible_tool={0} destructible (usar {1})
+destructible_material_tool={0} de {1} destructible (usar {2})
+blocking={0} (bloqueante)
+blocking_material={0} de {1} (bloqueante)
+dangerous={0} (peligroso)
+dangerous_material={0} de {1} (peligroso)
+area_not_available=Área no disponible
+unknown_position=Posición desconocida
+unknown=Desconocido
+player_position_error=No se pudo obtener la posición del jugador
+cannot_read_player_position=No se puede leer la posición del jugador
+position_reading_error_generic=Error leyendo posición
+empty_area_around=Área vacía alrededor
+area_scan_error=Error escaneando área
+
+# Estado de Objetos
+equipped=, equipado
+
+# Elementos UI
+stats_button=Botón de estadísticas: {0}
+equipment_preset=Preset de equipo: {0}
+crafting_button=Botón de crafteo: {0}
+organize_button=Botón de organizar: {0}
+quick_action_button=Botón de acción rápida: {0}
+button=Botón: {0}
+tab=Pestaña: {0}
+preset=Preset: {0}
+statistics=Estadísticas: {0}
+bag=Bolsa: {0}
+shortcut=Atajo: {0}
+element=Elemento: {0}
+
+# Mensajes Pop-up
+hold_to_confirm=mantén pulsado para confirmar
+
+# Opciones de Menú
+more_options=Más opciones
+
+# Tipos de Tiles
+tile_none=Vacío
+tile_ground=Suelo
+tile_wall=Pared
+tile_water=Agua
+tile_pit=Hoyo
+tile_bridge=Puente
+tile_floor=Suelo construido
+tile_roof_hole=Agujero en el techo
+tile_thin_wall=Pared delgada
+tile_dug_up_ground=Tierra excavada
+tile_watered_ground=Tierra regada
+tile_circuit_plate=Placa de circuito
+tile_ancient_circuit_plate=Placa de circuito antigua
+tile_fence=Valla
+tile_rug=Alfombra
+tile_small_stones=Piedras pequeñas
+tile_small_grass=Hierba pequeña
+tile_wall_grass=Hierba de pared
+tile_debris=Escombros
+tile_floor_crack=Grieta en el suelo
+tile_rail=Riel
+tile_great_wall=Gran pared
+tile_lit_floor=Suelo iluminado
+tile_debris2=Escombros
+tile_loose_flooring=Suelo suelto
+tile_immune=Zona inmune
+tile_wall_crack=Grieta en la pared
+tile_ore=Veta de mineral
+tile_big_root=Raíz grande
+tile_ground_slime=Rastro de slime
+tile_ancient_crystal=Cristal antiguo
+tile_chrysalis=Crisálida
+
+# Categorías de Tiles
+category_construction=Construcción
+category_liquid=Líquido
+category_mineral=Mineral
+category_organic=Orgánico
+category_stone=Piedra
+category_crystal=Cristal
+category_unknown=Desconocido
+
+# Categorías de Materiales de Tiles
+material_earth=Tierra
+material_stone=Piedra
+material_mineral=Mineral
+material_liquid=Líquido
+material_construction=Construcción
+material_crystal=Cristal
+material_organic=Orgánico
+material_unknown=Desconocido
+
+# Sonidos de Pasos
+sound_earth=Tierra
+sound_stone=Piedra
+sound_metal=Metal
+sound_splash=Chapoteo
+sound_wood=Madera
+sound_gravel=Grava
+sound_textile=Textil
+sound_neutral=Neutral
+
+# Herramientas
+tool_pickaxe=Pico
+tool_high_quality_pickaxe=Pico de alta calidad
+tool_axe=Hacha
+tool_shovel=Pala
+tool_pickaxe_or_shovel=Pico o Pala
+tool_none=Ninguna
+
+# Materiales de Tileset
+tileset_dirt=tierra
+tileset_stone=piedra
+tileset_obsidian=obsidiana
+tileset_lava=lava
+tileset_nature=naturaleza
+tileset_mold=moho
+tileset_sea=mar
+tileset_sand=arena
+tileset_desert=desierto
+tileset_snow=nieve
+tileset_crystal=cristal
+tileset_dark_stone=piedra oscura
+
+# Descripciones de Tiles
+tile_with_material={0} de {1}
+
+# Mensajes de Inventario
+inventory_opened=Inventario abierto
+inventory_closed=Inventario cerrado
+character_window_opened=Ventana de personaje abierta
+character_window_closed=Ventana de personaje cerrada

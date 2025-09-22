@@ -1,0 +1,215 @@
+# English localization file for Core Keeper Accessibility Mod
+# Format: key=value
+# Lines starting with # are comments
+
+# Virtual Cursor Messages
+virtual_cursor_initialized=Virtual cursor initialized
+cursor_initialization_error=Error initializing cursor
+cursor_reset=Cursor reset: x={0}, z={1}
+cursor_reset_error=Error resetting cursor
+limit_reached=Limit reached
+primary_action_error=Error in primary action: {0}
+placing_at_position=Placing at position x={0}, z={1}
+secondary_action_error=Error in secondary action: {0}
+interaction_error=Error in interaction: {0}
+cursor_not_initialized=Cursor not initialized
+current_position=Current position: x={0}, z={1}
+position_reading_error=Error reading player position
+
+# UI Navigation Messages
+no_tabs_available=No tabs available
+no_more_tabs=No more tabs available
+tab_equipment=Tab: Equipment
+tab_skills=Tab: Skills
+tab_souls=Tab: Souls
+tab_number=Tab {0}
+navigation_error=Error navigating tabs: {0}
+selection_error=Error selecting object: {0}
+empty_slot=Empty slot
+slot_selection_error=Error in slot selection: {0}
+skill_error=Error opening skill: {0}
+click_simulation_error=Error simulating click: {0}
+no_element_selected=No element selected
+no_element_selected_secondary=No element selected for secondary action
+secondary_action_error_ui=Error in secondary action: {0}
+empty_slot_no_action=Empty slot, no action available
+secondary_action_performed=Secondary action performed
+secondary_slot_error=Error in slot secondary action: {0}
+right_click_simulation_error=Error simulating right click: {0}
+talent_action=Action on talent: {0}
+talent_selected=Talent selected
+talent_selection_error=Error selecting talent: {0}
+skills=Skills
+preset_selection_error=Error selecting preset: {0}
+preset_selected=Preset selected: {0}
+equipment_preset_selected=Equipment preset selected
+equipment_preset_selected_generic=Equipment preset {0} selected
+equipment_preset_error=Error with equipment preset: {0}
+equipment_preset_not_found=Equipment preset not found
+stats_window_toggled=Stats window toggled
+stats=Stats
+stats_button_activated=Stats button activated
+stats_error=Error opening stats: {0}
+selected_item=Selected: {0}
+
+# Skill and Talent Messages
+talent_tree_opened=Talent tree opened: {0}
+talent_tree_opened_generic=Talent tree opened
+talent_tree_closed=Talent tree closed
+talent=Talent
+
+# Skill Names
+skill_mining=Mining
+skill_running=Running
+skill_melee=Melee
+skill_vitality=Vitality
+skill_crafting=Crafting
+skill_range=Range
+skill_gardening=Gardening
+skill_fishing=Fishing
+skill_cooking=Cooking
+skill_magic=Magic
+skill_summoning=Summoning
+skill_explosives=Explosives
+
+# World Reader Messages
+empty=Empty
+reading_error=Reading error
+the_core=The Core (interactable)
+work_station={0} (work station)
+enemy={0} (enemy)
+object={0} (object)
+plant={0} (plant)
+resource={0} (resource)
+entity={0} (entity)
+destructible_tool=Destructible {0} (use {1})
+destructible_material_tool=Destructible {1} {0} (use {2})
+blocking=Blocking {0}
+blocking_material=Blocking {1} {0}
+dangerous=Dangerous {0}
+dangerous_material=Dangerous {1} {0}
+area_not_available=Area not available
+unknown_position=Unknown position
+unknown=Unknown
+player_position_error=Could not get player position
+cannot_read_player_position=Cannot read player position
+position_reading_error_generic=Error reading position
+empty_area_around=Empty area around
+area_scan_error=Error scanning area
+
+# Item Status
+equipped=, equipped
+
+# UI Elements
+stats_button=Stats button: {0}
+equipment_preset=Equipment preset: {0}
+crafting_button=Crafting button: {0}
+organize_button=Organize button: {0}
+quick_action_button=Quick action button: {0}
+button=Button: {0}
+tab=Tab: {0}
+preset=Preset: {0}
+statistics=Statistics: {0}
+bag=Bag: {0}
+shortcut=Shortcut: {0}
+element=Element: {0}
+
+# Pop-up Messages
+hold_to_confirm=hold to confirm
+
+# Menu Options
+more_options=More options
+
+# Tile Types
+tile_none=Empty
+tile_ground=Ground
+tile_wall=Wall
+tile_water=Water
+tile_pit=Pit
+tile_bridge=Bridge
+tile_floor=Built floor
+tile_roof_hole=Roof hole
+tile_thin_wall=Thin wall
+tile_dug_up_ground=Dug up ground
+tile_watered_ground=Watered ground
+tile_circuit_plate=Circuit plate
+tile_ancient_circuit_plate=Ancient circuit plate
+tile_fence=Fence
+tile_rug=Rug
+tile_small_stones=Small stones
+tile_small_grass=Small grass
+tile_wall_grass=Wall grass
+tile_debris=Debris
+tile_floor_crack=Floor crack
+tile_rail=Rail
+tile_great_wall=Great wall
+tile_lit_floor=Lit floor
+tile_debris2=Debris
+tile_loose_flooring=Loose flooring
+tile_immune=Immune zone
+tile_wall_crack=Wall crack
+tile_ore=Ore vein
+tile_big_root=Big root
+tile_ground_slime=Slime trail
+tile_ancient_crystal=Ancient crystal
+tile_chrysalis=Chrysalis
+
+# Tile Categories
+category_construction=Construction
+category_liquid=Liquid
+category_mineral=Mineral
+category_organic=Organic
+category_stone=Stone
+category_crystal=Crystal
+category_unknown=Unknown
+
+# Tile Material Categories
+material_earth=Earth
+material_stone=Stone
+material_mineral=Mineral
+material_liquid=Liquid
+material_construction=Construction
+material_crystal=Crystal
+material_organic=Organic
+material_unknown=Unknown
+
+# Footstep Sounds
+sound_earth=Earth
+sound_stone=Stone
+sound_metal=Metal
+sound_splash=Splash
+sound_wood=Wood
+sound_gravel=Gravel
+sound_textile=Textile
+sound_neutral=Neutral
+
+# Tools
+tool_pickaxe=Pickaxe
+tool_high_quality_pickaxe=High quality pickaxe
+tool_axe=Axe
+tool_shovel=Shovel
+tool_pickaxe_or_shovel=Pickaxe or Shovel
+tool_none=None
+
+# Tileset Materials
+tileset_dirt=dirt
+tileset_stone=stone
+tileset_obsidian=obsidian
+tileset_lava=lava
+tileset_nature=nature
+tileset_mold=mold
+tileset_sea=sea
+tileset_sand=sand
+tileset_desert=desert
+tileset_snow=snow
+tileset_crystal=crystal
+tileset_dark_stone=dark stone
+
+# Tile Descriptions
+tile_with_material={1} {0}
+
+# Inventory Messages
+inventory_opened=Inventory opened
+inventory_closed=Inventory closed
+character_window_opened=Character window opened
+character_window_closed=Character window closed
