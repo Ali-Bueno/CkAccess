@@ -185,6 +185,17 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
 - **Eliminado**: Claves de localización sin usar (`opening_talent_tree_*`)
 - **Mejorado**: Manejo de errores y logging de exceptions
 
+#### Accesibilidad del Hotbar (2024)
+- **Problema**: El usuario solicitó anuncios de items al seleccionar slots del hotbar con teclas 1-0.
+- **Implementación**: Creado `HotbarSelectionAccessibilityPatch.cs` que intercepta `PlayerController.EquipSlot`.
+- **Funcionalidad**:
+  - Detecta automáticamente cuando se selecciona un slot del hotbar (teclas 1-0)
+  - Accede al inventario del jugador (`player.playerInventoryHandler.GetContainedObjectData()`)
+  - Anuncia el nombre localizado del item o "Slot vacío" si está vacío
+  - Fallback a número de slot si hay errores de acceso
+- **Localización**: Agregadas claves `hotbar_slot_selected` y `empty_hotbar_slot` en español e inglés
+- **Archivos modificados**: `HotbarSelectionAccessibilityPatch.cs`, `es.txt`, `en.txt`
+
 ### Próximos Pasos
 
 1.  **Accesibilizar la mesa de crafteo.**

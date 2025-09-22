@@ -220,6 +220,12 @@ namespace ckAccess.Patches.UI
                     return;
                 }
 
+                // PRIORIDAD 0: Verificar acciones directas con modificadores (Shift+U, Ctrl+U, etc.)
+                if (DirectActionsAccessibilityPatch.HandleDirectActions(uiManager))
+                {
+                    return;
+                }
+
                 // PRIORIDAD 1: Verificar si es una pestaña de preset de equipo (DEBE ser primera verificación)
                 var presetTab = uiManager.currentSelectedUIElement.GetComponent<PugOther.CharacterWindowTab>();
                 if (presetTab != null)
@@ -233,7 +239,13 @@ namespace ckAccess.Patches.UI
                     }
                 }
 
-                // PRIORIDAD 2: Verificar si es un slot de inventario
+                // PRIORIDAD 2: Verificar si estamos en una UI de crafting
+                if (CraftingAccessibilityPatch.HandleCraftingSelection(uiManager))
+                {
+                    return;
+                }
+
+                // PRIORIDAD 3: Verificar si es un slot de inventario
                 var inventorySlot = uiManager.currentSelectedUIElement.GetComponent<PugOther.InventorySlotUI>();
                 if (inventorySlot != null)
                 {
@@ -241,14 +253,14 @@ namespace ckAccess.Patches.UI
                     return;
                 }
 
-                // PRIORIDAD 3: Verificar si es un botón de estadísticas
+                // PRIORIDAD 4: Verificar si es un botón de estadísticas
                 if (IsStatsButton(uiManager.currentSelectedUIElement))
                 {
                     HandleStatsButtonSelection(uiManager);
                     return;
                 }
 
-                // PRIORIDAD 4: Verificar si es una habilidad (skill) - SOLO si no es preset
+                // PRIORIDAD 5: Verificar si es una habilidad (skill) - SOLO si no es preset
                 var skillElement = uiManager.currentSelectedUIElement.GetComponent<PugOther.SkillUIElement>();
                 if (skillElement != null)
                 {
@@ -263,7 +275,7 @@ namespace ckAccess.Patches.UI
                     return;
                 }
 
-                // PRIORIDAD 5: Verificar si es un talento en el árbol de talentos
+                // PRIORIDAD 6: Verificar si es un talento en el árbol de talentos
                 var talentElement = uiManager.currentSelectedUIElement as PugOther.SkillTalentUIElement;
                 if (talentElement != null)
                 {
@@ -271,7 +283,7 @@ namespace ckAccess.Patches.UI
                     return;
                 }
 
-                // PRIORIDAD 6: Si no es un elemento específico, simular click izquierdo genérico
+                // PRIORIDAD 7: Si no es un elemento específico, simular click izquierdo genérico
                 SimulateLeftClick(uiManager);
             }
             catch (System.Exception ex)
@@ -381,6 +393,12 @@ namespace ckAccess.Patches.UI
                 if (uiManager.currentSelectedUIElement == null)
                 {
                     UIManager.Speak(LocalizationManager.GetText("no_element_selected_secondary"));
+                    return;
+                }
+
+                // PRIORIDAD 0: Verificar acciones directas con modificadores (Shift+O)
+                if (DirectActionsAccessibilityPatch.HandleDirectActions(uiManager))
+                {
                     return;
                 }
 

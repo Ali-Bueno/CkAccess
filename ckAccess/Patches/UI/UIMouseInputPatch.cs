@@ -20,11 +20,11 @@ namespace ckAccess.Patches.UI
 
             var uiManager = PugOther.Manager.ui;
 
-            // OPTIMIZACIÓN: Solo procesar si hay un inventario o árbol de talentos abierto
+            // OPTIMIZACIÓN: Solo procesar si hay un inventario, árbol de talentos o UI de crafting abierto
             // Esto evita interferencia con la quick bar y otros elementos UI
-            if (uiManager == null || (!uiManager.isAnyInventoryShowing && !IsSkillTalentTreeOpen(uiManager)))
+            if (uiManager == null || (!uiManager.isAnyInventoryShowing && !IsSkillTalentTreeOpen(uiManager) && !uiManager.isCraftingUIShowing))
             {
-                return true; // Let the original method run - no inventory or talent tree open
+                return true; // Let the original method run - no inventory, talent tree or crafting UI open
             }
 
             // Verificar que hay un elemento seleccionado válido

@@ -46,6 +46,12 @@ namespace ckAccess.VirtualCursor
                     return; // Skip virtual cursor input
                 }
 
+                // Handle hotbar navigation first (works in game and inventory)
+                if (Patches.UI.HotbarAccessibilityPatch.HandleHotbarNavigation())
+                {
+                    return; // Hotbar navigation handled, don't process other input
+                }
+
                 // Handle virtual cursor input - this runs AFTER the original method
                 // so it doesn't interfere with mouse input
                 HandleVirtualCursorInput();
@@ -66,8 +72,11 @@ namespace ckAccess.VirtualCursor
                    Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.L) ||
                    Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.U) ||
                    Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.E) ||
-                   Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.T) ||
+                   Input.GetKeyDown(KeyCode.T) ||
                    Input.GetKeyDown(KeyCode.M) ||
+                   // Hotbar navigation keys
+                   (Input.GetKey(KeyCode.LeftAlt) && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) ||
+                    Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.Space))) ||
                    // También detectar teclas soltadas para acciones
                    Input.GetKeyUp(KeyCode.U) || Input.GetKeyUp(KeyCode.O) || Input.GetKeyUp(KeyCode.E);
         }
