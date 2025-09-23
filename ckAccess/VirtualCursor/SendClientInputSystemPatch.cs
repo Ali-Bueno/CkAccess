@@ -51,23 +51,30 @@ namespace ckAccess.VirtualCursor
 
         [HarmonyPatch("CalculateMouseOrJoystickWorldPoint")]
         [HarmonyPostfix]
+        [HarmonyPriority(Priority.High)] // Alta prioridad para ejecutar antes que AutoTargeting
         public static void CalculateMouseOrJoystickWorldPoint_Postfix(ref float2 __result, PugOther.PlayerController playerController)
         {
             try
             {
-                // Si estamos usando el cursor virtual, reemplazar la posición del mouse
-                if (_useVirtualCursorForPrimaryAction || _useVirtualCursorForSecondaryAction || _useVirtualCursorForInteraction)
-                {
-                    var originalResult = __result;
-                    __result = _virtualCursorWorldPosition.xy;
+                // Primero verificar si hay un objetivo de auto-targeting activo
+                var autoTargetPos = Patches.Player.AutoTargetingPatch.GetCurrentTargetPosition();
 
-                    // Removed debug message to reduce spam when holding keys
+                if (autoTargetPos.HasValue)
+                {
+                    // Si hay auto-target activo, usar esa posición
+                    __result = new float2(autoTargetPos.Value.x, autoTargetPos.Value.z);
                 }
+                else if (_useVirtualCursorForPrimaryAction || _useVirtualCursorForSecondaryAction || _useVirtualCursorForInteraction)
+                {
+                    // Si no hay auto-target pero sí cursor virtual, usar cursor virtual
+                    __result = _virtualCursorWorldPosition.xy;
+                }
+                // Si no hay ninguno de los dos, dejar el resultado original del juego
             }
             catch (System.Exception ex)
             {
                 // En caso de error, mantener el comportamiento original
-                Patches.UI.UIManager.Speak($"Error en parche de cursor virtual: {ex.Message}");
+                UnityEngine.Debug.LogError($"Error en parche de cursor virtual: {ex}");
             }
         }
 

@@ -100,6 +100,7 @@ namespace ckAccess.VirtualCursor
         /// <summary>
         /// Acción primaria en la posición del cursor (tecla U).
         /// Simula click izquierdo en la posición del cursor virtual.
+        /// INTEGRADO con auto-targeting para automáticamente apuntar a enemigos cercanos.
         /// </summary>
         public static void PrimaryAction()
         {
@@ -114,8 +115,22 @@ namespace ckAccess.VirtualCursor
                 // Asegurar que el jugador tenga un slot válido equipado
                 EnsureValidSlotEquipped();
 
-                // Usar el nuevo sistema de parches para simular la acción
-                var worldPos = new float3(_currentPosition.x, _currentPosition.y, _currentPosition.z);
+                // INTEGRACIÓN AUTO-TARGETING: Verificar si hay enemigos cercanos
+                Vector3 targetPosition = _currentPosition;
+                var autoTarget = ckAccess.Patches.Player.AutoTargetingPatch.GetCurrentTarget();
+
+                if (autoTarget != null && ckAccess.Patches.Player.AutoTargetingPatch.IsSystemEnabled)
+                {
+                    // Si hay auto-target activo, usar la posición del enemigo en lugar del cursor
+                    var enemyPos = autoTarget.WorldPosition;
+                    targetPosition = new Vector3(enemyPos.x, enemyPos.y, enemyPos.z);
+
+                    // Opcional: feedback de que se está usando auto-targeting
+                    // UIManager.Speak("Auto-target");
+                }
+
+                // Usar la posición objetivo (cursor o auto-target)
+                var worldPos = new float3(targetPosition.x, targetPosition.y, targetPosition.z);
                 SendClientInputSystemPatch.SetVirtualCursorPrimaryAction(worldPos);
 
                 // Removed verbose debug message to avoid spam when holding keys
@@ -170,29 +185,7 @@ namespace ckAccess.VirtualCursor
             }
         }
 
-        /// <summary>
-        /// Acción de interacción en la posición del cursor (equivalente a tecla E).
-        /// Interactúa con objetos, cofres, puertas, etc.
-        /// </summary>
-        public static void InteractionAction()
-        {
-            if (!_isInitialized)
-            {
-                Initialize();
-                return;
-            }
-
-            try
-            {
-                // Usar el nuevo sistema de parches para simular la interacción
-                var worldPos = new float3(_currentPosition.x, _currentPosition.y, _currentPosition.z);
-                SendClientInputSystemPatch.SetVirtualCursorInteraction(worldPos);
-            }
-            catch (System.Exception ex)
-            {
-                UIManager.Speak(LocalizationManager.GetText("interaction_error", ex.Message));
-            }
-        }
+        // Método de interacción eliminado - el juego maneja la interacción automáticamente
 
         /// <summary>
         /// Detiene la acción primaria (cuando se suelta la tecla U)
@@ -226,21 +219,7 @@ namespace ckAccess.VirtualCursor
             }
         }
 
-        /// <summary>
-        /// Detiene la interacción (cuando se suelta la tecla E)
-        /// </summary>
-        public static void StopInteractionAction()
-        {
-            try
-            {
-                SendClientInputSystemPatch.StopVirtualCursorAction();
-                PlayerInputPatch.StopAllSimulations();
-            }
-            catch (System.Exception ex)
-            {
-                UIManager.Speak($"Error deteniendo interacción: {ex.Message}");
-            }
-        }
+        // Método StopInteractionAction eliminado - no es necesario
 
         #endregion
 

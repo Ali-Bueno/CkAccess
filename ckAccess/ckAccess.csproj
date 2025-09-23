@@ -99,5 +99,9 @@
     <Exec Command="copy /Y &quot;$(ProjectDir)Localization\Languages\*.txt&quot; &quot;$(TargetDir)Localization\Languages\&quot;" />
     <Exec Command="if not exist &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\Localization\Languages&quot; mkdir &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\Localization\Languages&quot;" />
     <Exec Command="copy /Y &quot;$(ProjectDir)Localization\Languages\*.txt&quot; &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\Localization\Languages\&quot;" />
+    <Exec Command="if not exist &quot;$(TargetDir)sounds&quot; mkdir &quot;$(TargetDir)sounds&quot;" />
+    <Exec Command="copy /Y &quot;$(ProjectDir)sounds\*.wav&quot; &quot;$(TargetDir)sounds\&quot;" />
+    <Exec Command="if not exist &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\sounds&quot; mkdir &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\sounds&quot;" />
+    <Exec Command="copy /Y &quot;$(ProjectDir)sounds\*.wav&quot; &quot;D:\games\steam\steamapps\common\Core Keeper\BepInEx\plugins\sounds\&quot;" />
   </Target>
 </Project>

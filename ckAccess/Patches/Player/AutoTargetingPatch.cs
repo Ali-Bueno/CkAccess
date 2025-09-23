@@ -1,0 +1,969 @@
+extern alias PugOther;
+extern alias Core;
+extern alias PugComps;
+using HarmonyLib;
+using ckAccess.Patches.UI;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
+using UnityEngine;
+using Vector3 = Core::UnityEngine.Vector3;
+
+namespace ckAccess.Patches.Player
+{
+    /// <summary>
+    /// Sistema de auto-targeting que automaticamente apunta a enemigos cercanos
+    /// independiente del tipo de input (teclado, ratón, mando)
+    /// </summary>
+    [HarmonyPatch]
+    public static class AutoTargetingPatch
+    {
+        // Configuración del sistema
+        private const float AUTO_TARGET_BASE_RANGE = 5f; // Rango base para auto-targeting
+        private const float MELEE_WEAPON_RANGE = 3f; // Rango para armas cuerpo a cuerpo
+        private const float RANGED_WEAPON_RANGE = 10f; // Rango para armas a distancia
+        private const float MAGIC_WEAPON_RANGE = 8f; // Rango para armas mágicas
+        private const float TOOL_RANGE = 2f; // Rango para herramientas
+        private const int FRAMES_BETWEEN_SCANS = 15; // Escanear enemigos cada 15 frames
+
+        // Estado del sistema - SIEMPRE ACTIVO
+        private static bool _systemEnabled = true; // Siempre activo, no se puede desactivar
+        private static PugOther.EntityMonoBehaviour _currentTarget = null;
+        private static Vector3 _lastTargetPosition = Vector3.zero;
+        private static int _frameCounter = 0;
+        private static List<EnemyTarget> _nearbyEnemies = new List<EnemyTarget>();
+
+        // Estado para anuncios TTS
+        private static HashSet<PugOther.EntityMonoBehaviour> _previouslyInRangeEnemies = new HashSet<PugOther.EntityMonoBehaviour>();
+        private static float _lastAnnouncementTime = 0f;
+        private const float ANNOUNCEMENT_COOLDOWN = 1.5f; // Cooldown entre anuncios para evitar spam
+
+        // Estructura para almacenar información de enemigos
+        private struct EnemyTarget
+        {
+            public PugOther.EntityMonoBehaviour entity;
+            public Vector3 position;
+            public float distance;
+            public string name;
+        }
+
+        /// <summary>
+        /// Parche en el sistema de ataque para redirigir automáticamente hacia el enemigo más cercano
+        /// </summary>
+        [HarmonyPatch(typeof(PugOther.PlayerController), "ManagedUpdate")]
+        [HarmonyPostfix]
+        public static void ManagedUpdate_Postfix(PugOther.PlayerController __instance)
+        {
+            try
+            {
+                if (!_systemEnabled) return;
+
+                // Actualizar lista de enemigos cercanos
+                _frameCounter++;
+                if (_frameCounter >= FRAMES_BETWEEN_SCANS)
+                {
+                    _frameCounter = 0;
+                    UpdateNearbyEnemies(__instance);
+                }
+
+                // Verificar si el objetivo actual sigue siendo válido
+                ValidateCurrentTarget(__instance);
+
+                // No redirigir aquí - lo haremos en el SendClientInputSystem
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error en AutoTargeting ManagedUpdate: {ex}");
+            }
+        }
+
+
+        /// <summary>
+        /// Actualiza la lista de enemigos cercanos y selecciona el mejor objetivo
+        /// </summary>
+        private static void UpdateNearbyEnemies(PugOther.PlayerController player)
+        {
+            try
+            {
+                _nearbyEnemies.Clear();
+
+                if (!TryGetPlayerPosition(player, out Vector3 playerPos))
+                    return;
+
+                // Buscar enemigos en el área
+                var entityLookup = PugOther.Manager.memory?.entityMonoLookUp;
+                if (entityLookup == null) return;
+
+                foreach (var kvp in entityLookup)
+                {
+                    var entity = kvp.Value;
+                    if (entity?.gameObject?.activeInHierarchy != true) continue;
+
+                    // Verificar si es un enemigo
+                    if (!IsEnemyEntity(entity)) continue;
+
+                    var entityPos = entity.WorldPosition;
+                    var entityWorldPos = new Vector3(entityPos.x, entityPos.y, entityPos.z);
+                    var distance = Vector3.Distance(playerPos, entityWorldPos);
+
+                    // Determinar rango efectivo basado en el arma equipada
+                    float effectiveRange = CalculateEffectiveRange(player);
+
+                    // Solo considerar enemigos dentro del rango efectivo
+                    if (distance <= effectiveRange)
+                    {
+                        var enemy = new EnemyTarget
+                        {
+                            entity = entity,
+                            position = entityWorldPos,
+                            distance = distance,
+                            name = GetEntityName(entity)
+                        };
+
+                        _nearbyEnemies.Add(enemy);
+                    }
+                }
+
+                // Seleccionar el mejor objetivo (más cercano por ahora)
+                SelectBestTarget();
+
+                // Procesar anuncios TTS de enemigos que entran/salen del rango
+                ProcessEnemyRangeAnnouncements();
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error actualizando enemigos cercanos: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Selecciona el mejor objetivo de la lista de enemigos cercanos
+        /// </summary>
+        private static void SelectBestTarget()
+        {
+            if (_nearbyEnemies.Count == 0)
+            {
+                _currentTarget = null;
+                return;
+            }
+
+            // Por ahora, seleccionar el más cercano
+            // TODO: Se puede mejorar con prioridades (por tipo, salud, etc.)
+            var sortedEnemies = _nearbyEnemies.OrderBy(e => e.distance).ToList();
+            var newTarget = sortedEnemies[0].entity;
+
+            // Solo cambiar objetivo si es significativamente mejor o el actual es inválido
+            if (_currentTarget == null || !IsValidTarget(_currentTarget) ||
+                sortedEnemies[0].distance < GetDistanceToCurrentTarget() - 1f)
+            {
+                var previousTarget = _currentTarget;
+                _currentTarget = newTarget;
+                _lastTargetPosition = sortedEnemies[0].position;
+
+                // Anunciar nuevo objetivo solo si cambio y está habilitado el sistema
+                if (_systemEnabled && previousTarget != newTarget)
+                {
+                    string cleanName = GetCleanEnemyName(newTarget);
+                    int distance = (int)math.round(sortedEnemies[0].distance);
+                    UIManager.Speak($"Objetivo: {cleanName} a {distance} tiles");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Redirecciona el ataque hacia el objetivo seleccionado
+        /// </summary>
+        private static void RedirectAttackToTarget(PugOther.PlayerController player, PugOther.EntityMonoBehaviour target)
+        {
+            try
+            {
+                if (!TryGetPlayerPosition(player, out Vector3 playerPos))
+                    return;
+
+                var targetPos = target.WorldPosition;
+                var targetWorldPos = new Vector3(targetPos.x, targetPos.y, targetPos.z);
+
+                // Calcular dirección hacia el objetivo
+                var direction = (targetWorldPos - playerPos).normalized;
+                var direction2D = new float3(direction.x, 0f, direction.z);
+
+                // Actualizar la dirección de apuntado del jugador
+                // Esto funciona para todos los tipos de input (teclado, ratón, mando)
+                player.targetingDirection = direction2D;
+
+                // También actualizar facingDirection para asegurar que funcione sin "mirar hacia cursor"
+                try
+                {
+                    // Intentar actualizar la dirección de cara del jugador
+                    var facingDirProperty = player.GetType().GetField("facingDirection",
+                        System.Reflection.BindingFlags.Public |
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Instance);
+
+                    if (facingDirProperty != null)
+                    {
+                        facingDirProperty.SetValue(player, direction2D);
+                    }
+
+                    // Intentar actualizar el ángulo de rotación para proyectiles
+                    var targetAngle = math.atan2(direction.z, direction.x);
+                    var rotationProperty = player.GetType().GetField("targetRotation",
+                        System.Reflection.BindingFlags.Public |
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Instance);
+
+                    if (rotationProperty != null)
+                    {
+                        rotationProperty.SetValue(player, targetAngle);
+                    }
+                }
+                catch
+                {
+                    // Si no podemos acceder a estos campos, continuar solo con targetingDirection
+                }
+
+                // Forzar la orientación del personaje hacia el objetivo
+                // Esto asegura que proyectiles y ataques vayan en la dirección correcta
+                try
+                {
+                    // Actualizar el ángulo de rotación directamente sin usar Quaternion
+                    if (player.transform != null)
+                    {
+                        // Calcular el ángulo en grados
+                        float angleInDegrees = math.degrees(math.atan2(direction.z, direction.x));
+
+                        // Aplicar la rotación usando reflexión para evitar conflictos de tipos
+                        var transformType = player.transform.GetType();
+                        var eulerAnglesProperty = transformType.GetProperty("eulerAngles");
+
+                        if (eulerAnglesProperty != null)
+                        {
+                            var currentEuler = eulerAnglesProperty.GetValue(player.transform);
+                            if (currentEuler != null)
+                            {
+                                // Crear nuevo Vector3 con el ángulo Y actualizado
+                                var eulerType = currentEuler.GetType();
+                                var yField = eulerType.GetField("y");
+
+                                if (yField != null)
+                                {
+                                    yField.SetValue(currentEuler, angleInDegrees);
+                                    eulerAnglesProperty.SetValue(player.transform, currentEuler);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    // Si no podemos rotar el transform, continuar
+                }
+
+                // Actualizar posición del último objetivo
+                _lastTargetPosition = targetWorldPos;
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error redirigiendo ataque: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Calcula el rango efectivo basado en el arma equipada
+        /// </summary>
+        public static float CalculateEffectiveRange(PugOther.PlayerController player)
+        {
+            try
+            {
+                // Obtener el item equipado
+                var equippedSlot = player.GetEquippedSlot();
+
+                // Obtener información del objeto equipado
+                var inventoryHandler = player.playerInventoryHandler;
+                if (inventoryHandler == null)
+                {
+                    return AUTO_TARGET_BASE_RANGE;
+                }
+
+                // Convertir EquipmentSlot a índice si es necesario
+                int slotIndex = 0;
+                try
+                {
+                    // Intentar obtener el índice del slot equipado
+                    if (equippedSlot != null)
+                    {
+                        // GetEquippedSlot devuelve un EquipmentSlot, necesitamos el índice del hotbar
+                        // Por ahora, usar el primer slot del hotbar
+                        for (int i = 0; i < 10; i++)
+                        {
+                            var data = inventoryHandler.GetContainedObjectData(i);
+                            if (data.objectID != ObjectID.None)
+                            {
+                                slotIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch { }
+
+                var itemData = inventoryHandler.GetContainedObjectData(slotIndex);
+                if (itemData.objectID == ObjectID.None)
+                {
+                    return TOOL_RANGE;
+                }
+
+                // Detectar tipo de arma basándose en el ObjectID y componentes
+                return DetermineWeaponRange(itemData.objectID);
+            }
+            catch
+            {
+                return AUTO_TARGET_BASE_RANGE; // Fallback
+            }
+        }
+
+        /// <summary>
+        /// Determina el rango del arma basándose en su ObjectID y tipo
+        /// </summary>
+        private static float DetermineWeaponRange(ObjectID objectID)
+        {
+            try
+            {
+                string itemName = objectID.ToString().ToLower();
+
+                // Armas a distancia (mayor rango)
+                if (itemName.Contains("bow") || itemName.Contains("crossbow") ||
+                    itemName.Contains("gun") || itemName.Contains("rifle") ||
+                    itemName.Contains("slingshot") || itemName.Contains("blowpipe"))
+                {
+                    return RANGED_WEAPON_RANGE;
+                }
+
+                // Armas mágicas (rango medio)
+                if (itemName.Contains("staff") || itemName.Contains("wand") ||
+                    itemName.Contains("scepter") || itemName.Contains("orb") ||
+                    itemName.Contains("tome") || itemName.Contains("book") ||
+                    itemName.Contains("crystal") || itemName.Contains("rune"))
+                {
+                    return MAGIC_WEAPON_RANGE;
+                }
+
+                // Armas cuerpo a cuerpo (rango corto)
+                if (itemName.Contains("sword") || itemName.Contains("axe") ||
+                    itemName.Contains("mace") || itemName.Contains("hammer") ||
+                    itemName.Contains("spear") || itemName.Contains("dagger") ||
+                    itemName.Contains("club") || itemName.Contains("blade") ||
+                    itemName.Contains("scythe") || itemName.Contains("whip"))
+                {
+                    return MELEE_WEAPON_RANGE;
+                }
+
+                // Herramientas (rango mínimo)
+                if (itemName.Contains("pickaxe") || itemName.Contains("shovel") ||
+                    itemName.Contains("hoe") || itemName.Contains("watering") ||
+                    itemName.Contains("fishing") || itemName.Contains("tool"))
+                {
+                    return TOOL_RANGE;
+                }
+
+                // Verificar si tiene componente de arma usando reflexión
+                // Verificar si tiene componentes de proyectil (armas a distancia)
+                try
+                {
+                    // Usar reflexión para verificar componentes sin depender de tipos específicos
+                    var hasProjectile = false;
+                    try
+                    {
+                        var projectileType = System.Type.GetType("PugComps.ProjectileOnUseCD, Pug.Other");
+                        if (projectileType != null)
+                        {
+                            var hasComponentMethod = typeof(PugOther.PugDatabase).GetMethod("HasComponent");
+                            if (hasComponentMethod != null)
+                            {
+                                var genericMethod = hasComponentMethod.MakeGenericMethod(projectileType);
+                                hasProjectile = (bool)genericMethod.Invoke(null, new object[] { objectID });
+                            }
+                        }
+                    }
+                    catch { }
+
+                    if (hasProjectile)
+                    {
+                        return RANGED_WEAPON_RANGE;
+                    }
+
+                    // Verificar por tipo de objeto genérico
+                    var objectInfo = PugOther.PugDatabase.GetObjectInfo(objectID);
+                    if (objectInfo != null)
+                    {
+                        // Verificar si es equipable (probablemente un arma)
+                        if (PugOther.PugDatabase.HasComponent<PugComps.EquipmentCD>(objectID))
+                        {
+                            return MELEE_WEAPON_RANGE;
+                        }
+                    }
+                }
+                catch { }
+
+                // Default: rango base
+                return AUTO_TARGET_BASE_RANGE;
+            }
+            catch
+            {
+                return AUTO_TARGET_BASE_RANGE;
+            }
+        }
+
+        /// <summary>
+        /// Verifica si una entidad es un enemigo REAL (no estatuas ni decoraciones)
+        /// </summary>
+        public static bool IsEnemyEntity(PugOther.EntityMonoBehaviour entity)
+        {
+            try
+            {
+                var gameObject = entity.gameObject;
+                if (gameObject == null) return false;
+
+                string name = gameObject.name.ToLower();
+
+                // FILTRO ULTRA ESTRICTO: Si contiene "statue" EN CUALQUIER PARTE, NO es enemigo
+                if (name.Contains("statue") || name.Contains("statua"))
+                    return false;
+
+                // Si contiene "dummy" o "mannequin", tampoco
+                if (name.Contains("dummy") || name.Contains("mannequin") || name.Contains("practice"))
+                    return false;
+
+                // FILTRO MEJORADO: Excluir objetos que definitivamente NO son enemigos
+                // Decoraciones y objetos del entorno
+                if (name.Contains("statue") ||
+                    name.Contains("summon") ||
+                    name.Contains("totem") ||
+                    name.Contains("spawner") ||
+                    name.Contains("turret") ||
+                    name.Contains("trap") ||
+                    name.Contains("decoration") ||
+                    name.Contains("prop") ||
+                    name.Contains("dummy") ||
+                    name.Contains("destructible") ||
+                    name.Contains("breakable") ||
+                    name.Contains("crate") ||
+                    name.Contains("barrel") ||
+                    name.Contains("chest") ||
+                    name.Contains("container") ||
+                    name.Contains("furniture") ||
+                    name.Contains("plant") ||
+                    name.Contains("tree") ||
+                    name.Contains("rock") ||
+                    name.Contains("ore") ||
+                    name.Contains("crystal") ||
+                    name.Contains("wall") ||
+                    name.Contains("floor") ||
+                    name.Contains("ceiling"))
+                {
+                    return false; // No son enemigos, son objetos del mundo
+                }
+
+                // Verificar si tiene componentes que lo identifican como enemigo
+                // Por ahora no podemos acceder a objectID desde EntityMonoBehaviour directamente
+                bool hasEnemyComponents = false;
+
+                // Si no encontramos componentes, usar lista de nombres
+                // IMPORTANTE: Solo incluir enemigos REALES que atacan
+                // Excluir explícitamente cosas como "fly" si es una mosca decorativa
+
+                // VERIFICACIÓN ADICIONAL: El nombre debe contener algún indicador de movimiento o vida
+                // Los enemigos reales suelen tener componentes o sufijos que indican que son entidades vivas
+                bool hasLifeIndicator = name.Contains("(clone)") ||
+                                       name.Contains("spawned") ||
+                                       name.Contains("alive") ||
+                                       name.Contains("active") ||
+                                       name.Contains("mob_") ||
+                                       name.Contains("enemy_") ||
+                                       name.Contains("hostile_");
+
+                // Para enemigos conocidos, verificar que NO sean estatuas Y que parezcan vivos
+                // El nombre exacto importa - los enemigos reales tienen patrones específicos
+
+                // Slimes reales
+                if ((name.StartsWith("slime") || name.StartsWith("orangeslime") ||
+                     name.StartsWith("acidslime") || name.StartsWith("poisonslime")) &&
+                    !name.Contains("statue"))
+                    return true;
+
+                // Arañas reales
+                if ((name.StartsWith("spider") || name.StartsWith("cavespider") ||
+                     name.StartsWith("webspider")) && !name.Contains("statue"))
+                    return true;
+
+                // Esqueletos reales
+                if ((name.StartsWith("skeleton") || name.StartsWith("undeadskeleton")) &&
+                    !name.Contains("statue"))
+                    return true;
+
+                // Goblins reales
+                if ((name.StartsWith("goblin") || name.StartsWith("cavegoblin")) &&
+                    !name.Contains("statue"))
+                    return true;
+
+                // Orcos - CUIDADO: muchas estatuas de orcos
+                if ((name.StartsWith("orc_") || name.StartsWith("ork_") ||
+                     name.Equals("orc") || name.Equals("ork")) &&
+                    !name.Contains("statue"))
+                    return true;
+
+                // Zombies reales
+                if (name.StartsWith("zombie") && !name.Contains("statue"))
+                    return true;
+
+                // Demonios reales
+                if (name.StartsWith("demon") && !name.Contains("statue"))
+                    return true;
+
+                // Larvas - verificar que no sea spawner
+                if ((name.StartsWith("larva") || name.StartsWith("grub")) &&
+                    !name.Contains("statue") && !name.Contains("spawner"))
+                    return true;
+
+                // Gusanos
+                if (name.StartsWith("worm") && !name.Contains("statue"))
+                    return true;
+
+                // Murciélagos
+                if (name.StartsWith("bat") && !name.Contains("statue"))
+                    return true;
+
+                // Ratas
+                if (name.StartsWith("rat") && !name.Contains("statue"))
+                    return true;
+                if (name.Contains("mushroom") && name.Contains("poison"))
+                    return true; // Hongos venenosos que atacan
+                if (name.Contains("shaman"))
+                    return true;
+                if (name.Contains("witch"))
+                    return true;
+                if (name.Contains("mage") && !name.Contains("statue"))
+                    return true;
+                if (name.Contains("knight") && !name.Contains("statue"))
+                    return true;
+                if (name.Contains("warrior") && !name.Contains("statue"))
+                    return true;
+                if (name.Contains("guardian") && !name.Contains("statue"))
+                    return true;
+                if (name.Contains("brute"))
+                    return true;
+                if (name.Contains("crawler"))
+                    return true;
+
+                // Patrones genéricos pero con más cuidado
+                if ((name.Contains("enemy") || name.Contains("hostile") || name.Contains("monster")) &&
+                    !name.Contains("statue") && !name.Contains("dummy"))
+                    return true;
+
+                // Jefes (bosses) siempre son enemigos
+                if (name.Contains("boss") && !name.Contains("statue"))
+                    return true;
+
+                // Si tiene componentes de enemigo pero no matchó nombres, probablemente es enemigo
+                if (hasEnemyComponents && !name.Contains("npc") && !name.Contains("merchant") &&
+                    !name.Contains("vendor") && !name.Contains("friendly"))
+                    return true;
+
+                return false; // Por defecto, no es enemigo
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Verifica si un objetivo sigue siendo válido
+        /// </summary>
+        private static bool IsValidTarget(PugOther.EntityMonoBehaviour target)
+        {
+            try
+            {
+                return target != null &&
+                       target.gameObject != null &&
+                       target.gameObject.activeInHierarchy &&
+                       IsEnemyEntity(target);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Valida el objetivo actual y lo limpia si es inválido
+        /// </summary>
+        private static void ValidateCurrentTarget(PugOther.PlayerController player)
+        {
+            if (_currentTarget != null && !IsValidTarget(_currentTarget))
+            {
+                _currentTarget = null;
+            }
+
+            // También verificar si está fuera de rango
+            if (_currentTarget != null && TryGetPlayerPosition(player, out Vector3 playerPos))
+            {
+                float effectiveRange = CalculateEffectiveRange(player);
+                float distance = GetDistanceToCurrentTarget();
+
+                if (distance > effectiveRange + 2f) // Un poco de margen
+                {
+                    _currentTarget = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Obtiene la distancia al objetivo actual
+        /// </summary>
+        private static float GetDistanceToCurrentTarget()
+        {
+            if (_currentTarget == null) return float.MaxValue;
+
+            try
+            {
+                var targetPos = _currentTarget.WorldPosition;
+                return Vector3.Distance(_lastTargetPosition, new Vector3(targetPos.x, targetPos.y, targetPos.z));
+            }
+            catch
+            {
+                return float.MaxValue;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene la posición del jugador de forma segura
+        /// </summary>
+        private static bool TryGetPlayerPosition(PugOther.PlayerController player, out Vector3 position)
+        {
+            position = Vector3.zero;
+
+            try
+            {
+                if (player == null) return false;
+
+                var worldPos = player.WorldPosition;
+                position = new Vector3(worldPos.x, worldPos.y, worldPos.z);
+                return true;
+            }
+            catch
+            {
+                try
+                {
+                    if (player.transform != null)
+                    {
+                        var pos = player.transform.position;
+                        position = new Vector3(pos.x, pos.y, pos.z);
+                        return true;
+                    }
+                }
+                catch { }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Obtiene el nombre de una entidad
+        /// </summary>
+        private static string GetEntityName(PugOther.EntityMonoBehaviour entity)
+        {
+            try
+            {
+                return entity.gameObject?.name ?? "Unknown Enemy";
+            }
+            catch
+            {
+                return "Unknown Enemy";
+            }
+        }
+
+        /// <summary>
+        /// Método legacy para compatibilidad - el sistema siempre está activo
+        /// </summary>
+        public static void SetSystemEnabled(bool enabled)
+        {
+            // No hacer nada - el sistema siempre está activo
+            // Mantenido para compatibilidad pero no tiene efecto
+        }
+
+        /// <summary>
+        /// Verifica si el sistema está habilitado
+        /// </summary>
+        public static bool IsSystemEnabled => _systemEnabled;
+
+        /// <summary>
+        /// Obtiene el objetivo actual (para debugging)
+        /// </summary>
+        public static PugOther.EntityMonoBehaviour GetCurrentTarget() => _currentTarget;
+
+        /// <summary>
+        /// Procesa los anuncios TTS para enemigos que entran o salen del rango
+        /// </summary>
+        private static void ProcessEnemyRangeAnnouncements()
+        {
+            try
+            {
+                // Verificar cooldown para evitar spam
+                float currentTime = UnityEngine.Time.time;
+                if (currentTime - _lastAnnouncementTime < ANNOUNCEMENT_COOLDOWN)
+                    return;
+
+                // Crear conjunto de enemigos actualmente en rango
+                var currentlyInRangeEnemies = new HashSet<PugOther.EntityMonoBehaviour>();
+                foreach (var enemy in _nearbyEnemies)
+                {
+                    if (enemy.entity != null && IsValidTarget(enemy.entity))
+                    {
+                        currentlyInRangeEnemies.Add(enemy.entity);
+                    }
+                }
+
+                // Solo anunciar si el sistema está habilitado
+                if (!_systemEnabled)
+                    return;
+
+                // Detectar enemigos que entraron al rango
+                foreach (var enemy in currentlyInRangeEnemies)
+                {
+                    if (!_previouslyInRangeEnemies.Contains(enemy))
+                    {
+                        AnnounceEnemyInRange(enemy, true);
+                        _lastAnnouncementTime = currentTime;
+                        break; // Solo anunciar uno por vez para evitar spam
+                    }
+                }
+
+                // Detectar enemigos que salieron del rango
+                var enemiesToRemove = new List<PugOther.EntityMonoBehaviour>();
+                foreach (var enemy in _previouslyInRangeEnemies)
+                {
+                    if (!currentlyInRangeEnemies.Contains(enemy) || !IsValidTarget(enemy))
+                    {
+                        if (IsValidTarget(enemy)) // Solo anunciar si todavía existe
+                        {
+                            AnnounceEnemyInRange(enemy, false);
+                            _lastAnnouncementTime = currentTime;
+                        }
+                        enemiesToRemove.Add(enemy);
+                        break; // Solo anunciar uno por vez
+                    }
+                }
+
+                // Limpiar enemigos que ya no están válidos
+                foreach (var enemy in enemiesToRemove)
+                {
+                    _previouslyInRangeEnemies.Remove(enemy);
+                }
+
+                // Actualizar conjunto para el próximo frame
+                _previouslyInRangeEnemies = currentlyInRangeEnemies;
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error procesando anuncios de enemigos: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Anuncia cuando un enemigo entra o sale del rango
+        /// </summary>
+        private static void AnnounceEnemyInRange(PugOther.EntityMonoBehaviour enemy, bool enteringRange)
+        {
+            try
+            {
+                // Solo anunciar si el sistema está activo
+                if (!_systemEnabled)
+                    return;
+
+                string enemyName = GetCleanEnemyName(enemy);
+
+                // Calcular distancia y dirección relativa al jugador
+                var player = PugOther.Manager.main?.player;
+                if (player != null && TryGetPlayerPosition(player, out Vector3 playerPos))
+                {
+                    var enemyPos = enemy.WorldPosition;
+                    var enemyWorldPos = new Vector3(enemyPos.x, enemyPos.y, enemyPos.z);
+                    float distance = Vector3.Distance(playerPos, enemyWorldPos);
+
+                    // Calcular dirección
+                    string direction = GetRelativeDirection(playerPos, enemyWorldPos);
+
+                    if (enteringRange)
+                    {
+                        UIManager.Speak($"{enemyName} {direction}, {(int)math.round(distance)} tiles");
+                    }
+                    else
+                    {
+                        UIManager.Speak($"{enemyName} fuera de rango");
+                    }
+                }
+                else
+                {
+                    // Fallback simple sin dirección
+                    string message = enteringRange ?
+                        $"{enemyName} en rango" :
+                        $"{enemyName} fuera de rango";
+                    UIManager.Speak(message);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error anunciando enemigo: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Obtiene la dirección relativa de un objetivo respecto al jugador
+        /// </summary>
+        private static string GetRelativeDirection(Vector3 playerPos, Vector3 targetPos)
+        {
+            Vector3 diff = targetPos - playerPos;
+            float angle = math.degrees(math.atan2(diff.z, diff.x));
+
+            // Normalizar el ángulo entre 0-360
+            if (angle < 0) angle += 360;
+
+            // Determinar dirección cardinal
+            if (angle >= 337.5f || angle < 22.5f)
+                return "al este";
+            else if (angle >= 22.5f && angle < 67.5f)
+                return "al noreste";
+            else if (angle >= 67.5f && angle < 112.5f)
+                return "al norte";
+            else if (angle >= 112.5f && angle < 157.5f)
+                return "al noroeste";
+            else if (angle >= 157.5f && angle < 202.5f)
+                return "al oeste";
+            else if (angle >= 202.5f && angle < 247.5f)
+                return "al suroeste";
+            else if (angle >= 247.5f && angle < 292.5f)
+                return "al sur";
+            else
+                return "al sureste";
+        }
+
+        /// <summary>
+        /// Obtiene un nombre limpio y descriptivo del enemigo
+        /// </summary>
+        private static string GetCleanEnemyName(PugOther.EntityMonoBehaviour enemy)
+        {
+            try
+            {
+                if (enemy?.gameObject?.name == null)
+                    return "Enemigo desconocido";
+
+                string rawName = enemy.gameObject.name.ToLower();
+
+                // Limpiar el nombre removiendo sufijos comunes de Unity
+                string cleanName = rawName;
+
+                // Remover sufijos como (Clone), números, etc.
+                if (cleanName.Contains("(clone)"))
+                    cleanName = cleanName.Replace("(clone)", "").Trim();
+
+                // Remover números al final
+                while (cleanName.Length > 0 && char.IsDigit(cleanName[cleanName.Length - 1]))
+                {
+                    cleanName = cleanName.Substring(0, cleanName.Length - 1);
+                }
+
+                // Mapear nombres conocidos a versiones más amigables
+                var nameMapping = new Dictionary<string, string>
+                {
+                    { "slime", "Slime" },
+                    { "spider", "Araña" },
+                    { "skeleton", "Esqueleto" },
+                    { "goblin", "Goblin" },
+                    { "orc", "Orco" },
+                    { "zombie", "Zombie" },
+                    { "demon", "Demonio" },
+                    { "beast", "Bestia" },
+                    { "larva", "Larva" },
+                    { "grub", "Gusano" },
+                    { "worm", "Lombriz" },
+                    { "fly", "Mosca" },
+                    { "bat", "Murciélago" },
+                    { "rat", "Rata" },
+                    { "boss", "Jefe" }
+                };
+
+                // Buscar coincidencias en el mapeo
+                foreach (var mapping in nameMapping)
+                {
+                    if (cleanName.Contains(mapping.Key))
+                    {
+                        return mapping.Value;
+                    }
+                }
+
+                // Si no hay mapeo, capitalizar la primera letra
+                if (cleanName.Length > 0)
+                {
+                    return char.ToUpper(cleanName[0]) + cleanName.Substring(1);
+                }
+
+                return "Enemigo";
+            }
+            catch
+            {
+                return "Enemigo";
+            }
+        }
+
+        /// <summary>
+        /// Obtiene información de debugging del sistema
+        /// </summary>
+        public static string GetDebugInfo()
+        {
+            return $"AutoTargeting: Enabled={_systemEnabled}, " +
+                   $"CurrentTarget={(_currentTarget?.gameObject?.name ?? "None")}, " +
+                   $"NearbyEnemies={_nearbyEnemies.Count}, " +
+                   $"InRangeEnemies={_previouslyInRangeEnemies.Count}";
+        }
+
+        /// <summary>
+        /// Parche en SendClientInputSystem para interceptar el cálculo de dirección
+        /// Este es el punto correcto para aplicar auto-targeting universalmente
+        /// </summary>
+        [HarmonyPatch(typeof(PugOther.SendClientInputSystem), "OnUpdate")]
+        [HarmonyPrefix]
+        public static void SendClientInputSystem_OnUpdate_Prefix()
+        {
+            try
+            {
+                if (!_systemEnabled || _currentTarget == null || !IsValidTarget(_currentTarget))
+                    return;
+
+                // Obtener el jugador actual
+                var player = PugOther.Manager.main?.player;
+                if (player == null) return;
+
+                // Aplicar el auto-targeting modificando la dirección de apuntado
+                RedirectAttackToTarget(player, _currentTarget);
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error en SendClientInputSystem_OnUpdate_Prefix: {ex}");
+            }
+        }
+
+
+        /// <summary>
+        /// Obtiene la posición mundial del objetivo actual para uso externo
+        /// </summary>
+        public static float3? GetCurrentTargetPosition()
+        {
+            if (_currentTarget == null || !IsValidTarget(_currentTarget))
+                return null;
+
+            var pos = _currentTarget.WorldPosition;
+            return new float3(pos.x, pos.y, pos.z);
+        }
+    }
+}

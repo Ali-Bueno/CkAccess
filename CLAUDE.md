@@ -146,9 +146,26 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
   - **Completado:** Interacción con talentos mediante tecla U para invertir puntos.
 - **Completado:** Sistema completo de cursor virtual para gameplay.
   - **Completado:** Cursor virtual con movimiento I/J/K/L y detección de mundo.
-  - **Completado:** Acciones U/O/E en el mundo (minar, atacar, interactuar, colocar).
+  - **Completado:** Inicialización automática al entrar al mundo (sin necesidad de activación manual).
+  - **Completado:** Acciones U/O en el mundo (minar, atacar, colocar) - tecla E eliminada, el juego maneja interacciones automáticamente.
   - **Completado:** Integración completa con sistema de inventario y UI mediante U/O.
   - **Completado:** Soporte para teclas mantenidas emulando comportamiento de ratón.
+- **Completado:** Sistema de Auto-Targeting inteligente.
+  - **Completado:** Detección automática de enemigos cercanos con filtrado mejorado (excluye estatuas y decoraciones).
+  - **Completado:** Rango adaptativo según el arma equipada (melee: 3 tiles, ranged: 10 tiles, magic: 8 tiles).
+  - **Completado:** Integración con cursor virtual - la tecla U apunta automáticamente al enemigo más cercano.
+  - **Completado:** Anuncios por TTS de enemigos que entran/salen del rango con dirección y distancia.
+  - **Completado:** Sistema siempre activo (sin toggles).
+- **Completado:** Sistema de Proximidad Sonora.
+  - **Completado:** Sonidos de proximidad para objetos interactuables (cofres, puertas, altares, etc.).
+  - **Completado:** Sonidos de proximidad para enemigos con detección de movimiento.
+  - **Completado:** Sistema de pitch dinámico: grave = lejos (10 tiles), agudo = cerca (1 tile).
+  - **Completado:** Audio 3D espacializado para indicar dirección.
+  - **Completado:** Diferenciación sutil de tipos de enemigos mediante variaciones de pitch.
+  - **Completado:** Actualización en tiempo real de posición de enemigos aunque el jugador esté parado.
+- **Completado:** Accesibilidad del Hotbar.
+  - **Completado:** Anuncios de items al seleccionar slots del hotbar con teclas 1-0.
+  - **Completado:** Lectura del nombre del item o "Slot vacío" si no hay nada equipado.
 - **Completado:** Correcciones finales de accesibilidad y estabilidad.
   - **Completado:** Sistema de localización unificado con LocalizationManager.
   - **Completado:** Detección correcta de presets de equipo con navegación por teclado.
@@ -196,11 +213,29 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
 - **Localización**: Agregadas claves `hotbar_slot_selected` y `empty_hotbar_slot` en español e inglés
 - **Archivos modificados**: `HotbarSelectionAccessibilityPatch.cs`, `es.txt`, `en.txt`
 
+### Controles del Cursor Virtual y Sistemas de Accesibilidad
+
+#### Cursor Virtual (se activa automáticamente al entrar al mundo):
+- **I/J/K/L:** Mover cursor (arriba/izquierda/abajo/derecha)
+- **R:** Resetear cursor a la posición del jugador
+- **U:** Acción primaria (atacar/minar) - con auto-target activo apunta automáticamente a enemigos
+- **O:** Acción secundaria (usar/colocar objetos)
+- **P:** Información de posición del cursor
+- **M:** Posición detallada del jugador
+- **T:** Test de coordenadas
+
+#### Sistemas Automáticos (siempre activos):
+- **Auto-Targeting:** Apunta automáticamente al enemigo más cercano al usar U
+- **Sonidos de Proximidad:** Emite tonos que varían en pitch según la distancia (grave=lejos, agudo=cerca)
+  - Para objetos interactuables: se activa al caminar
+  - Para enemigos: se actualiza constantemente con su posición
+
 ### Próximos Pasos
 
-1.  **Accesibilizar la mesa de crafteo.**
-2.  **Mejorar personalización de personaje:** Investigar cómo obtener los nombres o descripciones de las opciones de apariencia (ej. "Pelo largo", "Rojo") en lugar de solo "Estilo X de Y".
-3.  **Verificar y pulir:** Probar exhaustivamente todos los menús para asegurar que la lectura sea fluida y no haya regresiones.
+1.  **Accesibilizar la mesa de crafteo y otros menús de crafting.**
+2.  **Mejorar personalización de personaje:** Investigar cómo obtener los nombres o descripciones de las opciones de apariencia.
+3.  **Sistema de lectura de chat y mensajes del juego.**
+4.  **Verificar y pulir:** Probar exhaustivamente todos los sistemas para asegurar estabilidad.
 
 ---
 ### Workaround Temporal

@@ -20,7 +20,6 @@ namespace ckAccess.VirtualCursor
         // Sistema para rastrear teclas mantenidas actualmente
         private static bool _uKeyHeld = false;
         private static bool _oKeyHeld = false;
-        private static bool _eKeyHeld = false;
         [HarmonyPatch("UpdateMouseUIInput")]
         [HarmonyPostfix]
         public static void UpdateMouseUIInput_Postfix(PugOther.UIMouse __instance)
@@ -71,14 +70,14 @@ namespace ckAccess.VirtualCursor
             return Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.J) ||
                    Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.L) ||
                    Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.U) ||
-                   Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.E) ||
+                   Input.GetKeyDown(KeyCode.O) ||
                    Input.GetKeyDown(KeyCode.T) ||
                    Input.GetKeyDown(KeyCode.M) ||
                    // Hotbar navigation keys
                    (Input.GetKey(KeyCode.LeftAlt) && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) ||
                     Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.Space))) ||
                    // También detectar teclas soltadas para acciones
-                   Input.GetKeyUp(KeyCode.U) || Input.GetKeyUp(KeyCode.O) || Input.GetKeyUp(KeyCode.E);
+                   Input.GetKeyUp(KeyCode.U) || Input.GetKeyUp(KeyCode.O);
         }
 
         private static void HandleVirtualCursorInput()
@@ -128,16 +127,7 @@ namespace ckAccess.VirtualCursor
                 _oKeyHeld = false;
                 VirtualCursor.StopSecondaryAction();
             }
-            else if (Input.GetKeyDown(KeyCode.E) && CanProcessInput(KeyCode.E, currentTime))
-            {
-                _eKeyHeld = true;
-                VirtualCursor.InteractionAction(); // Interaction key equivalent (interactuar con objetos)
-            }
-            else if (Input.GetKeyUp(KeyCode.E))
-            {
-                _eKeyHeld = false;
-                VirtualCursor.StopInteractionAction();
-            }
+            // Tecla E eliminada - el juego maneja la interacción automáticamente
             else if (Input.GetKeyDown(KeyCode.P) && CanProcessInput(KeyCode.P, currentTime))
             {
                 VirtualCursor.DebugCurrentPosition(); // Debug position information
@@ -150,7 +140,7 @@ namespace ckAccess.VirtualCursor
             {
                 VirtualCursor.AnnouncePlayerPositionDetailed(); // Posición detallada del jugador
             }
-            // TECLA TAB ELIMINADA - Ya no necesaria
+            // Teclas G y H eliminadas - sistemas siempre activos
         }
         
         private static bool CanProcessInput(KeyCode key, float currentTime)
@@ -172,7 +162,7 @@ namespace ckAccess.VirtualCursor
         /// </summary>
         public static bool IsAnyActionKeyHeld()
         {
-            return _uKeyHeld || _oKeyHeld || _eKeyHeld;
+            return _uKeyHeld || _oKeyHeld;
         }
 
         /// <summary>
@@ -184,7 +174,6 @@ namespace ckAccess.VirtualCursor
             {
                 case KeyCode.U: return _uKeyHeld;
                 case KeyCode.O: return _oKeyHeld;
-                case KeyCode.E: return _eKeyHeld;
                 default: return false;
             }
         }
