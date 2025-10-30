@@ -264,3 +264,8 @@ inventory_opened=Inventario abierto
 inventory_closed=Inventario cerrado
 character_window_opened=Ventana de personaje abierta
 character_window_closed=Ventana de personaje cerrada
+# Mensajes del Sistema de Notificaciones
+item_picked_single=Recogido: {0}
+item_picked_multiple=Recogido: {0} x{1}
+level_up=¡Subiste a nivel {0}!
+skill_up={0} subió a nivel {1}

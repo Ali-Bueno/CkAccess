@@ -264,3 +264,8 @@ inventory_opened=Inventory opened
 inventory_closed=Inventory closed
 character_window_opened=Character window opened
 character_window_closed=Character window closed
+# Notification System Messages
+item_picked_single=Picked up: {0}
+item_picked_multiple=Picked up: {0} x{1}
+level_up=Leveled up to {0}!
+skill_up={0} increased to level {1}
