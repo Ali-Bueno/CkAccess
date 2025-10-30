@@ -1,177 +1,189 @@
 extern alias PugOther;
 extern alias PugUnExt;
+extern alias Core;
 using HarmonyLib;
 using UnityEngine;
 using Rewired;
 using System.Linq;
 using ckAccess.Localization;
+using Vector3 = Core::UnityEngine.Vector3;
 
 namespace ckAccess.Patches.UI
 {
+    /// <summary>
+    /// Parche para habilitar navegación por teclado (WASD/Flechas) y D-Pad en inventarios
+    /// REFACTORIZADO: Código más limpio, sin duplicación, mejor manejo del pointer
+    /// </summary>
     [HarmonyPatch(typeof(PugOther.UIMouse))]
     public static class UIMouseInputPatch
     {
+        // Variable estática para forzar la posición del pointer en el siguiente frame
+        private static Vector3? _forcedPointerPosition = null;
+
+        /// <summary>
+        /// Parche POSTFIX para forzar la posición del pointer después de que el juego lo actualice
+        /// Esto garantiza que WASD funcione sin depender del mouse físico
+        /// </summary>
+        [HarmonyPatch("UpdateMouseUIInput")]
+        [HarmonyPostfix]
+        public static void UpdateMouseUIInput_Postfix(PugOther.UIMouse __instance)
+        {
+            try
+            {
+                // Si hay una posición forzada pendiente, aplicarla DESPUÉS de que el juego actualice el pointer
+                if (_forcedPointerPosition.HasValue)
+                {
+                    __instance.pointer.position = _forcedPointerPosition.Value;
+                    _forcedPointerPosition = null; // Limpiar para el siguiente frame
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error in UIMouseInputPatch Postfix: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Parche PREFIX para interceptar navegación con teclado/D-Pad
+        /// ANTES de que el juego procese el mouse físico
+        /// </summary>
         [HarmonyPatch("UpdateMouseUIInput")]
         [HarmonyPrefix]
-        public static bool UpdateMouseUIInput_Prefix(PugOther.UIMouse __instance, out bool leftClickWasUsed, out bool rightClickWasUsed)
+        public static void UpdateMouseUIInput_Prefix(PugOther.UIMouse __instance, out bool leftClickWasUsed, out bool rightClickWasUsed)
         {
             leftClickWasUsed = false;
             rightClickWasUsed = false;
 
-            var uiManager = PugOther.Manager.ui;
-
-            // OPTIMIZACIÓN: Solo procesar si hay un inventario, árbol de talentos o UI de crafting abierto
-            // Esto evita interferencia con la quick bar y otros elementos UI
-            if (uiManager == null || (!uiManager.isAnyInventoryShowing && !IsSkillTalentTreeOpen(uiManager) && !uiManager.isCraftingUIShowing))
+            try
             {
-                return true; // Let the original method run - no inventory, talent tree or crafting UI open
-            }
+                var uiManager = PugOther.Manager.ui;
 
-            // Verificar que hay un elemento seleccionado válido
-            if (uiManager.currentSelectedUIElement == null)
+                // Solo procesar si hay un inventario, árbol de talentos o UI de crafting abierto
+                if (uiManager == null || (!uiManager.isAnyInventoryShowing && !IsSkillTalentTreeOpen(uiManager) && !uiManager.isCraftingUIShowing))
+                {
+                    return;
+                }
+
+                // Verificar que hay un elemento seleccionado válido
+                if (uiManager.currentSelectedUIElement == null)
+                {
+                    return;
+                }
+
+                // Detectar input de navegación (teclado y D-Pad)
+                var navigationDirection = DetectNavigationInput();
+
+                // Detectar input de acciones (U/O)
+                bool hasActionInput = Input.GetKeyDown(KeyCode.U) || Input.GetKeyDown(KeyCode.O);
+
+                // Si no hay ningún input relevante, no hacer nada
+                if (navigationDirection == PugUnExt.Pug.UnityExtensions.Direction.Id.zero && !hasActionInput)
+                {
+                    return;
+                }
+
+                // Manejar acciones U/O (tienen prioridad sobre navegación)
+                if (hasActionInput)
+                {
+                    if (Input.GetKeyDown(KeyCode.U))
+                    {
+                        InventoryUIInputPatch.HandleUInputPublic(uiManager);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.O))
+                    {
+                        InventoryUIInputPatch.HandleOInputPublic(uiManager);
+                    }
+                    return;
+                }
+
+                // Manejar navegación con WASD/Flechas/D-Pad
+                if (navigationDirection != PugUnExt.Pug.UnityExtensions.Direction.Id.zero)
+                {
+                    HandleKeyboardNavigation(__instance, uiManager, navigationDirection);
+                }
+            }
+            catch (System.Exception ex)
             {
-                return true; // Let the original method run - no valid UI element
+                UnityEngine.Debug.LogError($"Error in UIMouseInputPatch Prefix: {ex}");
             }
+        }
 
-            // OPTIMIZACIÓN ADICIONAL: Solo procesar si hay input de navegación o acciones
-            // Esto reduce la interferencia con el ratón cuando no hay input de teclado/gamepad
-            bool hasNavigationInput = Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) ||
-                                     Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) ||
-                                     Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) ||
-                                     Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D);
+        /// <summary>
+        /// Detecta input de navegación de todas las fuentes (teclado + D-Pad)
+        /// </summary>
+        private static PugUnExt.Pug.UnityExtensions.Direction.Id DetectNavigationInput()
+        {
+            // Teclado (WASD / Flechas)
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+                return PugUnExt.Pug.UnityExtensions.Direction.Id.forward;
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+                return PugUnExt.Pug.UnityExtensions.Direction.Id.back;
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+                return PugUnExt.Pug.UnityExtensions.Direction.Id.left;
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+                return PugUnExt.Pug.UnityExtensions.Direction.Id.right;
 
-            // Añadir detección de U/O
-            bool hasActionInput = Input.GetKeyDown(KeyCode.U) || Input.GetKeyDown(KeyCode.O);
-
+            // D-Pad (usando las acciones correctas del juego)
             var player = ReInput.players.GetPlayer(0);
             if (player != null)
             {
-                hasNavigationInput = hasNavigationInput ||
-                                   player.GetButtonDown("SwapNextHotbar") ||
-                                   player.GetButtonDown("SwapPreviousHotbar") ||
-                                   player.GetButtonDown("QuickStack") ||
-                                   player.GetButtonDown("Sort");
-            }
-
-            // Si no hay input de navegación ni de acciones, dejar que el método original maneje todo
-            if (!hasNavigationInput && !hasActionInput)
-            {
-                return true; // Let the original method run - no relevant input
-            }
-
-            // Manejar acciones U/O antes que navegación
-            if (hasActionInput)
-            {
-                if (Input.GetKeyDown(KeyCode.U))
-                {
-                    InventoryUIInputPatch.HandleUInputPublic(uiManager);
-                }
-                else if (Input.GetKeyDown(KeyCode.O))
-                {
-                    InventoryUIInputPatch.HandleOInputPublic(uiManager);
-                }
-                return true; // Permitir que el método original continúe
-            }
-
-            if (player == null)
-            {
-                return true; // Let the original method run
-            }
-
-            PugUnExt.Pug.UnityExtensions.Direction.Id direction = PugUnExt.Pug.UnityExtensions.Direction.Id.zero;
-
-            // Keyboard Input
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-            {
-                direction = PugUnExt.Pug.UnityExtensions.Direction.Id.forward;
-            }
-            else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-            {
-                direction = PugUnExt.Pug.UnityExtensions.Direction.Id.back;
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-            {
-                direction = PugUnExt.Pug.UnityExtensions.Direction.Id.left;
-            }
-            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-            {
-                direction = PugUnExt.Pug.UnityExtensions.Direction.Id.right;
-            }
-
-            // D-Pad Input (using the correct, logged action names)
-            if (direction == PugUnExt.Pug.UnityExtensions.Direction.Id.zero)
-            {
                 if (player.GetButtonDown("SwapNextHotbar")) // D-Pad Up
-                {
-                    direction = PugUnExt.Pug.UnityExtensions.Direction.Id.forward;
-                }
-                else if (player.GetButtonDown("SwapPreviousHotbar")) // D-Pad Down
-                {
-                    direction = PugUnExt.Pug.UnityExtensions.Direction.Id.back;
-                }
-                else if (player.GetButtonDown("QuickStack")) // D-Pad Left
-                {
-                    direction = PugUnExt.Pug.UnityExtensions.Direction.Id.left;
-                }
-                else if (player.GetButtonDown("Sort")) // D-Pad Right
-                {
-                    direction = PugUnExt.Pug.UnityExtensions.Direction.Id.right;
-                }
+                    return PugUnExt.Pug.UnityExtensions.Direction.Id.forward;
+                if (player.GetButtonDown("SwapPreviousHotbar")) // D-Pad Down
+                    return PugUnExt.Pug.UnityExtensions.Direction.Id.back;
+                if (player.GetButtonDown("QuickStack")) // D-Pad Left
+                    return PugUnExt.Pug.UnityExtensions.Direction.Id.left;
+                if (player.GetButtonDown("Sort")) // D-Pad Right
+                    return PugUnExt.Pug.UnityExtensions.Direction.Id.right;
             }
 
-            if (direction != PugUnExt.Pug.UnityExtensions.Direction.Id.zero)
+            return PugUnExt.Pug.UnityExtensions.Direction.Id.zero;
+        }
+
+        /// <summary>
+        /// Maneja la navegación con teclado/D-Pad
+        /// OPTIMIZADO: Código más simple y robusto
+        /// </summary>
+        private static void HandleKeyboardNavigation(PugOther.UIMouse uiMouse, PugOther.UIManager uiManager, PugUnExt.Pug.UnityExtensions.Direction.Id direction)
+        {
+            try
             {
-                // MEJORADO: Forzar posición del ratón al centro antes de navegar
-                // Esto soluciona el problema de dependencia de la posición del ratón físico
                 var currentElement = uiManager.currentSelectedUIElement;
-                if (currentElement != null)
+                if (currentElement == null) return;
+
+                // Obtener el siguiente elemento usando el método nativo del juego
+                var nextElement = currentElement.GetAdjacentUIElement(direction, currentElement.transform.position);
+
+                if (nextElement != null && nextElement.isShowing)
                 {
-                    // Usar la posición actual del elemento como punto de referencia
-                    var referencePosition = currentElement.transform.position;
-                    __instance.pointer.position = referencePosition;
+                    // Establecer la posición forzada para el Postfix
+                    var pos = nextElement.transform.position;
+                    _forcedPointerPosition = new Vector3(pos.x, pos.y, pos.z);
 
-                    var nextElement = currentElement.GetAdjacentUIElement(direction, referencePosition);
-                    if (nextElement != null)
+                    // Llamar a TrySelectNewElement usando reflexión
+                    var method = typeof(PugOther.UIMouse).GetMethod("TrySelectNewElement",
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+                    if (method != null)
                     {
-                        __instance.pointer.position = nextElement.transform.position;
-
-                        var method = typeof(PugOther.UIMouse).GetMethod("TrySelectNewElement", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                        if (method != null)
-                        {
-                            method.Invoke(__instance, new object[] { nextElement, false });
-                        }
-
-                        // IMPORTANTE: Anunciar elementos que no fueron detectados automáticamente
-                        AnnounceElementIfNeeded(nextElement);
+                        method.Invoke(uiMouse, new object[] { nextElement, false });
                     }
-                    else
-                    {
-                        // Si no hay elemento adyacente, buscar el siguiente disponible en toda la interfaz
-                        var alternativeElement = FindNextAvailableElement(direction, currentElement);
-                        if (alternativeElement != null)
-                        {
-                            __instance.pointer.position = alternativeElement.transform.position;
 
-                            var method = typeof(PugOther.UIMouse).GetMethod("TrySelectNewElement", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                            if (method != null)
-                            {
-                                method.Invoke(__instance, new object[] { alternativeElement, false });
-                            }
-
-                            AnnounceElementIfNeeded(alternativeElement);
-                        }
-                    }
+                    // Anunciar el nuevo elemento si es necesario
+                    AnnounceElementIfNeeded(nextElement);
                 }
-                // We handled the input, skip the original method
-                return false;
+                // Si no hay elemento adyacente, no hacer nada (no buscar alternativas para evitar comportamiento impredecible)
             }
-
-            // No custom input detected, let the original method run
-            return true;
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error en HandleKeyboardNavigation: {ex}");
+                _forcedPointerPosition = null;
+            }
         }
 
         /// <summary>
         /// Anuncia elementos que no tienen parches específicos
+        /// SIMPLIFICADO: Solo anuncia lo esencial
         /// </summary>
         private static void AnnounceElementIfNeeded(PugOther.UIelement element)
         {
@@ -179,13 +191,13 @@ namespace ckAccess.Patches.UI
             {
                 if (element == null) return;
 
-                // Verificar si es un botón sin parche específico
+                // Verificar si es un botón
                 var button = element.GetComponent<PugOther.ButtonUIElement>();
                 if (button != null)
                 {
                     // FILTRO: No anunciar skills - tienen su propio parche específico
                     var skillComponent = button.GetComponent<PugOther.SkillUIElement>();
-                    if (skillComponent != null) return; // Es una skill, no anunciar como botón
+                    if (skillComponent != null) return;
 
                     var hoverTitle = button.GetHoverTitle();
                     if (hoverTitle != null && !string.IsNullOrEmpty(hoverTitle.text))
@@ -193,32 +205,7 @@ namespace ckAccess.Patches.UI
                         string buttonText = UIManager.GetLocalizedText(hoverTitle.text);
                         if (string.IsNullOrEmpty(buttonText)) buttonText = hoverTitle.text;
 
-                        // Detectar tipos específicos de botones por su texto
-                        string lowerText = buttonText.ToLower();
-                        if (lowerText.Contains("stats") || lowerText.Contains("estadística"))
-                        {
-                            UIManager.Speak(LocalizationManager.GetText("stats_button", buttonText));
-                        }
-                        else if (lowerText.Contains("preset") || lowerText.Contains("equip"))
-                        {
-                            UIManager.Speak(LocalizationManager.GetText("equipment_preset", buttonText));
-                        }
-                        else if (lowerText.Contains("craft") || lowerText.Contains("fabricar"))
-                        {
-                            UIManager.Speak(LocalizationManager.GetText("crafting_button", buttonText));
-                        }
-                        else if (lowerText.Contains("sort") || lowerText.Contains("organizar"))
-                        {
-                            UIManager.Speak(LocalizationManager.GetText("organize_button", buttonText));
-                        }
-                        else if (lowerText.Contains("quick") || lowerText.Contains("rápido"))
-                        {
-                            UIManager.Speak(LocalizationManager.GetText("quick_action_button", buttonText));
-                        }
-                        else
-                        {
-                            UIManager.Speak(LocalizationManager.GetText("button", buttonText));
-                        }
+                        UIManager.Speak(LocalizationManager.GetText("button", buttonText));
                         return;
                     }
                 }
@@ -236,132 +223,10 @@ namespace ckAccess.Patches.UI
                         return;
                     }
                 }
-
-                // Verificar por nombre del GameObject para elementos no identificados
-                string objectName = element.gameObject.name;
-                if (!string.IsNullOrEmpty(objectName) &&
-                    !objectName.StartsWith("GameObject") &&
-                    !ShouldIgnoreElement(objectName))
-                {
-                    string lowerName = objectName.ToLower();
-
-                    // Detectar elementos específicos por nombre
-                    if (lowerName.Contains("preset"))
-                    {
-                        UIManager.Speak(LocalizationManager.GetText("preset", CleanObjectName(objectName)));
-                    }
-                    else if (lowerName.Contains("stats") || lowerName.Contains("statistics"))
-                    {
-                        UIManager.Speak(LocalizationManager.GetText("statistics", CleanObjectName(objectName)));
-                    }
-                    else if (lowerName.Contains("pouch") || lowerName.Contains("bag"))
-                    {
-                        UIManager.Speak(LocalizationManager.GetText("bag", CleanObjectName(objectName)));
-                    }
-                    else if (lowerName.Contains("shortcut"))
-                    {
-                        UIManager.Speak(LocalizationManager.GetText("shortcut", CleanObjectName(objectName)));
-                    }
-                    else if (lowerName.Contains("button"))
-                    {
-                        UIManager.Speak(LocalizationManager.GetText("button", CleanObjectName(objectName)));
-                    }
-                    else if (lowerName.Contains("tab"))
-                    {
-                        UIManager.Speak(LocalizationManager.GetText("tab", CleanObjectName(objectName)));
-                    }
-                    // NO anunciar slots normales - ya tienen su propio parche
-                }
             }
             catch
             {
                 // Error silencioso
-            }
-        }
-
-        /// <summary>
-        /// Limpia el nombre del objeto para mejor legibilidad
-        /// </summary>
-        private static string CleanObjectName(string objectName)
-        {
-            if (string.IsNullOrEmpty(objectName)) return "Desconocido";
-
-            // Remover sufijos comunes de Unity
-            objectName = objectName.Replace("(Clone)", "")
-                                  .Replace("UI", "")
-                                  .Replace("Element", "")
-                                  .Replace("Button", "")
-                                  .Replace("Tab", "")
-                                  .Trim();
-
-            // Capitalizar primera letra
-            if (objectName.Length > 0)
-            {
-                objectName = char.ToUpper(objectName[0]) + objectName.Substring(1);
-            }
-
-            return objectName;
-        }
-
-        /// <summary>
-        /// Busca el siguiente elemento disponible cuando GetAdjacentUIElement falla
-        /// SIMPLIFICADO: Por ahora solo retorna null para evitar errores de compilación
-        /// </summary>
-        private static PugOther.UIelement FindNextAvailableElement(PugUnExt.Pug.UnityExtensions.Direction.Id direction, PugOther.UIelement currentElement)
-        {
-            // TODO: Implementar búsqueda alternativa sin FindObjectsOfType
-            return null;
-        }
-
-        /// <summary>
-        /// Verifica si un elemento debe ser ignorado para anuncios
-        /// </summary>
-        private static bool ShouldIgnoreElement(string objectName)
-        {
-            if (string.IsNullOrEmpty(objectName)) return true;
-
-            string lowerName = objectName.ToLower();
-
-            // Ignorar elementos clonados de inventario (ya tienen parches específicos)
-            if (lowerName.Contains("inventoryslot") && lowerName.Contains("clone")) return true;
-            if (lowerName.Contains("inventoryslotplayer")) return true;
-            if (lowerName.Contains("slot") && (lowerName.Contains("clone") || lowerName.Contains("masked"))) return true;
-
-            // Ignorar otros elementos internos
-            if (lowerName.Contains("background")) return true;
-            if (lowerName.Contains("outline")) return true;
-            if (lowerName.Contains("shadow")) return true;
-            if (lowerName.Contains("container")) return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Verifica si un elemento está en contexto de inventario
-        /// </summary>
-        private static bool IsElementInInventoryContext(PugOther.UIelement element)
-        {
-            try
-            {
-                // Verificar si está en ventana de personaje
-                var characterWindow = element.GetComponentInParent<PugOther.CharacterWindowUI>();
-                if (characterWindow != null) return true;
-
-                // Verificar si está en algún inventario
-                var inventoryUI = element.GetComponentInParent<PugOther.InventoryUI>();
-                if (inventoryUI != null) return true;
-
-                // Verificar por nombre del GameObject
-                string objectName = element.gameObject.name.ToLower();
-                return objectName.Contains("inventory") ||
-                       objectName.Contains("slot") ||
-                       objectName.Contains("tab") ||
-                       objectName.Contains("button") ||
-                       objectName.Contains("equipment");
-            }
-            catch
-            {
-                return false;
             }
         }
 
@@ -372,8 +237,6 @@ namespace ckAccess.Patches.UI
         {
             try
             {
-                // Por ahora, detección simplificada - TODO: mejorar cuando sepamos la API exacta
-                // Si hay un elemento seleccionado que es SkillTalentUIElement, asumimos que está abierto
                 var currentElement = uiManager.currentSelectedUIElement;
                 if (currentElement != null)
                 {

@@ -354,7 +354,7 @@ namespace ckAccess.Patches.Player
         }
 
         /// <summary>
-        /// Verifica si una entidad es un enemigo REAL (no estatuas ni decoraciones)
+        /// Verifica si una entidad es un enemigo REAL (no estatuas, minions ni decoraciones)
         /// </summary>
         public static bool IsEnemyEntity(PugOther.EntityMonoBehaviour entity)
         {
@@ -362,6 +362,34 @@ namespace ckAccess.Patches.Player
             {
                 var gameObject = entity.gameObject;
                 if (gameObject == null) return false;
+
+                // FILTRO CRÍTICO: Excluir MINIONS y PETS del jugador
+                // Los minions invocados tienen el componente MinionCD
+                // Las mascotas tienen el componente PetCD
+                try
+                {
+                    var entityData = entity.entity;
+                    var world = entity.world;
+
+                    if (world != null && entityData != default)
+                    {
+                        // Verificar si es un minion invocado por el jugador
+                        if (world.EntityManager.HasComponent<PugComps.MinionCD>(entityData))
+                        {
+                            return false; // Es un minion del jugador, NO es enemigo
+                        }
+
+                        // Verificar si es una mascota del jugador
+                        if (world.EntityManager.HasComponent<PugComps.PetCD>(entityData))
+                        {
+                            return false; // Es una mascota, NO es enemigo
+                        }
+                    }
+                }
+                catch
+                {
+                    // Si falla la verificación de componentes, continuar con las otras verificaciones
+                }
 
                 string name = gameObject.name.ToLower();
 
