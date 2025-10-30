@@ -30,6 +30,13 @@ namespace ckAccess.VirtualCursor
         /// </summary>
         public static void UpdateVirtualAimInput()
         {
+            // CRÍTICO: No funcionar en menús principales o cuando estamos escribiendo
+            if (!IsInGameplay())
+            {
+                _virtualAimInput = Vector2.zero;
+                return;
+            }
+
             // Solo actualizar si no hay inventarios abiertos (estamos en gameplay)
             if (PugOther.Manager.ui != null && PugOther.Manager.ui.isAnyInventoryShowing)
             {
@@ -235,6 +242,10 @@ namespace ckAccess.VirtualCursor
         [HarmonyPostfix]
         public static void WasButtonPressedDownThisFrame_Postfix(ref bool __result, PugOther.PlayerInput.InputType inputType)
         {
+            // CRÍTICO: No funcionar en menús principales o cuando estamos escribiendo
+            if (!IsInGameplay())
+                return;
+
             // Solo mapear si no hay inventarios abiertos (estamos en gameplay)
             if (PugOther.Manager.ui != null && PugOther.Manager.ui.isAnyInventoryShowing)
                 return;
@@ -258,6 +269,10 @@ namespace ckAccess.VirtualCursor
         [HarmonyPostfix]
         public static void IsButtonCurrentlyDown_Postfix(ref bool __result, PugOther.PlayerInput.InputType inputType)
         {
+            // CRÍTICO: No funcionar en menús principales o cuando estamos escribiendo
+            if (!IsInGameplay())
+                return;
+
             // Solo mapear si no hay inventarios abiertos (estamos en gameplay)
             if (PugOther.Manager.ui != null && PugOther.Manager.ui.isAnyInventoryShowing)
                 return;
@@ -279,5 +294,64 @@ namespace ckAccess.VirtualCursor
         public static void SimulateInteract() { }
         public static void SimulateSecondInteract() { }
         public static void StopAllSimulations() { }
+
+        /// <summary>
+        /// Verifica si estamos en gameplay real (no en menús principales, no escribiendo)
+        /// </summary>
+        private static bool IsInGameplay()
+        {
+            try
+            {
+                // Si no hay jugador activo, no estamos en gameplay
+                var main = PugOther.Manager.main;
+                if (main == null || main.player == null)
+                    return false;
+
+                // Verificar si hay un campo de texto activo
+                var input = PugOther.Manager.input;
+                if (input != null)
+                {
+                    // Verificar si textInputIsActive (propiedad calculada)
+                    try
+                    {
+                        var textInputIsActiveProp = AccessTools.Property(input.GetType(), "textInputIsActive");
+                        if (textInputIsActiveProp != null)
+                        {
+                            bool textInputIsActive = (bool)textInputIsActiveProp.GetValue(input);
+                            if (textInputIsActive)
+                                return false;
+                        }
+                    }
+                    catch { }
+                }
+
+                var uiManager = PugOther.Manager.ui;
+                if (uiManager != null)
+                {
+
+                    // Si el juego está pausado, no estamos en gameplay
+                    if (UnityEngine.Time.timeScale == 0f)
+                        return false;
+                }
+
+                // Verificar que el controlador del jugador esté activo
+                try
+                {
+                    var playerController = main.player as PugOther.PlayerController;
+                    if (playerController == null)
+                        return false;
+
+                    if (!playerController.enabled || !playerController.gameObject.activeInHierarchy)
+                        return false;
+                }
+                catch { }
+
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        }
     }
 }

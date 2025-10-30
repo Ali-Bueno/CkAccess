@@ -366,3 +366,16 @@ tileset_alien=alien
 tileset_oasis=oasis
 tileset_explosive_forest=explosive forest
 tileset_explosive_desert=explosive desert
+
+# Interaction Messages
+interact_available=Press E to interact with {0}
+interactable_object=object
+object_type_chest=chest
+object_type_door=door
+object_type_workstation=workstation
+
+# Intro/Outro
+intro_skip_message=Hold space to skip the intro
+
+# Tutorial Buffer
+no_tutorials=No tutorials in buffer

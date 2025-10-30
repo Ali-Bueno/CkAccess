@@ -151,33 +151,56 @@ namespace ckAccess.VirtualCursor
         {
             try
             {
-                // Check for main menu state - if the game is not in play mode
+                // CRÍTICO: Si no hay jugador activo, definitivamente estamos en un menú
                 var main = PugOther.Manager.main;
-                if (main?.player == null)
-                    return true; // No player means we're likely in menus
-                
-                // Check if pause menu is open
+                if (main == null || main.player == null)
+                    return true;
+
+                // CRÍTICO: Verificar si hay un campo de texto activo (escribiendo nombres, etc.)
+                var input = PugOther.Manager.input;
+                if (input != null)
+                {
+                    // Verificar si textInputIsActive (propiedad calculada)
+                    try
+                    {
+                        var textInputIsActiveProp = AccessTools.Property(input.GetType(), "textInputIsActive");
+                        if (textInputIsActiveProp != null)
+                        {
+                            bool textInputIsActive = (bool)textInputIsActiveProp.GetValue(input);
+                            if (textInputIsActive)
+                                return true; // Estamos escribiendo
+                        }
+                    }
+                    catch { }
+                }
+
                 var uiManager = PugOther.Manager.ui;
                 if (uiManager != null)
                 {
-                    // Check for pause menu - usually indicated by game being paused or specific UI state
-                    if (UnityEngine.Time.timeScale == 0f) // Game is paused
+
+                    // Check for pause menu
+                    if (UnityEngine.Time.timeScale == 0f)
                         return true;
-                        
-                    // Alternative check: look for pause menu objects
-                    var pauseMenuObjects = Core::UnityEngine.Object.FindObjectsOfType<Core::UnityEngine.MonoBehaviour>();
-                    foreach (var obj in pauseMenuObjects)
-                    {
-                        if (obj?.gameObject?.name?.ToLower().Contains("pause") == true)
-                            return true;
-                    }
                 }
-                
+
+                // Verificar el estado del jugador - si está en el mundo y puede moverse
+                try
+                {
+                    var playerController = main.player as PugOther.PlayerController;
+                    if (playerController == null)
+                        return true;
+
+                    // Si el controlador no está activo, estamos en un menú
+                    if (!playerController.enabled || !playerController.gameObject.activeInHierarchy)
+                        return true;
+                }
+                catch { }
+
                 return false;
             }
             catch (System.Exception)
             {
-                // If we can't determine the state, assume we're in an excluded menu
+                // Si hay error detectando el estado, asumir que estamos en menú por seguridad
                 return true;
             }
         }

@@ -366,3 +366,16 @@ tileset_alien=alienígena
 tileset_oasis=oasis
 tileset_explosive_forest=bosque explosivo
 tileset_explosive_desert=desierto explosivo
+
+# Mensajes de Interacción
+interact_available=Presiona E para interactuar con {0}
+interactable_object=objeto
+object_type_chest=cofre
+object_type_door=puerta
+object_type_workstation=estación de trabajo
+
+# Intro/Outro
+intro_skip_message=Mantén espacio para saltar la introducción
+
+# Tutorial Buffer
+no_tutorials=No hay tutoriales en el buffer
