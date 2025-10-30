@@ -263,26 +263,30 @@ namespace ckAccess.Patches.Player
                     {
                         // Crear GameObject temporal para el audio
                         var tempAudioSource = new GameObject($"ProximityAudio_{interactable.name}");
-
-                        // SIMPLIFICADO: Usar la posición del objeto directamente
-                        // Si el paneo está invertido, invertimos solo el eje X
-                        float invertedX = -interactable.position.x; // Invertir X si el paneo está al revés
-                        var unityPos = new UnityEngine.Vector3(invertedX, interactable.position.y, interactable.position.z);
-
-                        tempAudioSource.transform.position = unityPos;
-
                         var audioSource = tempAudioSource.AddComponent<AudioSource>();
                         audioSource.clip = _proximityAudioClip;
                         audioSource.volume = volumeMultiplier;
                         audioSource.pitch = pitchMultiplier; // Pitch calculado para este paso
 
-                        // MEJORADO: Configuración de audio 3D más precisa
-                        audioSource.spatialBlend = 0.7f; // 70% 3D, 30% 2D para mejor balance
-                        audioSource.rolloffMode = AudioRolloffMode.Logarithmic; // Caída logarítmica más natural
-                        audioSource.maxDistance = 6f; // Distancia máxima reducida
-                        audioSource.minDistance = 0.5f; // Distancia mínima más cercana
-                        audioSource.spread = 90f; // Ángulo de propagación moderado
-                        audioSource.dopplerLevel = 0f; // Sin efecto doppler
+                        // NUEVO: Paneo estéreo manual 2D basado en posición relativa (igual que enemigos)
+                        // Calcular dirección del objeto relativa al jugador
+                        Vector3 directionToObject = interactable.position - playerPos;
+
+                        // Para juegos top-down, usamos X para izquierda/derecha
+                        float panValue = 0f;
+                        float horizontalDistance = Mathf.Abs(directionToObject.x);
+
+                        if (horizontalDistance > 0.1f) // Evitar división por cero
+                        {
+                            // Calcular pan basado en X: positivo = derecha, negativo = izquierda
+                            panValue = Mathf.Clamp(directionToObject.x / 5f, -1f, 1f); // 5 tiles = pan completo
+                        }
+
+                        // Configuración 2D con paneo estéreo manual
+                        audioSource.spatialBlend = 0f; // 100% 2D - NO usar audio 3D
+                        audioSource.panStereo = panValue; // Paneo manual: -1 (izq) a 1 (der)
+                        audioSource.rolloffMode = AudioRolloffMode.Linear;
+                        audioSource.dopplerLevel = 0f;
 
                         // Reproducir inmediatamente
                         audioSource.Play();

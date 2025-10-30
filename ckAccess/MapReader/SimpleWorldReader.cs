@@ -99,51 +99,58 @@ namespace ckAccess.MapReader
         }
 
         /// <summary>
-        /// Obtiene descripción simple de una entidad basada en su nombre de GameObject.
+        /// Obtiene descripción simple de una entidad usando el sistema de categorización.
+        /// MEJORADO: Usa ObjectCategoryHelper en lugar de hardcodeo.
         /// </summary>
         private static string GetEntityDescription(PugOther.EntityMonoBehaviour entity)
         {
-            var name = entity.gameObject.name.ToLower();
+            var name = entity.gameObject.name;
+            var cleanedName = CleanName(name.Replace("(clone)", "").Replace("_", " ").Trim());
 
-            // Limpiar nombre básico
-            name = name.Replace("(clone)", "").Replace("_", " ").Trim();
+            // Usar sistema de categorización inteligente
+            var category = ObjectCategoryHelper.GetCategory(entity);
 
-            // DETECTAR POR PATRONES SIMPLES
+            // Generar descripción basada en categoría
+            return category switch
+            {
+                ObjectCategoryHelper.ObjectCategory.Core =>
+                    LocalizationManager.GetText("the_core"),
 
-            // Núcleo principal
-            if (name.Contains("core"))
-                return LocalizationManager.GetText("the_core");
+                ObjectCategoryHelper.ObjectCategory.Chest =>
+                    LocalizationManager.GetText("work_station", cleanedName),
 
-            // Cofres y almacenamiento
-            if (name.Contains("chest") || name.Contains("storage") || name.Contains("container"))
-                return LocalizationManager.GetText("work_station", CleanName(name));
+                ObjectCategoryHelper.ObjectCategory.WorkStation =>
+                    LocalizationManager.GetText("work_station", cleanedName),
 
-            // Estaciones de trabajo
-            if (name.Contains("workbench") || name.Contains("anvil") || name.Contains("furnace") ||
-                name.Contains("table") || name.Contains("forge") || name.Contains("station"))
-                return LocalizationManager.GetText("work_station", CleanName(name));
+                ObjectCategoryHelper.ObjectCategory.Enemy =>
+                    LocalizationManager.GetText("enemy", cleanedName),
 
-            // Enemigos (excluyendo estatuas)
-            if (!name.Contains("statue") && !name.Contains("trophy") &&
-                (name.Contains("slime") || name.Contains("spider") || name.Contains("larva") ||
-                 name.Contains("grub") || name.Contains("mushroom") || name.Contains("scarab") ||
-                 name.Contains("mold") || name.Contains("boss") || name.Contains("enemy")))
-                return LocalizationManager.GetText("enemy", CleanName(name));
+                ObjectCategoryHelper.ObjectCategory.Pickup =>
+                    LocalizationManager.GetText("object", cleanedName),
 
-            // Objetos recolectables
-            if (name.Contains("pickup") || name.Contains("drop") || name.Contains("item"))
-                return LocalizationManager.GetText("object", CleanName(name));
+                ObjectCategoryHelper.ObjectCategory.Plant =>
+                    LocalizationManager.GetText("plant", cleanedName),
 
-            // Plantas y árboles
-            if (name.Contains("tree") || name.Contains("plant") || name.Contains("flower") || name.Contains("mushroom"))
-                return LocalizationManager.GetText("plant", CleanName(name));
+                ObjectCategoryHelper.ObjectCategory.Resource =>
+                    LocalizationManager.GetText("resource", cleanedName),
 
-            // Recursos minerales
-            if (name.Contains("ore") || name.Contains("crystal") || name.Contains("mineral") || name.Contains("rock"))
-                return LocalizationManager.GetText("resource", CleanName(name));
+                ObjectCategoryHelper.ObjectCategory.Animal =>
+                    LocalizationManager.GetText("entity", $"Animal: {cleanedName}"),
 
-            // Cualquier otra entidad
-            return LocalizationManager.GetText("entity", CleanName(name));
+                ObjectCategoryHelper.ObjectCategory.Critter =>
+                    LocalizationManager.GetText("entity", $"Criatura: {cleanedName}"),
+
+                ObjectCategoryHelper.ObjectCategory.Statue =>
+                    LocalizationManager.GetText("entity", $"Estatua: {cleanedName}"),
+
+                ObjectCategoryHelper.ObjectCategory.Furniture =>
+                    LocalizationManager.GetText("entity", $"Mueble: {cleanedName}"),
+
+                ObjectCategoryHelper.ObjectCategory.Structure =>
+                    LocalizationManager.GetText("entity", $"Estructura: {cleanedName}"),
+
+                _ => LocalizationManager.GetText("entity", cleanedName)
+            };
         }
 
         /// <summary>

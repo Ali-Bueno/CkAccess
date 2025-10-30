@@ -30,9 +30,14 @@ namespace ckAccess.Patches.Player
         private const float MIN_PITCH = 0.3f; // Pitch mínimo para enemigos lejanos (grave - 10 tiles)
         private const float MAX_PITCH = 2.5f; // Pitch máximo para enemigos cercanos (agudo - 1 tile)
 
-        // Frecuencia de actualización
-        private const int FRAMES_BETWEEN_UPDATES = 20; // Actualizar cada 20 frames
+        // Frecuencia de actualización - MEJORADO: Más rápido para mejor tracking
+        private const int FRAMES_BETWEEN_UPDATES = 10; // Actualizar cada 10 frames (antes 20)
         private const float MOVEMENT_THRESHOLD = 0.5f; // Umbral de movimiento para considerar que el enemigo se movió
+
+        // Configuración de cooldowns dinámicos según distancia
+        private const float MIN_COOLDOWN = 0.3f; // Cooldown mínimo cuando está MUY cerca (< 2 tiles)
+        private const float MAX_COOLDOWN = 1.2f; // Cooldown máximo cuando está lejos (> 7 tiles)
+        private const float MEDIUM_COOLDOWN = 0.6f; // Cooldown en distancia media (3-6 tiles)
 
         // Estado del sistema
         private static AudioClip _enemyProximityClip = null;
@@ -40,8 +45,6 @@ namespace ckAccess.Patches.Player
         private static Dictionary<PugOther.EntityMonoBehaviour, EnemyTracker> _trackedEnemies = new Dictionary<PugOther.EntityMonoBehaviour, EnemyTracker>();
         private static int _frameCounter = 0;
         private static bool _systemEnabled = true; // SIEMPRE ACTIVO - no se puede desactivar
-        private static float _lastProximityPlayTime = 0f;
-        private const float PROXIMITY_COOLDOWN = 1.5f; // Cooldown entre sonidos de proximidad
 
         // Estructura para rastrear enemigos
         private class EnemyTracker
@@ -109,11 +112,12 @@ namespace ckAccess.Patches.Player
 
         /// <summary>
         /// Crea el tono de proximidad para enemigos (más grave y amenazante)
+        /// MEJORADO: Duración aumentada para mejor percepción
         /// </summary>
         private static void CreateEnemyProximityTone()
         {
             int sampleRate = 22050;
-            float duration = 0.15f; // Un poco más largo para enemigos
+            float duration = 0.25f; // Aumentado de 0.15f a 0.25f para mejor percepción
             int samples = (int)(sampleRate * duration);
 
             _enemyProximityClip = AudioClip.Create("EnemyProximitySound", samples, 1, sampleRate, false);
@@ -245,8 +249,9 @@ namespace ckAccess.Patches.Player
                         float movementDistance = Vector3.Distance(tracker.lastPosition, entityWorldPos);
                         if (movementDistance > MOVEMENT_THRESHOLD)
                         {
-                            // El enemigo se movió
-                            if (isInRange && Time.time - tracker.lastMovementTime > 0.5f)
+                            // El enemigo se movió - MEJORADO: Cooldown dinámico también para movimiento
+                            float movementCooldown = CalculateDynamicCooldown(distance) * 0.5f; // Mitad del cooldown de proximidad
+                            if (isInRange && Time.time - tracker.lastMovementTime > movementCooldown)
                             {
                                 PlayEnemyMovementSound(entityWorldPos, distance, tracker.enemyType);
                                 tracker.lastMovementTime = Time.time;
@@ -278,15 +283,35 @@ namespace ckAccess.Patches.Player
         }
 
         /// <summary>
+        /// Calcula el cooldown dinámico basado en la distancia al enemigo
+        /// Cuanto más cerca, más rápido se repite el sonido
+        /// </summary>
+        private static float CalculateDynamicCooldown(float distance)
+        {
+            // Muy cerca (< 2 tiles): loop muy rápido (0.3s)
+            if (distance < 2f)
+                return MIN_COOLDOWN;
+
+            // Cerca (2-4 tiles): loop rápido (0.4-0.6s)
+            if (distance < 4f)
+                return Mathf.Lerp(MIN_COOLDOWN, MEDIUM_COOLDOWN, (distance - 2f) / 2f);
+
+            // Media distancia (4-7 tiles): loop moderado (0.6-0.9s)
+            if (distance < 7f)
+                return Mathf.Lerp(MEDIUM_COOLDOWN, MAX_COOLDOWN * 0.75f, (distance - 4f) / 3f);
+
+            // Lejos (7-10 tiles): loop lento (0.9-1.2s)
+            return Mathf.Lerp(MAX_COOLDOWN * 0.75f, MAX_COOLDOWN, (distance - 7f) / 3f);
+        }
+
+        /// <summary>
         /// Reproduce sonidos de proximidad para enemigos cercanos
+        /// MEJORADO: Cooldown dinámico según distancia
         /// </summary>
         private static void PlayEnemyProximitySounds(PugOther.PlayerController player)
         {
             try
             {
-                if (Time.time - _lastProximityPlayTime < PROXIMITY_COOLDOWN)
-                    return;
-
                 if (!TryGetPlayerPosition(player, out Vector3 playerPos))
                     return;
 
@@ -314,7 +339,10 @@ namespace ckAccess.Patches.Player
 
                 foreach (var (enemy, distance, tracker) in sortedEnemies)
                 {
-                    if (Time.time - tracker.lastSoundTime < 2f) continue; // Cooldown individual por enemigo
+                    // NUEVO: Cooldown dinámico basado en distancia
+                    float dynamicCooldown = CalculateDynamicCooldown(distance);
+
+                    if (Time.time - tracker.lastSoundTime < dynamicCooldown) continue;
 
                     var entityPos = enemy.WorldPosition;
                     var entityWorldPos = new Vector3(entityPos.x, entityPos.y, entityPos.z);
@@ -322,8 +350,6 @@ namespace ckAccess.Patches.Player
                     PlayProximitySound(entityWorldPos, distance, tracker.enemyType);
                     tracker.lastSoundTime = Time.time;
                 }
-
-                _lastProximityPlayTime = Time.time;
             }
             catch (System.Exception ex)
             {
@@ -333,55 +359,64 @@ namespace ckAccess.Patches.Player
 
         /// <summary>
         /// Reproduce sonido de proximidad para un enemigo
+        /// REDISEÑADO: Paneo estéreo manual 2D para juegos top-down
         /// </summary>
         private static void PlayProximitySound(Vector3 position, float distance, string enemyType)
         {
             if (_enemyProximityClip == null) return;
 
+            // Obtener posición del jugador
+            var player = PugOther.Manager.main?.player;
+            if (player == null) return;
+
+            if (!TryGetPlayerPosition(player, out Vector3 playerPos))
+                return;
+
             var tempAudioSource = new GameObject($"EnemyProximity_{enemyType}");
-
-            // Posición con paneo invertido si es necesario
-            float invertedX = -position.x;
-            var unityPos = new UnityEngine.Vector3(invertedX, position.y, position.z);
-            tempAudioSource.transform.position = unityPos;
-
             var audioSource = tempAudioSource.AddComponent<AudioSource>();
             audioSource.clip = _enemyProximityClip;
 
-            // IGUAL QUE INTERACTUABLES: Calcular pitch lineal basado en distancia
-            // Normalizar la distancia: 0 = más cerca (1 tile), 1 = más lejos (10 tiles)
+            // Calcular pitch lineal basado en distancia
             float normalizedDistance = Mathf.Clamp01((distance - MIN_DETECTION_RANGE) / (MAX_DETECTION_RANGE - MIN_DETECTION_RANGE));
-
-            // Invertir: 0 = lejos, 1 = cerca
             float proximity = 1f - normalizedDistance;
-
-            // Calcular pitch de forma completamente lineal como en interactuables
-            // MIN_PITCH (0.3) cuando está lejos, MAX_PITCH (2.5) cuando está cerca
             float pitch = MIN_PITCH + (MAX_PITCH - MIN_PITCH) * proximity;
 
             // Ajuste SUTIL según tipo de enemigo
             pitch *= GetEnemyPitchMultiplier(enemyType);
 
-            // Calcular volumen como en interactuables
+            // Calcular volumen
             float normalizedVolDist = Mathf.Clamp01((MAX_DETECTION_RANGE - distance) / (MAX_DETECTION_RANGE - MIN_DETECTION_RANGE));
             float volume = MIN_VOLUME + (BASE_VOLUME - MIN_VOLUME) * normalizedVolDist;
 
-            // Boost adicional para distancias medias (3-6 tiles) como en interactuables
+            // Boost adicional para distancias medias (3-6 tiles)
             if (distance >= 3f && distance <= 6f)
             {
-                volume *= 1.2f; // 20% más alto en distancias medias
+                volume *= 1.2f;
             }
 
             audioSource.volume = Mathf.Clamp(volume, MIN_VOLUME, BASE_VOLUME);
             audioSource.pitch = pitch;
 
-            // Configuración 3D - IGUAL QUE INTERACTUABLES
-            audioSource.spatialBlend = 0.7f; // 70% 3D, 30% 2D para mejor balance
-            audioSource.rolloffMode = AudioRolloffMode.Logarithmic; // Caída logarítmica más natural
-            audioSource.maxDistance = 6f; // Distancia máxima reducida
-            audioSource.minDistance = 0.5f; // Distancia mínima
-            audioSource.spread = 90f; // Ángulo de propagación moderado
-            audioSource.dopplerLevel = 0f; // Sin efecto doppler
+            // NUEVO: Paneo estéreo manual 2D basado en posición relativa
+            // Calcular dirección del enemigo relativa al jugador
+            Vector3 directionToEnemy = position - playerPos;
+
+            // Para juegos top-down, usamos X para izquierda/derecha
+            // Normalizar el eje X para obtener un valor de pan (-1 a 1)
+            float panValue = 0f;
+            float horizontalDistance = Mathf.Abs(directionToEnemy.x);
+
+            if (horizontalDistance > 0.1f) // Evitar división por cero
+            {
+                // Calcular pan basado en X: positivo = derecha, negativo = izquierda
+                panValue = Mathf.Clamp(directionToEnemy.x / 5f, -1f, 1f); // 5 tiles = pan completo
+            }
+
+            // Configuración 2D con paneo estéreo manual
+            audioSource.spatialBlend = 0f; // 100% 2D - NO usar audio 3D
+            audioSource.panStereo = panValue; // Paneo manual: -1 (izq) a 1 (der)
+            audioSource.rolloffMode = AudioRolloffMode.Linear;
+            audioSource.dopplerLevel = 0f;
 
             audioSource.Play();
             UnityEngine.Object.Destroy(tempAudioSource, _enemyProximityClip.length + 0.2f);
@@ -389,17 +424,20 @@ namespace ckAccess.Patches.Player
 
         /// <summary>
         /// Reproduce sonido de movimiento de enemigo
+        /// REDISEÑADO: Paneo estéreo manual 2D para juegos top-down
         /// </summary>
         private static void PlayEnemyMovementSound(Vector3 position, float distance, string enemyType)
         {
             if (_enemyMovementClip == null) return;
 
+            // Obtener posición del jugador
+            var player = PugOther.Manager.main?.player;
+            if (player == null) return;
+
+            if (!TryGetPlayerPosition(player, out Vector3 playerPos))
+                return;
+
             var tempAudioSource = new GameObject($"EnemyMovement_{enemyType}");
-
-            float invertedX = -position.x;
-            var unityPos = new UnityEngine.Vector3(invertedX, position.y, position.z);
-            tempAudioSource.transform.position = unityPos;
-
             var audioSource = tempAudioSource.AddComponent<AudioSource>();
             audioSource.clip = _enemyMovementClip;
 
@@ -418,12 +456,21 @@ namespace ckAccess.Patches.Player
             audioSource.volume = volume;
             audioSource.pitch = pitch;
 
-            // Configuración 3D igual que interactuables
-            audioSource.spatialBlend = 0.7f; // 70% 3D
-            audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
-            audioSource.maxDistance = 6f;
-            audioSource.minDistance = 0.5f;
-            audioSource.spread = 90f;
+            // NUEVO: Paneo estéreo manual 2D basado en posición relativa
+            Vector3 directionToEnemy = position - playerPos;
+            float panValue = 0f;
+            float horizontalDistance = Mathf.Abs(directionToEnemy.x);
+
+            if (horizontalDistance > 0.1f)
+            {
+                panValue = Mathf.Clamp(directionToEnemy.x / 5f, -1f, 1f);
+            }
+
+            // Configuración 2D con paneo estéreo manual
+            audioSource.spatialBlend = 0f; // 100% 2D
+            audioSource.panStereo = panValue; // Paneo manual
+            audioSource.rolloffMode = AudioRolloffMode.Linear;
+            audioSource.dopplerLevel = 0f;
 
             audioSource.Play();
             UnityEngine.Object.Destroy(tempAudioSource, _enemyMovementClip.length + 0.1f);

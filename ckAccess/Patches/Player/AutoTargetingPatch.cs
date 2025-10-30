@@ -69,7 +69,12 @@ namespace ckAccess.Patches.Player
                 // Verificar si el objetivo actual sigue siendo válido
                 ValidateCurrentTarget(__instance);
 
-                // No redirigir aquí - lo haremos en el SendClientInputSystem
+                // NUEVO: Redirigir continuamente si hay un objetivo válido
+                // Esto asegura que el jugador siempre esté apuntando al enemigo
+                if (_currentTarget != null && IsValidTarget(_currentTarget))
+                {
+                    RedirectAttackToTarget(__instance, _currentTarget);
+                }
             }
             catch (System.Exception ex)
             {
@@ -172,6 +177,7 @@ namespace ckAccess.Patches.Player
 
         /// <summary>
         /// Redirecciona el ataque hacia el objetivo seleccionado
+        /// SIMPLIFICADO: Solo actualiza la dirección de apuntado de manera continua
         /// </summary>
         private static void RedirectAttackToTarget(PugOther.PlayerController player, PugOther.EntityMonoBehaviour target)
         {
@@ -187,79 +193,11 @@ namespace ckAccess.Patches.Player
                 var direction = (targetWorldPos - playerPos).normalized;
                 var direction2D = new float3(direction.x, 0f, direction.z);
 
-                // Actualizar la dirección de apuntado del jugador
-                // Esto funciona para todos los tipos de input (teclado, ratón, mando)
+                // CORE: Actualizar la dirección de apuntado del jugador
+                // Esto es lo más importante y funciona para todos los tipos de armas
                 player.targetingDirection = direction2D;
 
-                // También actualizar facingDirection para asegurar que funcione sin "mirar hacia cursor"
-                try
-                {
-                    // Intentar actualizar la dirección de cara del jugador
-                    var facingDirProperty = player.GetType().GetField("facingDirection",
-                        System.Reflection.BindingFlags.Public |
-                        System.Reflection.BindingFlags.NonPublic |
-                        System.Reflection.BindingFlags.Instance);
-
-                    if (facingDirProperty != null)
-                    {
-                        facingDirProperty.SetValue(player, direction2D);
-                    }
-
-                    // Intentar actualizar el ángulo de rotación para proyectiles
-                    var targetAngle = math.atan2(direction.z, direction.x);
-                    var rotationProperty = player.GetType().GetField("targetRotation",
-                        System.Reflection.BindingFlags.Public |
-                        System.Reflection.BindingFlags.NonPublic |
-                        System.Reflection.BindingFlags.Instance);
-
-                    if (rotationProperty != null)
-                    {
-                        rotationProperty.SetValue(player, targetAngle);
-                    }
-                }
-                catch
-                {
-                    // Si no podemos acceder a estos campos, continuar solo con targetingDirection
-                }
-
-                // Forzar la orientación del personaje hacia el objetivo
-                // Esto asegura que proyectiles y ataques vayan en la dirección correcta
-                try
-                {
-                    // Actualizar el ángulo de rotación directamente sin usar Quaternion
-                    if (player.transform != null)
-                    {
-                        // Calcular el ángulo en grados
-                        float angleInDegrees = math.degrees(math.atan2(direction.z, direction.x));
-
-                        // Aplicar la rotación usando reflexión para evitar conflictos de tipos
-                        var transformType = player.transform.GetType();
-                        var eulerAnglesProperty = transformType.GetProperty("eulerAngles");
-
-                        if (eulerAnglesProperty != null)
-                        {
-                            var currentEuler = eulerAnglesProperty.GetValue(player.transform);
-                            if (currentEuler != null)
-                            {
-                                // Crear nuevo Vector3 con el ángulo Y actualizado
-                                var eulerType = currentEuler.GetType();
-                                var yField = eulerType.GetField("y");
-
-                                if (yField != null)
-                                {
-                                    yField.SetValue(currentEuler, angleInDegrees);
-                                    eulerAnglesProperty.SetValue(player.transform, currentEuler);
-                                }
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    // Si no podemos rotar el transform, continuar
-                }
-
-                // Actualizar posición del último objetivo
+                // Actualizar posición del último objetivo para caching
                 _lastTargetPosition = targetWorldPos;
             }
             catch (System.Exception ex)
