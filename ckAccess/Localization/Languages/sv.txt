@@ -1,0 +1,33 @@
+# Swedish localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=Plockade upp: {0}
+item_picked_multiple=Plockade upp: {0} x{1}
+level_up=Nådde nivå {0}!
+skill_up={0} ökade till nivå {1}
+
+# UI Navigation Messages
+empty_slot=Tom plats
+tab_equipment=Flik: Utrustning
+tab_skills=Flik: Färdigheter
+tab_souls=Flik: Själar
+skills=Färdigheter
+selected_item=Vald: {0}
+
+# Skill Names
+skill_mining=Gruvdrift
+skill_running=Löpning
+skill_melee=Närstrid
+skill_vitality=Vitalitet
+skill_crafting=Hantverk
+skill_range=Avstånd
+skill_gardening=Trädgårdsodling
+skill_fishing=Fiske
+skill_cooking=Matlagning
+skill_magic=Magi
+skill_summoning=Framkallning
+skill_explosives=Sprängämnen
+
+# Hotbar Messages
+hotbar_slot_selected=Plats {0} vald
+empty_hotbar_slot=Tom snabbåtkomstplats

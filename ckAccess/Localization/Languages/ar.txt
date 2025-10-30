@@ -1,0 +1,33 @@
+# Arabic localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=تم التقاط: {0}
+item_picked_multiple=تم التقاط: {0} x{1}
+level_up=وصلت إلى المستوى {0}!
+skill_up={0} ارتفعت إلى المستوى {1}
+
+# UI Navigation Messages
+empty_slot=فتحة فارغة
+tab_equipment=علامة تبويب: المعدات
+tab_skills=علامة تبويب: المهارات
+tab_souls=علامة تبويب: الأرواح
+skills=المهارات
+selected_item=المحدد: {0}
+
+# Skill Names
+skill_mining=التعدين
+skill_running=الجري
+skill_melee=القتال القريب
+skill_vitality=الحيوية
+skill_crafting=الصناعة
+skill_range=المسافة
+skill_gardening=البستنة
+skill_fishing=الصيد
+skill_cooking=الطبخ
+skill_magic=السحر
+skill_summoning=الاستدعاء
+skill_explosives=المتفجرات
+
+# Hotbar Messages
+hotbar_slot_selected=تم تحديد الفتحة {0}
+empty_hotbar_slot=فتحة شريط سريع فارغة

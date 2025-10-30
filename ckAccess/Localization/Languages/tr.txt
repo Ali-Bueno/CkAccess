@@ -1,0 +1,33 @@
+# Turkish localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=Toplandı: {0}
+item_picked_multiple=Toplandı: {0} x{1}
+level_up=Seviye {0}'e ulaşıldı!
+skill_up={0} seviye {1}'e yükseltildi
+
+# UI Navigation Messages
+empty_slot=Boş yuva
+tab_equipment=Sekme: Ekipman
+tab_skills=Sekme: Yetenekler
+tab_souls=Sekme: Ruhlar
+skills=Yetenekler
+selected_item=Seçili: {0}
+
+# Skill Names
+skill_mining=Madencilik
+skill_running=Koşu
+skill_melee=Yakın dövüş
+skill_vitality=Canlılık
+skill_crafting=El işi
+skill_range=Menzil
+skill_gardening=Bahçıvanlık
+skill_fishing=Balıkçılık
+skill_cooking=Yemek pişirme
+skill_magic=Büyü
+skill_summoning=Çağırma
+skill_explosives=Patlayıcılar
+
+# Hotbar Messages
+hotbar_slot_selected=Yuva {0} seçildi
+empty_hotbar_slot=Boş hızlı erişim yuvası

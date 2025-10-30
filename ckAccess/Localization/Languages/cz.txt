@@ -1,0 +1,33 @@
+# Czech localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=Sebráno: {0}
+item_picked_multiple=Sebráno: {0} x{1}
+level_up=Dosažena úroveň {0}!
+skill_up={0} zvýšeno na úroveň {1}
+
+# UI Navigation Messages
+empty_slot=Prázdný slot
+tab_equipment=Záložka: Vybavení
+tab_skills=Záložka: Dovednosti
+tab_souls=Záložka: Duše
+skills=Dovednosti
+selected_item=Vybráno: {0}
+
+# Skill Names
+skill_mining=Těžba
+skill_running=Běh
+skill_melee=Boj zblízka
+skill_vitality=Vitalita
+skill_crafting=Řemeslo
+skill_range=Dálka
+skill_gardening=Zahradnictví
+skill_fishing=Rybaření
+skill_cooking=Vaření
+skill_magic=Magie
+skill_summoning=Vyvolání
+skill_explosives=Výbušniny
+
+# Hotbar Messages
+hotbar_slot_selected=Slot {0} vybrán
+empty_hotbar_slot=Prázdný slot rychlého přístupu

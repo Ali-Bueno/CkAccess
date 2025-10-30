@@ -1,0 +1,109 @@
+# German localization file for Core Keeper Accessibility Mod
+# Format: key=value
+# Lines starting with # are comments
+
+# Virtual Cursor Messages
+virtual_cursor_initialized=Virtueller Cursor initialisiert
+cursor_initialization_error=Fehler beim Initialisieren des Cursors
+cursor_reset=Cursor zurückgesetzt: x={0}, z={1}
+cursor_reset_error=Fehler beim Zurücksetzen des Cursors
+limit_reached=Grenze erreicht
+primary_action_error=Fehler bei primärer Aktion: {0}
+placing_at_position=Platzierung bei Position x={0}, z={1}
+item_placed_at_position={0} platziert bei Position x={1}, z={2}
+secondary_action_error=Fehler bei sekundärer Aktion: {0}
+interaction_error=Interaktionsfehler: {0}
+cursor_not_initialized=Cursor nicht initialisiert
+current_position=Aktuelle Position: x={0}, z={1}
+position_reading_error=Fehler beim Lesen der Spielerposition
+
+# UI Navigation Messages
+no_tabs_available=Keine Registerkarten verfügbar
+no_more_tabs=Keine weiteren Registerkarten verfügbar
+tab_equipment=Registerkarte: Ausrüstung
+tab_skills=Registerkarte: Fähigkeiten
+tab_souls=Registerkarte: Seelen
+tab_number=Registerkarte {0}
+navigation_error=Navigationsfehler der Registerkarten: {0}
+selection_error=Fehler bei der Objektauswahl: {0}
+empty_slot=Leerer Slot
+slot_selection_error=Fehler bei der Slot-Auswahl: {0}
+skill_error=Fehler beim Öffnen der Fähigkeit: {0}
+click_simulation_error=Fehler bei der Click-Simulation: {0}
+no_element_selected=Kein Element ausgewählt
+no_element_selected_secondary=Kein Element für sekundäre Aktion ausgewählt
+secondary_action_error_ui=Fehler bei sekundärer Aktion: {0}
+empty_slot_no_action=Leerer Slot, keine Aktion verfügbar
+secondary_action_performed=Sekundäre Aktion ausgeführt
+secondary_slot_error=Fehler bei sekundärer Slot-Aktion: {0}
+right_click_simulation_error=Fehler bei Rechtsklick-Simulation: {0}
+talent_action=Aktion auf Talent: {0}
+talent_selected=Talent ausgewählt
+talent_selection_error=Fehler bei Talentauswahl: {0}
+skills=Fähigkeiten
+preset_selection_error=Fehler bei Voreinstellungsauswahl: {0}
+preset_selected=Voreinstellung ausgewählt: {0}
+equipment_preset_selected=Ausrüstungsvoreinstellung ausgewählt
+equipment_preset_selected_generic=Ausrüstungsvoreinstellung {0} ausgewählt
+equipment_preset_error=Fehler mit Ausrüstungsvoreinstellung: {0}
+equipment_preset_not_found=Ausrüstungsvoreinstellung nicht gefunden
+stats_window_toggled=Statistikfenster umgeschaltet
+stats=Statistiken
+stats_button_activated=Statistik-Button aktiviert
+stats_error=Fehler beim Öffnen der Statistiken: {0}
+selected_item=Ausgewählt: {0}
+
+# Skill and Talent Messages
+talent_tree_opened=Talentbaum geöffnet: {0}
+talent_tree_opened_generic=Talentbaum geöffnet
+talent_tree_closed=Talentbaum geschlossen
+talent=Talent
+
+# Skill Names
+skill_mining=Bergbau
+skill_running=Laufen
+skill_melee=Nahkampf
+skill_vitality=Vitalität
+skill_crafting=Handwerk
+skill_range=Reichweite
+skill_gardening=Gartenbau
+skill_fishing=Angeln
+skill_cooking=Kochen
+skill_magic=Magie
+skill_summoning=Beschwörung
+skill_explosives=Sprengstoffe
+
+# World Reader Messages
+empty=Leer
+reading_error=Lesefehler
+the_core=Der Kern (interagierbar)
+work_station={0} (Werkbank)
+enemy={0} (Feind)
+object={0} (Objekt)
+plant={0} (Pflanze)
+resource={0} (Ressource)
+entity={0} (Entität)
+destructible_tool=Zerstörbar {0} (benutze {1})
+destructible_material_tool=Zerstörbar {1} {0} (benutze {2})
+blocking=Blockierend {0}
+blocking_material=Blockierend {1} {0}
+dangerous=Gefährlich {0}
+dangerous_material=Gefährlich {1} {0}
+area_not_available=Bereich nicht verfügbar
+unknown_position=Unbekannte Position
+unknown=Unbekannt
+player_position_error=Spielerposition konnte nicht abgerufen werden
+cannot_read_player_position=Kann Spielerposition nicht lesen
+position_reading_error_generic=Fehler beim Lesen der Position
+empty_area_around=Leerer Bereich drumherum
+area_scan_error=Fehler beim Scannen des Bereichs
+
+# Notification System Messages
+item_picked_single=Aufgehoben: {0}
+item_picked_multiple=Aufgehoben: {0} x{1}
+level_up=Level {0} erreicht!
+skill_up={0} auf Level {1} erhöht
+
+# Hotbar Messages
+hotbar_slot_selected=Slot {0} ausgewählt
+empty_hotbar_slot=Leerer Hotbar-Slot

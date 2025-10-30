@@ -1,0 +1,33 @@
+# Thai localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=หยิบ: {0}
+item_picked_multiple=หยิบ: {0} x{1}
+level_up=ถึงเลเวล {0} แล้ว!
+skill_up={0} เพิ่มขึ้นเป็นเลเวล {1}
+
+# UI Navigation Messages
+empty_slot=ช่องว่าง
+tab_equipment=แท็บ: อุปกรณ์
+tab_skills=แท็บ: ทักษะ
+tab_souls=แท็บ: วิญญาณ
+skills=ทักษะ
+selected_item=เลือก: {0}
+
+# Skill Names
+skill_mining=การขุด
+skill_running=การวิ่ง
+skill_melee=การต่อสู้ระยะประชิด
+skill_vitality=พลังชีวิต
+skill_crafting=การประดิษฐ์
+skill_range=การโจมตีระยะไกล
+skill_gardening=การทำสวน
+skill_fishing=การตกปลา
+skill_cooking=การทำอาหาร
+skill_magic=เวทมนตร์
+skill_summoning=การเรียก
+skill_explosives=วัตถุระเบิด
+
+# Hotbar Messages
+hotbar_slot_selected=เลือกช่อง {0}
+empty_hotbar_slot=ช่องแถบด่วนว่าง

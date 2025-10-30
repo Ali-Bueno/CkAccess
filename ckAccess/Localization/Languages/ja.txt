@@ -1,0 +1,33 @@
+# Japanese localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=拾った: {0}
+item_picked_multiple=拾った: {0} x{1}
+level_up=レベル{0}に到達！
+skill_up={0}がレベル{1}に上昇
+
+# UI Navigation Messages
+empty_slot=空きスロット
+tab_equipment=タブ: 装備
+tab_skills=タブ: スキル
+tab_souls=タブ: 魂
+skills=スキル
+selected_item=選択: {0}
+
+# Skill Names
+skill_mining=採掘
+skill_running=走る
+skill_melee=近接戦闘
+skill_vitality=生命力
+skill_crafting=クラフト
+skill_range=遠距離
+skill_gardening=園芸
+skill_fishing=釣り
+skill_cooking=料理
+skill_magic=魔法
+skill_summoning=召喚
+skill_explosives=爆発物
+
+# Hotbar Messages
+hotbar_slot_selected=スロット{0}を選択
+empty_hotbar_slot=空きホットバースロット

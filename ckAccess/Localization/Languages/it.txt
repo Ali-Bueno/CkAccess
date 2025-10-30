@@ -1,0 +1,33 @@
+# Italian localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=Raccolto: {0}
+item_picked_multiple=Raccolto: {0} x{1}
+level_up=Livello {0} raggiunto!
+skill_up={0} aumentato al livello {1}
+
+# UI Navigation Messages
+empty_slot=Slot vuoto
+tab_equipment=Scheda: Equipaggiamento
+tab_skills=Scheda: Abilità
+tab_souls=Scheda: Anime
+skills=Abilità
+selected_item=Selezionato: {0}
+
+# Skill Names
+skill_mining=Estrazione
+skill_running=Corsa
+skill_melee=Combattimento ravvicinato
+skill_vitality=Vitalità
+skill_crafting=Artigianato
+skill_range=Distanza
+skill_gardening=Giardinaggio
+skill_fishing=Pesca
+skill_cooking=Cucina
+skill_magic=Magia
+skill_summoning=Evocazione
+skill_explosives=Esplosivi
+
+# Hotbar Messages
+hotbar_slot_selected=Slot {0} selezionato
+empty_hotbar_slot=Slot barra azioni vuoto

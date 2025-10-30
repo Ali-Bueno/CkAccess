@@ -1,0 +1,33 @@
+# Portuguese Brazilian localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=Coletado: {0}
+item_picked_multiple=Coletado: {0} x{1}
+level_up=Nível {0} alcançado!
+skill_up={0} aumentado para nível {1}
+
+# UI Navigation Messages
+empty_slot=Slot vazio
+tab_equipment=Aba: Equipamento
+tab_skills=Aba: Habilidades
+tab_souls=Aba: Almas
+skills=Habilidades
+selected_item=Selecionado: {0}
+
+# Skill Names
+skill_mining=Mineração
+skill_running=Corrida
+skill_melee=Corpo a corpo
+skill_vitality=Vitalidade
+skill_crafting=Artesanato
+skill_range=Alcance
+skill_gardening=Jardinagem
+skill_fishing=Pesca
+skill_cooking=Culinária
+skill_magic=Magia
+skill_summoning=Invocação
+skill_explosives=Explosivos
+
+# Hotbar Messages
+hotbar_slot_selected=Slot {0} selecionado
+empty_hotbar_slot=Slot da barra de ação vazio

@@ -1,0 +1,33 @@
+# Ukrainian localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=Підібрано: {0}
+item_picked_multiple=Підібрано: {0} x{1}
+level_up=Досягнуто рівень {0}!
+skill_up={0} підвищено до рівня {1}
+
+# UI Navigation Messages
+empty_slot=Порожній слот
+tab_equipment=Вкладка: Спорядження
+tab_skills=Вкладка: Навички
+tab_souls=Вкладка: Душі
+skills=Навички
+selected_item=Вибрано: {0}
+
+# Skill Names
+skill_mining=Видобуток
+skill_running=Біг
+skill_melee=Ближній бій
+skill_vitality=Життєздатність
+skill_crafting=Ремесло
+skill_range=Дальній бій
+skill_gardening=Садівництво
+skill_fishing=Риболовля
+skill_cooking=Кулінарія
+skill_magic=Магія
+skill_summoning=Виклик
+skill_explosives=Вибухівка
+
+# Hotbar Messages
+hotbar_slot_selected=Слот {0} вибрано
+empty_hotbar_slot=Порожній слот швидкого доступу

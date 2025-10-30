@@ -1,0 +1,33 @@
+# Korean localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=획득: {0}
+item_picked_multiple=획득: {0} x{1}
+level_up=레벨 {0} 달성!
+skill_up={0}이(가) 레벨 {1}로 상승
+
+# UI Navigation Messages
+empty_slot=빈 슬롯
+tab_equipment=탭: 장비
+tab_skills=탭: 스킬
+tab_souls=탭: 영혼
+skills=스킬
+selected_item=선택됨: {0}
+
+# Skill Names
+skill_mining=채굴
+skill_running=달리기
+skill_melee=근접 전투
+skill_vitality=생명력
+skill_crafting=제작
+skill_range=원거리
+skill_gardening=원예
+skill_fishing=낚시
+skill_cooking=요리
+skill_magic=마법
+skill_summoning=소환
+skill_explosives=폭발물
+
+# Hotbar Messages
+hotbar_slot_selected=슬롯 {0} 선택됨
+empty_hotbar_slot=빈 단축키 슬롯

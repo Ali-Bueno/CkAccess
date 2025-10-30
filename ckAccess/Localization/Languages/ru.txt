@@ -1,0 +1,33 @@
+# Russian localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=Поднято: {0}
+item_picked_multiple=Поднято: {0} x{1}
+level_up=Достигнут уровень {0}!
+skill_up={0} повышен до уровня {1}
+
+# UI Navigation Messages
+empty_slot=Пустой слот
+tab_equipment=Вкладка: Снаряжение
+tab_skills=Вкладка: Навыки
+tab_souls=Вкладка: Души
+skills=Навыки
+selected_item=Выбрано: {0}
+
+# Skill Names
+skill_mining=Добыча
+skill_running=Бег
+skill_melee=Ближний бой
+skill_vitality=Живучесть
+skill_crafting=Ремесло
+skill_range=Дальний бой
+skill_gardening=Садоводство
+skill_fishing=Рыбалка
+skill_cooking=Готовка
+skill_magic=Магия
+skill_summoning=Призыв
+skill_explosives=Взрывчатка
+
+# Hotbar Messages
+hotbar_slot_selected=Слот {0} выбран
+empty_hotbar_slot=Пустой слот панели быстрого доступа

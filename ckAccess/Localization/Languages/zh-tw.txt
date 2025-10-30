@@ -1,0 +1,33 @@
+# Chinese Traditional localization file for Core Keeper Accessibility Mod
+
+# Notification System Messages
+item_picked_single=拾取了: {0}
+item_picked_multiple=拾取了: {0} x{1}
+level_up=達到等級{0}！
+skill_up={0}提升到等級{1}
+
+# UI Navigation Messages
+empty_slot=空槽位
+tab_equipment=標籤頁: 裝備
+tab_skills=標籤頁: 技能
+tab_souls=標籤頁: 靈魂
+skills=技能
+selected_item=已選擇: {0}
+
+# Skill Names
+skill_mining=採礦
+skill_running=奔跑
+skill_melee=近戰
+skill_vitality=生命力
+skill_crafting=製作
+skill_range=遠程
+skill_gardening=園藝
+skill_fishing=釣魚
+skill_cooking=烹飪
+skill_magic=魔法
+skill_summoning=召喚
+skill_explosives=爆炸物
+
+# Hotbar Messages
+hotbar_slot_selected=已選擇槽位{0}
+empty_hotbar_slot=空快捷欄槽位

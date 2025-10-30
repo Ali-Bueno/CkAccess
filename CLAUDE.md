@@ -229,6 +229,118 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
 - **Sonidos de Proximidad:** Emite tonos que varían en pitch según la distancia (grave=lejos, agudo=cerca)
   - Para objetos interactuables: se activa al caminar
   - Para enemigos: se actualiza constantemente con su posición
+  - **Audio 2D:** Paneo estéreo manual para posicionamiento correcto (izquierda/derecha)
+
+### Sistema de Notificaciones ✅ **COMPLETADO**
+
+Se ha implementado un sistema completo de notificaciones con historial navegable que anuncia eventos importantes del juego.
+
+#### Funcionalidades Principales:
+
+1. **Detección Automática de Eventos:**
+   - **Items Recogidos**: Monitorea el inventario del jugador cada 500ms y detecta cuando se recogen items
+   - **Nivel Total**: Rastrea la suma de todos los niveles de skills (Core Keeper usa skills individuales, no nivel de personaje)
+   - **Skills Mejoradas**: Detecta cuando cualquier skill individual sube de nivel
+   - **Inicialización Inteligente**: No anuncia el inventario inicial al cargar el juego, solo items realmente recogidos
+
+2. **Buffer Inteligente:**
+   - Almacena hasta **100 notificaciones** en memoria
+   - Limpieza automática: elimina las más antiguas cuando se supera el límite
+   - Sistema eficiente que no impacta el rendimiento
+
+3. **Navegación del Historial:**
+   - **Punto (.)**: Siguiente notificación (más reciente)
+   - **Coma (,)**: Anterior notificación (más antigua)
+   - **Shift + Punto**: Saltar directamente a la última notificación
+   - **Shift + Coma**: Saltar directamente a la primera notificación
+   - Cada notificación se anuncia con su posición: "X de Y. [mensaje]"
+   - Cooldown de 200ms entre navegaciones
+
+4. **Control de Anuncios:**
+   - Intervalo mínimo de 500ms entre notificaciones automáticas
+   - Debounce de 300ms para evitar anuncios duplicados del mismo item
+   - No interrumpe si el usuario está navegando el historial
+
+#### Archivos del Sistema:
+
+- **`NotificationSystem.cs`**: Sistema central con historial y gestión de notificaciones
+- **`NotificationNavigationPatch.cs`**: Controles de navegación por teclado (Punto/Coma con/sin Shift)
+- **`ItemPickupNotificationPatch.cs`**: Detección de items recogidos mediante monitoreo de inventario
+- **`LevelUpNotificationPatch.cs`**: Detección de cambios en nivel total (suma de skills)
+- **`SkillUpNotificationPatch.cs`**: Detección de mejoras en skills individuales
+
+#### Tipos de Notificaciones:
+
+```csharp
+public enum NotificationType
+{
+    ItemPickup,     // Item recogido
+    LevelUp,        // Subida de nivel total
+    SkillUp,        // Mejora de skill
+    Achievement,    // Logro desbloqueado (futuro)
+    Info,           // Información general
+    Warning,        // Advertencia
+    Error           // Error
+}
+```
+
+#### Claves de Localización (19 idiomas soportados):
+
+```
+item_picked_single=Picked up: {0}
+item_picked_multiple=Picked up: {0} x{1}
+level_up=Leveled up to {0}!
+skill_up={0} increased to level {1}
+```
+
+### Sistema de Anunciador de Tiles al Frente ✅ **COMPLETADO**
+
+Anuncia automáticamente el tile que está en frente del jugador según la dirección de movimiento.
+
+#### Funcionamiento:
+- **Detección de Dirección**: Monitorea WASD/flechas para determinar hacia dónde mira el jugador
+- **Cálculo Inteligente**: Determina el tile 1 unidad adelante en la dirección de movimiento
+- **Cache Eficiente**: Solo anuncia cuando el tile cambia, no repeticiones innecesarias
+- **Cooldown**: 300ms entre anuncios para evitar spam
+- **Integración con Menús**: Se desactiva automáticamente cuando hay menús abiertos
+
+#### Archivo:
+- **`TileAheadAnnouncerPatch.cs`**: Parche en `PlayerController.ManagedUpdate`
+
+### Sistema de Categorización de Objetos ✅ **COMPLETADO**
+
+Sistema inteligente para identificar y categorizar objetos del mundo sin hardcoding.
+
+#### Categorías Soportadas:
+- Core (núcleo del juego)
+- Chest (cofres)
+- WorkStation (estaciones de trabajo)
+- Enemy (enemigos)
+- Pickup (items recogibles)
+- Plant (plantas)
+- Resource (recursos minables)
+- Decoration (decoraciones)
+- Furniture (muebles)
+- Animal (animales)
+- Critter (bichos)
+- Structure (estructuras)
+- Door (puertas)
+- Statue (estatuas)
+
+#### Archivo:
+- **`ObjectCategoryHelper.cs`**: 70+ patrones de objetos organizados por categoría
+
+### Sistema de Localización
+
+El mod soporta **19 idiomas**:
+- Inglés (en), Español (es), Francés (fr), Alemán (de)
+- Italiano (it), Portugués Brasileño (pt-br), Holandés (nl)
+- Ruso (ru), Polaco (pl), Turco (tr), Ucraniano (uk)
+- Checo (cz), Sueco (sv)
+- Japonés (ja), Chino Simplificado (zh-cn), Chino Tradicional (zh-tw)
+- Coreano (ko), Árabe (ar), Tailandés (th)
+
+**Sistema de Fallback**: Si falta una traducción, se usa inglés automáticamente.
 
 ### Próximos Pasos
 
