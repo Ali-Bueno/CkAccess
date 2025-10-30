@@ -1,0 +1,368 @@
+# Fichier de localisation française pour Core Keeper Accessibility Mod
+# Format : clé=valeur
+# Les lignes commençant par # sont des commentaires
+
+# Messages du curseur virtuel
+virtual_cursor_initialized=Curseur virtuel initialisé
+cursor_initialization_error=Erreur lors de l'initialisation du curseur
+cursor_reset=Curseur réinitialisé : x={0}, z={1}
+cursor_reset_error=Erreur lors de la réinitialisation du curseur
+limit_reached=Limite atteinte
+primary_action_error=Erreur dans l'action primaire : {0}
+placing_at_position=Placement à la position x={0}, z={1}
+item_placed_at_position={0} placé à la position x={1}, z={2}
+secondary_action_error=Erreur dans l'action secondaire : {0}
+interaction_error=Erreur lors de l'interaction : {0}
+cursor_not_initialized=Curseur non initialisé
+current_position=Position actuelle : x={0}, z={1}
+position_reading_error=Erreur lors de la lecture de la position du joueur
+
+# Messages de navigation UI
+no_tabs_available=Aucun onglet disponible
+no_more_tabs=Plus d'onglets disponibles
+tab_equipment=Onglet : Équipement
+tab_skills=Onglet : Compétences
+tab_souls=Onglet : Âmes
+tab_number=Onglet {0}
+navigation_error=Erreur de navigation des onglets : {0}
+selection_error=Erreur lors de la sélection de l'objet : {0}
+empty_slot=Emplacement vide
+slot_selection_error=Erreur de sélection d'emplacement : {0}
+skill_error=Erreur lors de l'ouverture de la compétence : {0}
+click_simulation_error=Erreur lors de la simulation du clic : {0}
+no_element_selected=Aucun élément sélectionné
+no_element_selected_secondary=Aucun élément sélectionné pour l'action secondaire
+secondary_action_error_ui=Erreur dans l'action secondaire : {0}
+empty_slot_no_action=Emplacement vide, aucune action disponible
+secondary_action_performed=Action secondaire effectuée
+secondary_slot_error=Erreur dans l'action secondaire de l'emplacement : {0}
+right_click_simulation_error=Erreur lors de la simulation du clic droit : {0}
+talent_action=Action sur le talent : {0}
+talent_selected=Talent sélectionné
+talent_selection_error=Erreur lors de la sélection du talent : {0}
+skills=Compétences
+preset_selection_error=Erreur lors de la sélection du préréglage : {0}
+preset_selected=Préréglage sélectionné : {0}
+equipment_preset_selected=Préréglage d'équipement sélectionné
+equipment_preset_selected_generic=Préréglage d'équipement {0} sélectionné
+equipment_preset_error=Erreur avec le préréglage d'équipement : {0}
+equipment_preset_not_found=Préréglage d'équipement introuvable
+stats_window_toggled=Fenêtre de statistiques basculée
+stats=Statistiques
+stats_button_activated=Bouton de statistiques activé
+stats_error=Erreur lors de l'ouverture des statistiques : {0}
+selected_item=Sélectionné : {0}
+
+# Messages de compétences et talents
+talent_tree_opened=Arbre de talents ouvert : {0}
+talent_tree_opened_generic=Arbre de talents ouvert
+talent_tree_closed=Arbre de talents fermé
+talent=Talent
+
+# Noms des compétences
+skill_mining=Minage
+skill_running=Course
+skill_melee=Corps à corps
+skill_vitality=Vitalité
+skill_crafting=Artisanat
+skill_range=À distance
+skill_gardening=Jardinage
+skill_fishing=Pêche
+skill_cooking=Cuisine
+skill_magic=Magie
+skill_summoning=Invocation
+skill_explosives=Explosifs
+
+# Messages du lecteur de monde
+empty=Vide
+reading_error=Erreur de lecture
+the_core=Le Cœur (interactif)
+work_station={0} (station de travail)
+enemy={0} (ennemi)
+object={0} (objet)
+plant={0} (plante)
+resource={0} (ressource)
+entity={0} (entité)
+destructible_tool={0} destructible (utiliser {1})
+destructible_material_tool={0} en {1} destructible (utiliser {2})
+blocking={0} (bloquant)
+blocking_material={0} en {1} (bloquant)
+dangerous={0} (dangereux)
+dangerous_material={0} en {1} (dangereux)
+area_not_available=Zone non disponible
+unknown_position=Position inconnue
+unknown=Inconnu
+player_position_error=Impossible d'obtenir la position du joueur
+cannot_read_player_position=Impossible de lire la position du joueur
+position_reading_error_generic=Erreur lors de la lecture de la position
+empty_area_around=Zone vide autour
+area_scan_error=Erreur lors du scan de la zone
+
+# Messages d'artisanat (établi)
+recipe=Recette : {0}
+recipe_with_amount=Recette : {0} x{1}
+can_craft=Peut être fabriqué
+cannot_craft=Ne peut pas être fabriqué
+required_materials=Matériaux requis
+missing_material={0} : manquent {1}
+available_material={0} : disponibles {1}
+and_more_materials=et plus de matériaux
+invalid_recipe=Recette invalide
+cannot_craft_materials=Ne peut pas être fabriqué : matériaux manquants
+inventory_full=Inventaire plein
+crafted_item={0} fabriqué
+crafting_error=Erreur lors de la fabrication
+
+# Messages d'actions directes
+empty_slot_cannot_equip=Emplacement vide, impossible d'équiper
+item_not_equippable={0} ne peut pas être équipé
+equipment_window_not_open=Fenêtre d'équipement non ouverte
+item_equipped={0} équipé
+item_cannot_equip=Impossible d'équiper {0}
+equip_error=Erreur lors de l'équipement
+empty_slot_cannot_use=Emplacement vide, impossible d'utiliser
+item_not_usable={0} ne peut pas être utilisé
+item_used={0} utilisé
+item_cannot_use=Impossible d'utiliser {0}
+item_placed={0} placé
+item_action_performed=Action effectuée sur {0}
+use_error=Erreur lors de l'utilisation
+no_crafting_available=Aucun artisanat disponible
+crafting_station_available=Station d'artisanat disponible, utilisez les recettes de l'inventaire
+select_recipe_item=Sélectionnez un objet de recette
+recipe_item_detected=Recette détectée : {0}
+not_a_recipe=Cet objet n'est pas une recette
+craft_error=Erreur lors de la fabrication
+
+# Messages de la barre d'action rapide
+hotbar_changed=Barre d'action {0} sélectionnée
+no_weapon_equipped=Aucune arme équipée
+empty_hotbar_slot=Emplacement de barre vide
+unknown=Inconnu
+current_hotbar_item=Barre {0}, emplacement {1} : {2}
+hotbar_error=Erreur de barre d'action
+durability_critical=durabilité critique {0}%
+durability_low=faible durabilité {0}%
+durability_normal=durabilité {0}%
+durability_full=durabilité complète
+hotbar_info_available=Information de barre disponible
+hotbar_slot_selected=Emplacement {0} sélectionné
+
+# État des objets
+equipped=, équipé
+
+# Éléments UI
+stats_button=Bouton de statistiques : {0}
+equipment_preset=Préréglage d'équipement : {0}
+crafting_button=Bouton d'artisanat : {0}
+organize_button=Bouton d'organisation : {0}
+quick_action_button=Bouton d'action rapide : {0}
+button=Bouton : {0}
+tab=Onglet : {0}
+preset=Préréglage : {0}
+statistics=Statistiques : {0}
+bag=Sac : {0}
+shortcut=Raccourci : {0}
+element=Élément : {0}
+
+# Messages pop-up
+hold_to_confirm=maintenir pour confirmer
+
+# Options de menu
+more_options=Plus d'options
+
+# Types de tuiles
+tile_none=Vide
+tile_ground=Sol
+tile_wall=Mur
+tile_water=Eau
+tile_pit=Fosse
+tile_bridge=Pont
+tile_floor=Sol construit
+tile_roof_hole=Trou dans le toit
+tile_thin_wall=Mur mince
+tile_dug_up_ground=Sol creusé
+tile_watered_ground=Sol arrosé
+tile_circuit_plate=Plaque de circuit
+tile_ancient_circuit_plate=Plaque de circuit antique
+tile_fence=Clôture
+tile_rug=Tapis
+tile_small_stones=Petites pierres
+tile_small_grass=Petite herbe
+tile_wall_grass=Herbe murale
+tile_debris=Débris
+tile_floor_crack=Fissure de sol
+tile_rail=Rail
+tile_great_wall=Grande muraille
+tile_lit_floor=Sol éclairé
+tile_debris2=Débris
+tile_loose_flooring=Revêtement lâche
+tile_immune=Zone immune
+tile_wall_crack=Fissure murale
+tile_ore=Veine de minerai
+tile_big_root=Grande racine
+tile_ground_slime=Trace de slime
+tile_ancient_crystal=Cristal antique
+tile_chrysalis=Chrysalide
+
+# Catégories de tuiles
+category_construction=Construction
+category_liquid=Liquide
+category_mineral=Minéral
+category_organic=Organique
+category_stone=Pierre
+category_crystal=Cristal
+category_unknown=Inconnu
+
+# Catégories de matériaux de tuiles
+material_earth=Terre
+material_stone=Pierre
+material_mineral=Minéral
+material_liquid=Liquide
+material_construction=Construction
+material_crystal=Cristal
+material_organic=Organique
+material_unknown=Inconnu
+
+# Sons de pas
+sound_earth=Terre
+sound_stone=Pierre
+sound_metal=Métal
+sound_splash=Éclaboussure
+sound_wood=Bois
+sound_gravel=Gravier
+sound_textile=Textile
+sound_neutral=Neutre
+
+# Outils
+tool_pickaxe=Pioche
+tool_high_quality_pickaxe=Pioche de haute qualité
+tool_axe=Hache
+tool_shovel=Pelle
+tool_pickaxe_or_shovel=Pioche ou Pelle
+tool_none=Aucun
+
+# Matériaux de tuiles
+tileset_dirt=terre
+tileset_stone=pierre
+tileset_obsidian=obsidienne
+tileset_lava=lave
+tileset_nature=nature
+tileset_mold=moisissure
+tileset_sea=mer
+tileset_sand=sable
+tileset_desert=désert
+tileset_snow=neige
+tileset_crystal=cristal
+tileset_dark_stone=pierre sombre
+
+# Descriptions de tuiles
+tile_with_material={0} en {1}
+
+# Messages d'inventaire
+inventory_opened=Inventaire ouvert
+inventory_closed=Inventaire fermé
+character_window_opened=Fenêtre de personnage ouverte
+character_window_closed=Fenêtre de personnage fermée
+
+# Messages du système de notifications
+item_picked_single=Ramassé : {0}
+item_picked_multiple=Ramassé : {0} x{1}
+level_up=Niveau {0} atteint !
+skill_up={0} augmenté au niveau {1}
+
+# Messages de ciblage automatique
+enemy_in_range={0} à portée
+enemy_out_of_range={0} hors de portée
+enemy_at_distance={0} {1}, {2} tuiles
+enemy_unknown=Ennemi inconnu
+enemy_generic=Ennemi
+
+# Directions
+dir_east=à l'est
+dir_northeast=au nord-est
+dir_north=au nord
+dir_northwest=au nord-ouest
+dir_west=à l'ouest
+dir_southwest=au sud-ouest
+dir_south=au sud
+dir_southeast=au sud-est
+
+# Noms d'ennemis
+enemy_slime=Slime
+enemy_spider=Araignée
+enemy_skeleton=Squelette
+enemy_goblin=Gobelin
+enemy_orc=Orc
+enemy_zombie=Zombie
+enemy_demon=Démon
+enemy_beast=Bête
+enemy_larva=Larve
+enemy_grub=Asticot
+enemy_worm=Ver
+enemy_fly=Mouche
+enemy_bat=Chauve-souris
+enemy_rat=Rat
+enemy_boss=Boss
+
+# Messages du système de notifications
+no_notifications=Aucune notification
+first_notification=Première notification
+last_notification=Dernière notification
+
+# Descriptions de catégories d'objets
+category_core=Cœur
+category_chest=Coffre
+category_workstation=Station de travail
+category_enemy=Ennemi
+category_pickup=Objet ramassable
+category_plant=Plante
+category_resource=Ressource
+category_decoration=Décoration
+category_furniture=Meuble
+category_animal=Animal
+category_critter=Créature
+category_structure=Structure
+category_door=Porte
+category_statue=Statue
+category_unknown=Objet inconnu
+
+# Préfixes de types d'entités
+prefix_animal=Animal
+prefix_creature=Créature
+prefix_statue=Statue
+prefix_furniture=Meuble
+prefix_structure=Structure
+
+# Noms de tuiles supplémentaires
+tileset_extras=extras
+tileset_base_building_wood=bâtiment en bois
+tileset_larva_hive=ruche de larves
+tileset_base_building_stone=bâtiment en pierre
+tileset_clay=argile
+tileset_turf=gazon
+tileset_base_building_unpainted=bâtiment non peint
+tileset_base_building_yellow=bâtiment jaune
+tileset_base_building_green=bâtiment vert
+tileset_base_building_red=bâtiment rouge
+tileset_base_building_purple=bâtiment violet
+tileset_base_building_blue=bâtiment bleu
+tileset_base_building_brown=bâtiment marron
+tileset_base_building_white=bâtiment blanc
+tileset_base_building_black=bâtiment noir
+tileset_base_building_scarlet=bâtiment écarlate
+tileset_base_building_coral=bâtiment corail
+tileset_base_building_galaxite=bâtiment galaxite
+tileset_base_building_metal=bâtiment métallique
+tileset_base_building_valentine=bâtiment Saint-Valentin
+tileset_base_building_easter=bâtiment de Pâques
+tileset_city=ville
+tileset_desert_temple=temple du désert
+tileset_desert_temple2=ancien temple du désert
+tileset_glass=verre
+tileset_meadow=prairie
+tileset_explosive=explosif
+tileset_alien=alien
+tileset_oasis=oasis
+tileset_explosive_forest=forêt explosive
+tileset_explosive_desert=désert explosif

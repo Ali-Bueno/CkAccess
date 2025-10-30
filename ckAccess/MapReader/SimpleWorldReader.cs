@@ -135,19 +135,19 @@ namespace ckAccess.MapReader
                     LocalizationManager.GetText("resource", cleanedName),
 
                 ObjectCategoryHelper.ObjectCategory.Animal =>
-                    LocalizationManager.GetText("entity", $"Animal: {cleanedName}"),
+                    LocalizationManager.GetText("entity", $"{LocalizationManager.GetText("prefix_animal")}: {cleanedName}"),
 
                 ObjectCategoryHelper.ObjectCategory.Critter =>
-                    LocalizationManager.GetText("entity", $"Criatura: {cleanedName}"),
+                    LocalizationManager.GetText("entity", $"{LocalizationManager.GetText("prefix_creature")}: {cleanedName}"),
 
                 ObjectCategoryHelper.ObjectCategory.Statue =>
-                    LocalizationManager.GetText("entity", $"Estatua: {cleanedName}"),
+                    LocalizationManager.GetText("entity", $"{LocalizationManager.GetText("prefix_statue")}: {cleanedName}"),
 
                 ObjectCategoryHelper.ObjectCategory.Furniture =>
-                    LocalizationManager.GetText("entity", $"Mueble: {cleanedName}"),
+                    LocalizationManager.GetText("entity", $"{LocalizationManager.GetText("prefix_furniture")}: {cleanedName}"),
 
                 ObjectCategoryHelper.ObjectCategory.Structure =>
-                    LocalizationManager.GetText("entity", $"Estructura: {cleanedName}"),
+                    LocalizationManager.GetText("entity", $"{LocalizationManager.GetText("prefix_structure")}: {cleanedName}"),
 
                 _ => LocalizationManager.GetText("entity", cleanedName)
             };

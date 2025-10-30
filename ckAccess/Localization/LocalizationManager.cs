@@ -2,6 +2,7 @@ extern alias PugOther;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 
 namespace ckAccess.Localization
 {
@@ -21,19 +22,19 @@ namespace ckAccess.Localization
         /// </summary>
         private static void Initialize()
         {
-            if (_isInitialized) return;
+            if (_isInitialized)
+                return;
 
             lock (_initLock)
             {
-                if (_isInitialized) return;
+                if (_isInitialized)
+                    return;
 
                 try
                 {
                     // Obtener la carpeta del mod (donde está el DLL)
                     string modDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                     string languagesPath = Path.Combine(modDirectory, "Localization", "Languages");
-
-                    UnityEngine.Debug.Log($"[LocalizationManager] Loading translations from: {languagesPath}");
 
                     if (Directory.Exists(languagesPath))
                     {
@@ -46,17 +47,17 @@ namespace ckAccess.Localization
                             LoadLanguageFile(fileName, filePath);
                         }
 
-                        UnityEngine.Debug.Log($"[LocalizationManager] Loaded {Translations.Count} language(s)");
+                        UnityEngine.Debug.Log($"[ckAccess] Loaded {Translations.Count} language(s) successfully");
                     }
                     else
                     {
-                        UnityEngine.Debug.LogWarning($"[LocalizationManager] Languages directory not found: {languagesPath}");
+                        UnityEngine.Debug.LogError($"[ckAccess] Languages directory not found: {languagesPath}");
                         LoadFallbackTranslations();
                     }
                 }
                 catch (System.Exception ex)
                 {
-                    UnityEngine.Debug.LogError($"[LocalizationManager] Error initializing translations: {ex.Message}");
+                    UnityEngine.Debug.LogError($"[ckAccess] Error initializing translations: {ex.Message}");
                     LoadFallbackTranslations();
                 }
 
@@ -95,11 +96,10 @@ namespace ckAccess.Localization
                 }
 
                 Translations[languageCode] = translations;
-                UnityEngine.Debug.Log($"[LocalizationManager] Loaded {translations.Count} translations for '{languageCode}'");
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogError($"[LocalizationManager] Error loading language file '{filePath}': {ex.Message}");
+                UnityEngine.Debug.LogError($"[ckAccess] Failed loading language '{languageCode}': {ex.Message}");
             }
         }
 
@@ -239,10 +239,12 @@ namespace ckAccess.Localization
                 string language = GetCurrentLanguage();
 
                 // Buscar en el idioma actual
-                if (Translations.TryGetValue(language, out var languageDict) &&
-                    languageDict.TryGetValue(key, out var translation))
+                if (Translations.TryGetValue(language, out var languageDict))
                 {
-                    return args.Length > 0 ? string.Format(translation, args) : translation;
+                    if (languageDict.TryGetValue(key, out var translation))
+                    {
+                        return args.Length > 0 ? string.Format(translation, args) : translation;
+                    }
                 }
 
                 // Fallback a inglés
@@ -256,9 +258,10 @@ namespace ckAccess.Localization
                 // Último fallback - devolver la clave
                 return key;
             }
-            catch
+            catch (System.Exception ex)
             {
                 // En caso de error, devolver la clave
+                UnityEngine.Debug.LogError($"[ckAccess] Error in GetText('{key}'): {ex.Message}");
                 return key;
             }
         }
@@ -272,35 +275,67 @@ namespace ckAccess.Localization
             {
                 // Intentar obtener el idioma de las preferencias del juego
                 var prefs = PugOther.Manager.prefs;
+
                 if (prefs != null)
                 {
                     // El sistema de Core Keeper usa códigos de idioma estándar
                     string gameLanguage = prefs.language;
-                    UnityEngine.Debug.Log($"[LocalizationManager] Game language: '{gameLanguage}'");
 
-                    // Mapear códigos de idioma conocidos
-                    string mappedLanguage = gameLanguage switch
+                    // Normalizar a minúsculas para comparación
+                    string normalizedLanguage = gameLanguage?.ToLower().Trim() ?? "en";
+
+                    // Mapear códigos de idioma soportados por Core Keeper (todos en minúsculas)
+                    // Core Keeper usa I2 Localization que devuelve códigos ISO estándar
+                    string mappedLanguage = normalizedLanguage switch
                     {
-                        "spanish" or "es" or "es-ES" => "es",
-                        "english" or "en" or "en-US" => "en",
-                        _ => "en" // Fallback a inglés para idiomas no soportados
+                        // Idiomas principales
+                        "spanish" or "es" or "es-es" or "español" => "es",
+                        "english" or "en" or "en-us" => "en",
+
+                        // Idiomas europeos
+                        // IMPORTANTE: Core Keeper/I2 devuelve códigos ISO sin región ("pt", "fr", "it")
+                        // pero algunos archivos requieren códigos regionales ("pt-BR", "fr-FR", "it-IT")
+                        "french" or "fr" or "fr-fr" or "français" => "fr-FR",
+                        "german" or "de" or "de-de" or "deutsch" => "de",
+                        "italian" or "it" or "it-it" or "italiano" => "it-IT",
+                        "portuguese" or "pt" or "pt-br" or "português" => "pt-BR",
+                        "russian" or "ru" or "ru-ru" or "русский" => "ru",
+                        "ukrainian" or "uk" or "uk-ua" or "українська" => "uk",
+
+                        // Idiomas asiáticos
+                        "japanese" or "ja" or "ja-jp" or "日本語" => "ja",
+                        "korean" or "ko" or "ko-kr" or "한국어" => "ko",
+                        "chinese" or "zh" or "zh-cn" or "cn" or "简体中文" => "zh-cn",
+                        "zh-tw" or "tw" or "繁體中文" => "zh-tw",
+                        "thai" or "th" or "th-th" or "ไทย" => "th",
+
+                        // Idiomas con alfabetos especiales
+                        "arabic" or "ar" or "ar-sa" or "العربية" => "ar",
+
+                        _ => null // Null indica intentar con el código original
                     };
 
-                    UnityEngine.Debug.Log($"[LocalizationManager] Mapped language: '{mappedLanguage}'");
+                    // Si el switch no mapeó nada, intentar usar el código tal como viene
+                    // Esto maneja casos donde I2 devuelve códigos que coinciden exactamente con nuestros archivos
+                    if (mappedLanguage == null)
+                    {
+                        // Verificar si el código existe directamente en nuestros diccionarios
+                        if (Translations.ContainsKey(normalizedLanguage))
+                            return normalizedLanguage;
+
+                        // Último fallback a inglés
+                        return "en";
+                    }
+
                     return mappedLanguage;
-                }
-                else
-                {
-                    UnityEngine.Debug.Log($"[LocalizationManager] Manager.prefs is null, defaulting to 'en'");
                 }
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.Log($"[LocalizationManager] Exception getting language: {ex.Message}");
+                UnityEngine.Debug.LogError($"[ckAccess] Error getting current language: {ex.Message}");
             }
 
             // Fallback por defecto a inglés
-            UnityEngine.Debug.Log($"[LocalizationManager] Using fallback language: 'en'");
             return "en";
         }
 

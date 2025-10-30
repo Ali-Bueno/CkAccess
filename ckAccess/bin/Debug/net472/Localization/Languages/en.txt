@@ -269,3 +269,99 @@ item_picked_single=Picked up: {0}
 item_picked_multiple=Picked up: {0} x{1}
 level_up=Leveled up to {0}!
 skill_up={0} increased to level {1}
+
+# Auto-Targeting Messages
+enemy_in_range={0} in range
+enemy_out_of_range={0} out of range
+enemy_at_distance={0} {1}, {2} tiles
+enemy_unknown=Unknown enemy
+enemy_generic=Enemy
+
+# Directions
+dir_east=to the east
+dir_northeast=to the northeast
+dir_north=to the north
+dir_northwest=to the northwest
+dir_west=to the west
+dir_southwest=to the southwest
+dir_south=to the south
+dir_southeast=to the southeast
+
+# Enemy Names
+enemy_slime=Slime
+enemy_spider=Spider
+enemy_skeleton=Skeleton
+enemy_goblin=Goblin
+enemy_orc=Orc
+enemy_zombie=Zombie
+enemy_demon=Demon
+enemy_beast=Beast
+enemy_larva=Larva
+enemy_grub=Grub
+enemy_worm=Worm
+enemy_fly=Fly
+enemy_bat=Bat
+enemy_rat=Rat
+enemy_boss=Boss
+
+# Notification System Messages
+no_notifications=No notifications
+first_notification=First notification
+last_notification=Last notification
+
+# Object Category Descriptions
+category_core=Core
+category_chest=Chest
+category_workstation=Workstation
+category_enemy=Enemy
+category_pickup=Collectible object
+category_plant=Plant
+category_resource=Resource
+category_decoration=Decoration
+category_furniture=Furniture
+category_animal=Animal
+category_critter=Creature
+category_structure=Structure
+category_door=Door
+category_statue=Statue
+category_unknown=Unknown object
+
+# Entity Type Prefixes
+prefix_animal=Animal
+prefix_creature=Creature
+prefix_statue=Statue
+prefix_furniture=Furniture
+prefix_structure=Structure
+
+# Additional Tileset Names
+tileset_extras=extras
+tileset_base_building_wood=wooden building
+tileset_larva_hive=larva hive
+tileset_base_building_stone=stone building
+tileset_clay=clay
+tileset_turf=turf
+tileset_base_building_unpainted=unpainted building
+tileset_base_building_yellow=yellow building
+tileset_base_building_green=green building
+tileset_base_building_red=red building
+tileset_base_building_purple=purple building
+tileset_base_building_blue=blue building
+tileset_base_building_brown=brown building
+tileset_base_building_white=white building
+tileset_base_building_black=black building
+tileset_base_building_scarlet=scarlet building
+tileset_base_building_coral=coral building
+tileset_base_building_galaxite=galaxite building
+tileset_base_building_metal=metal building
+tileset_base_building_valentine=valentine building
+tileset_base_building_easter=easter building
+tileset_city=city
+tileset_desert_temple=desert temple
+tileset_desert_temple2=ancient desert temple
+tileset_glass=glass
+tileset_meadow=meadow
+tileset_explosive=explosive
+tileset_alien=alien
+tileset_oasis=oasis
+tileset_explosive_forest=explosive forest
+tileset_explosive_desert=explosive desert

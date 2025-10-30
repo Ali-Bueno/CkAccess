@@ -4,6 +4,7 @@ extern alias Core;
 using System;
 using System.Collections.Generic;
 using GameObject = Core::UnityEngine.GameObject;
+using ckAccess.Localization;
 
 namespace ckAccess.MapReader
 {
@@ -243,21 +244,21 @@ namespace ckAccess.MapReader
         {
             return category switch
             {
-                ObjectCategory.Core => "Núcleo",
-                ObjectCategory.Chest => "Cofre",
-                ObjectCategory.WorkStation => "Estación de trabajo",
-                ObjectCategory.Enemy => "Enemigo",
-                ObjectCategory.Pickup => "Objeto recolectable",
-                ObjectCategory.Plant => "Planta",
-                ObjectCategory.Resource => "Recurso",
-                ObjectCategory.Decoration => "Decoración",
-                ObjectCategory.Furniture => "Mueble",
-                ObjectCategory.Animal => "Animal",
-                ObjectCategory.Critter => "Criatura",
-                ObjectCategory.Structure => "Estructura",
-                ObjectCategory.Door => "Puerta",
-                ObjectCategory.Statue => "Estatua",
-                _ => "Objeto desconocido"
+                ObjectCategory.Core => LocalizationManager.GetText("category_core"),
+                ObjectCategory.Chest => LocalizationManager.GetText("category_chest"),
+                ObjectCategory.WorkStation => LocalizationManager.GetText("category_workstation"),
+                ObjectCategory.Enemy => LocalizationManager.GetText("category_enemy"),
+                ObjectCategory.Pickup => LocalizationManager.GetText("category_pickup"),
+                ObjectCategory.Plant => LocalizationManager.GetText("category_plant"),
+                ObjectCategory.Resource => LocalizationManager.GetText("category_resource"),
+                ObjectCategory.Decoration => LocalizationManager.GetText("category_decoration"),
+                ObjectCategory.Furniture => LocalizationManager.GetText("category_furniture"),
+                ObjectCategory.Animal => LocalizationManager.GetText("category_animal"),
+                ObjectCategory.Critter => LocalizationManager.GetText("category_critter"),
+                ObjectCategory.Structure => LocalizationManager.GetText("category_structure"),
+                ObjectCategory.Door => LocalizationManager.GetText("category_door"),
+                ObjectCategory.Statue => LocalizationManager.GetText("category_statue"),
+                _ => LocalizationManager.GetText("category_unknown")
             };
         }
     }

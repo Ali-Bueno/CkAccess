@@ -1,9 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dotnet build)",
+      "Bash(sort:*)",
+      "Bash(test:*)",
+      "Bash(dotnet build:*)",
       "Bash(git add:*)",
-      "Bash(dotnet build:*)"
+      "Bash(git commit:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []

@@ -60,15 +60,18 @@ namespace ckAccess.MapReader
         {
             try
             {
-                // Usar el sistema de localización universal
+                // ESTRATEGIA: Usar nuestro LocalizationManager que sí tiene las traducciones
+                // El sistema nativo de I2 del juego NO tiene traducciones para tiles (devuelve "missing:")
                 if (LocalizationKeys.TryGetValue(tileType, out var localizationKey))
                 {
-                    return LocalizationManager.GetText(localizationKey);
+                    string result = LocalizationManager.GetText(localizationKey);
+                    System.Console.WriteLine($"[TileTypeHelper] Using LocalizationManager: '{result}' for key '{localizationKey}'");
+                    return result;
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                // Fallback silencioso
+                System.Console.WriteLine($"[TileTypeHelper] Exception: {ex}");
             }
 
             // Último fallback al nombre del enum

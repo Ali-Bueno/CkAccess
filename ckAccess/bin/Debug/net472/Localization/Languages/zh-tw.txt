@@ -1,0 +1,367 @@
+# 核心守護者無障礙模組的繁體中文本地化檔案
+# 格式：鍵=值
+# 以 # 開頭的行是註解
+
+# 虛擬遊標訊息
+virtual_cursor_initialized=虛擬遊標已初始化
+cursor_initialization_error=初始化遊標時出錯
+cursor_reset=遊標已重置：x={0}，z={1}
+cursor_reset_error=重置遊標時出錯
+limit_reached=已達到限制
+primary_action_error=主要動作出錯：{0}
+placing_at_position=正在位置 x={0}，z={1} 放置
+item_placed_at_position={0} 已放置在位置 x={1}，z={2}
+secondary_action_error=次要動作出錯：{0}
+interaction_error=互動出錯：{0}
+cursor_not_initialized=遊標未初始化
+current_position=目前位置：x={0}，z={1}
+position_reading_error=讀取玩家位置時出錯
+
+# 使用者介面導覽訊息
+no_tabs_available=沒有可用的分頁
+no_more_tabs=沒有更多分頁可用
+tab_equipment=分頁：裝備
+tab_skills=分頁：技能
+tab_souls=分頁：靈魂
+tab_number=分頁 {0}
+navigation_error=導覽分頁時出錯：{0}
+selection_error=選擇物體時出錯：{0}
+empty_slot=空的格子
+slot_selection_error=選擇格子時出錯：{0}
+skill_error=打開技能時出錯：{0}
+click_simulation_error=模擬點擊時出錯：{0}
+no_element_selected=未選擇任何元素
+no_element_selected_secondary=未選擇任何元素進行次要動作
+secondary_action_error_ui=次要動作出錯：{0}
+empty_slot_no_action=格子為空，沒有可用動作
+secondary_action_performed=已執行次要動作
+secondary_slot_error=格子次要動作出錯：{0}
+right_click_simulation_error=模擬滑鼠右鍵點擊時出錯：{0}
+talent_action=天賦動作：{0}
+talent_selected=已選擇天賦
+talent_selection_error=選擇天賦時出錯：{0}
+skills=技能
+preset_selection_error=選擇預設組合時出錯：{0}
+preset_selected=已選擇預設組合：{0}
+equipment_preset_selected=已選擇裝備預設組合
+equipment_preset_selected_generic=已選擇裝備預設組合 {0}
+equipment_preset_error=裝備預設組合出錯：{0}
+equipment_preset_not_found=未找到裝備預設組合
+stats_window_toggled=統計資訊視窗已切換
+stats=統計資訊
+stats_button_activated=統計資訊按鈕已啟動
+stats_error=打開統計資訊時出錯：{0}
+selected_item=已選擇：{0}
+
+# 技能和天賦訊息
+talent_tree_opened=天賦樹已打開：{0}
+talent_tree_opened_generic=天賦樹已打開
+talent_tree_closed=天賦樹已關閉
+talent=天賦
+
+# 技能名稱
+skill_mining=採礦
+skill_running=奔跑
+skill_melee=近戰格鬥
+skill_vitality=生命力
+skill_crafting=製作
+skill_range=遠距格鬥
+skill_gardening=園藝
+skill_fishing=釣魚
+skill_cooking=烹飪
+skill_magic=魔法
+skill_summoning=召喚
+skill_explosives=爆炸物
+
+# 世界閱讀器訊息
+empty=空的
+reading_error=讀取錯誤
+the_core=核心（可互動）
+work_station={0}（工作站）
+enemy={0}（敵人）
+object={0}（物體）
+plant={0}（植物）
+resource={0}（資源）
+entity={0}（實體）
+destructible_tool={0} 可破壞（使用 {1}）
+destructible_material_tool={0} 的 {1} 可破壞（使用 {2}）
+blocking={0}（阻擋物）
+blocking_material={0} 的 {1}（阻擋物）
+dangerous={0}（危險）
+dangerous_material={0} 的 {1}（危險）
+area_not_available=區域不可用
+unknown_position=位置未知
+unknown=未知
+player_position_error=無法取得玩家位置
+cannot_read_player_position=無法讀取玩家位置
+position_reading_error_generic=讀取位置時出錯
+empty_area_around=周圍區域空無一物
+area_scan_error=掃描區域時出錯
+
+# 製作訊息（工作台）
+recipe=配方：{0}
+recipe_with_amount=配方：{0} x{1}
+can_craft=可以製作
+cannot_craft=無法製作
+required_materials=所需材料
+missing_material={0}：缺少 {1}
+available_material={0}：你有 {1}
+and_more_materials=及更多材料
+invalid_recipe=無效配方
+cannot_craft_materials=無法製作：缺少材料
+inventory_full=物品欄已滿
+crafted_item=已製作 {0}
+crafting_error=製作出錯
+
+# 直接動作訊息
+empty_slot_cannot_equip=格子為空，無法裝備
+item_not_equippable={0} 無法裝備
+equipment_window_not_open=裝備視窗未打開
+item_equipped=已裝備 {0}
+item_cannot_equip=無法裝備 {0}
+equip_error=裝備時出錯
+empty_slot_cannot_use=格子為空，無法使用
+item_not_usable={0} 無法使用
+item_used=已使用 {0}
+item_cannot_use=無法使用 {0}
+item_placed=已放置 {0}
+item_action_performed=已在 {0} 執行動作
+use_error=使用時出錯
+no_crafting_available=沒有可用的製作
+crafting_station_available=製作站可用，使用物品欄中的配方
+select_recipe_item=選擇一個配方物品
+recipe_item_detected=偵測到配方：{0}
+not_a_recipe=此物品不是配方
+craft_error=製作時出錯
+
+# 快捷列訊息
+hotbar_changed=已選擇快捷列 {0}
+no_weapon_equipped=未裝備武器
+empty_hotbar_slot=快捷列格子為空
+unknown=未知
+current_hotbar_item=快捷列 {0}，格子 {1}：{2}
+hotbar_error=快捷列出錯
+durability_critical=耐久度臨界 {0}%
+durability_low=耐久度低 {0}%
+durability_normal=耐久度 {0}%
+durability_full=耐久度滿
+hotbar_info_available=快捷列資訊可用
+hotbar_slot_selected=已選擇格子 {0}
+
+# 物體狀態
+equipped=，已裝備
+
+# 使用者介面元素
+stats_button=統計資訊按鈕：{0}
+equipment_preset=裝備預設組合：{0}
+crafting_button=製作按鈕：{0}
+organize_button=整理按鈕：{0}
+quick_action_button=快速動作按鈕：{0}
+button=按鈕：{0}
+tab=分頁：{0}
+preset=預設組合：{0}
+statistics=統計資訊：{0}
+bag=背包：{0}
+shortcut=快捷鍵：{0}
+element=元素：{0}
+
+# 快顯訊息
+hold_to_confirm=按住以確認
+
+# 菜單選項
+more_options=更多選項
+
+# 地塊類型
+tile_none=空的
+tile_ground=地面
+tile_wall=牆壁
+tile_water=水
+tile_pit=坑洞
+tile_bridge=橋
+tile_floor=建築地面
+tile_roof_hole=屋頂洞口
+tile_thin_wall=薄牆
+tile_dug_up_ground=挖掘的土地
+tile_watered_ground=灌溉的土地
+tile_circuit_plate=電路板
+tile_ancient_circuit_plate=古老電路板
+tile_fence=圍籬
+tile_rug=地毯
+tile_small_stones=小石頭
+tile_small_grass=小草
+tile_wall_grass=牆上的草
+tile_debris=碎石瓦礫
+tile_floor_crack=地面裂縫
+tile_rail=鐵軌
+tile_great_wall=大牆
+tile_lit_floor=照亮的地面
+tile_debris2=碎石瓦礫
+tile_loose_flooring=鬆動的地板
+tile_immune=免疫區域
+tile_wall_crack=牆壁裂縫
+tile_ore=礦脈
+tile_big_root=大根
+tile_ground_slime=鼻涕蟲跡
+tile_ancient_crystal=古老水晶
+tile_chrysalis=蛹
+
+# 地塊類別
+category_construction=建築
+category_liquid=液體
+category_mineral=礦物
+category_organic=有機物
+category_stone=石頭
+category_crystal=水晶
+category_unknown=未知
+
+# 地塊材料類別
+material_earth=土壤
+material_stone=石頭
+material_mineral=礦物
+material_liquid=液體
+material_construction=建築
+material_crystal=水晶
+material_organic=有機物
+material_unknown=未知
+
+# 腳步聲
+sound_earth=土壤
+sound_stone=石頭
+sound_metal=金屬
+sound_splash=濺水聲
+sound_wood=木頭
+sound_gravel=碎石
+sound_textile=織物
+sound_neutral=中性
+
+# 工具
+tool_pickaxe=鎬
+tool_high_quality_pickaxe=高品質鎬
+tool_axe=斧頭
+tool_shovel=鏟子
+tool_pickaxe_or_shovel=鎬或鏟子
+tool_none=無
+
+# 瓷磚集材料
+tileset_dirt=土壤
+tileset_stone=石頭
+tileset_obsidian=黑曜石
+tileset_lava=熔岩
+tileset_nature=自然
+tileset_mold=黴菌
+tileset_sea=大海
+tileset_sand=沙子
+tileset_desert=沙漠
+tileset_snow=雪
+tileset_crystal=水晶
+tileset_dark_stone=深色石頭
+
+# 地塊描述
+tile_with_material={1} {0}
+
+# 物品欄訊息
+inventory_opened=物品欄已打開
+inventory_closed=物品欄已關閉
+character_window_opened=角色視窗已打開
+character_window_closed=角色視窗已關閉
+# 通知系統訊息
+item_picked_single=拾取：{0}
+item_picked_multiple=拾取：{0} x{1}
+level_up=升級到 {0} 級！
+skill_up={0} 升級到 {1} 級
+
+# 自動目標定位訊息
+enemy_in_range={0} 在範圍內
+enemy_out_of_range={0} 超出範圍
+enemy_at_distance={0} {1}，{2} 格距離
+enemy_unknown=未知敵人
+enemy_generic=敵人
+
+# 方向
+dir_east=東邊
+dir_northeast=東北邊
+dir_north=北邊
+dir_northwest=西北邊
+dir_west=西邊
+dir_southwest=西南邊
+dir_south=南邊
+dir_southeast=東南邊
+
+# 敵人名稱
+enemy_slime=鼻涕蟲
+enemy_spider=蜘蛛
+enemy_skeleton=骷髏
+enemy_goblin=地精
+enemy_orc=獸人
+enemy_zombie=殭屍
+enemy_demon=惡魔
+enemy_beast=野獸
+enemy_larva=幼蟲
+enemy_grub=蛆蟲
+enemy_worm=蠕蟲
+enemy_fly=蒼蠅
+enemy_bat=蝙蝠
+enemy_rat=老鼠
+enemy_boss=頭目
+
+# 通知系統訊息
+no_notifications=沒有通知
+first_notification=第一個通知
+last_notification=最後一個通知
+
+# 物體分類描述
+category_core=核心
+category_chest=寶箱
+category_workstation=工作站
+category_enemy=敵人
+category_pickup=可拾取物體
+category_plant=植物
+category_resource=資源
+category_decoration=裝飾
+category_furniture=傢俱
+category_animal=動物
+category_critter=小動物
+category_structure=結構
+category_door=門
+category_statue=雕像
+category_unknown=未知物體
+
+# 實體類型前綴
+prefix_animal=動物
+prefix_creature=生物
+prefix_statue=雕像
+prefix_furniture=傢俱
+prefix_structure=結構
+
+# 額外的瓷磚集名稱
+tileset_extras=額外
+tileset_base_building_wood=木造建築
+tileset_larva_hive=幼蟲巢房
+tileset_base_building_stone=石造建築
+tileset_clay=黏土
+tileset_turf=草皮
+tileset_base_building_unpainted=未上漆建築
+tileset_base_building_yellow=黃色建築
+tileset_base_building_green=綠色建築
+tileset_base_building_red=紅色建築
+tileset_base_building_purple=紫色建築
+tileset_base_building_blue=藍色建築
+tileset_base_building_brown=棕色建築
+tileset_base_building_white=白色建築
+tileset_base_building_black=黑色建築
+tileset_base_building_scarlet=深紅色建築
+tileset_base_building_coral=珊瑚色建築
+tileset_base_building_galaxite=星系石建築
+tileset_base_building_metal=金屬建築
+tileset_base_building_valentine=聖誕節建築
+tileset_base_building_easter=復活節建築
+tileset_city=城市
+tileset_desert_temple=沙漠神廟
+tileset_desert_temple2=古老沙漠神廟
+tileset_glass=玻璃
+tileset_meadow=草地
+tileset_explosive=爆炸物
+tileset_alien=外星人
+tileset_oasis=綠洲
+tileset_explosive_forest=爆炸森林
+tileset_explosive_desert=爆炸沙漠

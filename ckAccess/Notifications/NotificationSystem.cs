@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using DavyKager;
 using UnityEngine;
+using ckAccess.Localization;
 
 namespace ckAccess.Notifications
 {
@@ -105,7 +106,7 @@ namespace ckAccess.Notifications
             {
                 if (_history.Count == 0)
                 {
-                    Tolk.Output("No hay notificaciones", true);
+                    Tolk.Output(LocalizationManager.GetText("no_notifications"), true);
                     return;
                 }
 
@@ -121,7 +122,7 @@ namespace ckAccess.Notifications
                 else
                 {
                     // Ya estamos en el primero
-                    Tolk.Output("Primera notificación", true);
+                    Tolk.Output(LocalizationManager.GetText("first_notification"), true);
                     return;
                 }
 
@@ -142,7 +143,7 @@ namespace ckAccess.Notifications
             {
                 if (_history.Count == 0)
                 {
-                    Tolk.Output("No hay notificaciones", true);
+                    Tolk.Output(LocalizationManager.GetText("no_notifications"), true);
                     return;
                 }
 
@@ -158,7 +159,7 @@ namespace ckAccess.Notifications
                 else
                 {
                     // Ya estamos en el último
-                    Tolk.Output("Última notificación", true);
+                    Tolk.Output(LocalizationManager.GetText("last_notification"), true);
                     return;
                 }
 
@@ -179,7 +180,7 @@ namespace ckAccess.Notifications
             {
                 if (_history.Count == 0)
                 {
-                    Tolk.Output("No hay notificaciones", true);
+                    Tolk.Output(LocalizationManager.GetText("no_notifications"), true);
                     return;
                 }
 
@@ -201,7 +202,7 @@ namespace ckAccess.Notifications
             {
                 if (_history.Count == 0)
                 {
-                    Tolk.Output("No hay notificaciones", true);
+                    Tolk.Output(LocalizationManager.GetText("no_notifications"), true);
                     return;
                 }
 

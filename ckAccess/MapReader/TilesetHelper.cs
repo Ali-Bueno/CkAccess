@@ -12,58 +12,14 @@ namespace ckAccess.MapReader
     {
         /// <summary>
         /// Caché de nombres de tilesets para optimizar rendimiento.
+        /// CLAVE: (tilesetIndex, languageCode) para soportar cambios de idioma en tiempo real.
         /// </summary>
-        private static readonly Dictionary<int, string> _nameCache = new Dictionary<int, string>();
+        private static readonly Dictionary<string, string> _nameCache = new Dictionary<string, string>();
+
         /// <summary>
-        /// Mapeo REAL basado en el enum PugTilemap.Tileset del juego (ck code1/PugTilemap/Tileset.cs).
+        /// Idioma del último caché para detectar cambios de idioma.
         /// </summary>
-        private static readonly Dictionary<int, string> TilesetToMaterialMap = new Dictionary<int, string>
-        {
-            // Enum real de PugTilemap.Tileset
-            { 0, "Tierra" },                  // Dirt
-            { 1, "Piedra" },                  // Stone
-            { 2, "Obsidiana" },               // Obsidian
-            { 3, "Lava" },                    // Lava
-            { 4, "Extras" },                  // Extras
-            { 5, "Madera de construcción" },  // BaseBuildingWood
-            { 6, "Panal de larvas" },         // LarvaHive
-            { 7, "Piedra de construcción" },  // BaseBuildingStone
-            { 8, "Naturaleza" },              // Nature
-            { 9, "Moho" },                    // Mold
-            { 10, "Mar" },                    // Sea
-            { 11, "Arcilla" },                // Clay
-            { 12, "Arena" },                  // Sand ← ¡Esta es la clave!
-            { 13, "Césped" },                 // Turf
-            { 14, "Construcción sin pintar" }, // BaseBuildingUnpainted
-            { 15, "Construcción amarilla" },  // BaseBuildingYellow
-            { 16, "Construcción verde" },     // BaseBuildingGreen
-            { 17, "Construcción roja" },      // BaseBuildingRed
-            { 18, "Construcción púrpura" },   // BaseBuildingPurple
-            { 19, "Construcción azul" },      // BaseBuildingBlue
-            { 20, "Construcción marrón" },    // BaseBuildingBrown
-            { 21, "Construcción blanca" },    // BaseBuildingWhite
-            { 22, "Construcción negra" },     // BaseBuildingBlack
-            { 23, "Construcción escarlata" }, // BaseBuildingScarlet
-            { 24, "Ciudad" },                 // City
-            { 25, "Construcción coral" },     // BaseBuildingCoral
-            { 26, "Desierto" },               // Desert
-            { 27, "Templo del desierto" },    // DesertTemple
-            { 28, "Construcción galaxita" },  // BaseBuildingGalaxite
-            { 29, "Templo del desierto 2" },  // DesertTemple2
-            { 30, "Construcción metálica" },  // BaseBuildingMetal
-            { 31, "Nieve" },                  // Snow
-            { 32, "Construcción San Valentín" }, // BaseBuildingValentine
-            { 33, "Construcción Pascua" },    // BaseBuildingEaster
-            { 34, "Cristal" },                // Glass
-            { 35, "Pradera" },                // Meadow
-            { 36, "Explosivo" },              // Explosive
-            { 59, "Piedra oscura" },          // DarkStone
-            { 60, "Cristal" },                // Crystal
-            { 61, "Alienígena" },             // Alien
-            { 71, "Oasis" },                  // Oasis ← Correcto número!
-            { 72, "Bosque explosivo" },       // ExplosiveForest
-            { 73, "Desierto explosivo" }      // ExplosiveDesert
-        };
+        private static string _lastLanguage = null;
 
         /// <summary>
         /// Obtiene el nombre localizado de un tileset usando el sistema del juego.
@@ -72,8 +28,18 @@ namespace ckAccess.MapReader
         /// <returns>Nombre localizado del tileset</returns>
         public static string GetLocalizedName(int tilesetIndex)
         {
-            // OPTIMIZACIÓN: Verificar caché primero
-            if (_nameCache.TryGetValue(tilesetIndex, out var cachedName))
+            // Detectar cambio de idioma y limpiar caché si es necesario
+            string currentLanguage = LocalizationManager.GetText("tile_ground"); // Usar una clave conocida como indicador
+            if (_lastLanguage != null && _lastLanguage != currentLanguage)
+            {
+                System.Console.WriteLine($"[TilesetHelper] Language changed from '{_lastLanguage}' to '{currentLanguage}', clearing cache");
+                _nameCache.Clear();
+            }
+            _lastLanguage = currentLanguage;
+
+            // OPTIMIZACIÓN: Verificar caché primero (ahora consciente del idioma)
+            string cacheKey = $"{tilesetIndex}_{currentLanguage}";
+            if (_nameCache.TryGetValue(cacheKey, out var cachedName))
             {
                 return cachedName;
             }
@@ -83,6 +49,7 @@ namespace ckAccess.MapReader
             {
                 // PRIORIDAD 1: Usar nuestro LocalizationManager (más confiable)
                 result = GetFallbackLocalizedName(tilesetIndex);
+                System.Console.WriteLine($"[TilesetHelper] LocalizationManager returned: '{result}' for tileset {tilesetIndex}");
 
                 // Si nuestro sistema no tiene el tileset, usar el sistema nativo como fallback
                 if (result.StartsWith("Material "))
@@ -90,6 +57,7 @@ namespace ckAccess.MapReader
                     var friendlyName = GetTilesetFriendlyName(tilesetIndex);
                     if (!string.IsNullOrEmpty(friendlyName))
                     {
+                        System.Console.WriteLine($"[TilesetHelper] Using game's friendly name: '{friendlyName}'");
                         result = friendlyName;
                     }
                     else
@@ -97,19 +65,22 @@ namespace ckAccess.MapReader
                         var localizedName = GetLocalizedTilesetName(tilesetIndex);
                         if (!string.IsNullOrEmpty(localizedName))
                         {
+                            System.Console.WriteLine($"[TilesetHelper] Using game's localized name: '{localizedName}'");
                             result = localizedName;
                         }
                     }
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
+                System.Console.WriteLine($"[TilesetHelper] Exception: {ex.Message}");
                 // Fallback silencioso
                 result = GetFallbackLocalizedName(tilesetIndex);
             }
 
-            // OPTIMIZACIÓN: Cachear resultado para futuras consultas
-            _nameCache[tilesetIndex] = result;
+            // OPTIMIZACIÓN: Cachear resultado para futuras consultas (con idioma incluido en la clave)
+            // Reutilizar la variable cacheKey ya declarada arriba
+            _nameCache[cacheKey] = result;
             return result;
         }
 
@@ -283,23 +254,61 @@ namespace ckAccess.MapReader
 
         /// <summary>
         /// Obtiene el nombre fallback usando LocalizationManager.
+        /// Mapeo completo basado en PugTilemap.Tileset del juego.
         /// </summary>
         private static string GetFallbackLocalizedName(int tilesetIndex)
         {
             string tilesetKey = tilesetIndex switch
             {
-                0 => "tileset_dirt",        // Dirt
-                1 => "tileset_stone",       // Stone
-                2 => "tileset_obsidian",    // Obsidian
-                3 => "tileset_lava",        // Lava
-                8 => "tileset_nature",      // Nature
-                9 => "tileset_mold",        // Mold
-                10 => "tileset_sea",        // Sea
-                12 => "tileset_sand",       // Sand
-                26 => "tileset_desert",     // Desert
-                31 => "tileset_snow",       // Snow
-                34 => "tileset_crystal",    // Glass/Crystal
-                59 => "tileset_dark_stone", // DarkStone
+                // Tilesets básicos
+                0 => "tileset_dirt",
+                1 => "tileset_stone",
+                2 => "tileset_obsidian",
+                3 => "tileset_lava",
+                4 => "tileset_extras",
+                5 => "tileset_base_building_wood",
+                6 => "tileset_larva_hive",
+                7 => "tileset_base_building_stone",
+                8 => "tileset_nature",
+                9 => "tileset_mold",
+                10 => "tileset_sea",
+                11 => "tileset_clay",
+                12 => "tileset_sand",
+                13 => "tileset_turf",
+
+                // Construcciones coloreadas
+                14 => "tileset_base_building_unpainted",
+                15 => "tileset_base_building_yellow",
+                16 => "tileset_base_building_green",
+                17 => "tileset_base_building_red",
+                18 => "tileset_base_building_purple",
+                19 => "tileset_base_building_blue",
+                20 => "tileset_base_building_brown",
+                21 => "tileset_base_building_white",
+                22 => "tileset_base_building_black",
+                23 => "tileset_base_building_scarlet",
+                25 => "tileset_base_building_coral",
+                28 => "tileset_base_building_galaxite",
+                30 => "tileset_base_building_metal",
+                32 => "tileset_base_building_valentine",
+                33 => "tileset_base_building_easter",
+
+                // Biomas especiales
+                24 => "tileset_city",
+                26 => "tileset_desert",
+                27 => "tileset_desert_temple",
+                29 => "tileset_desert_temple2",
+                31 => "tileset_snow",
+                34 => "tileset_glass",
+                35 => "tileset_meadow",
+                36 => "tileset_explosive",
+                59 => "tileset_dark_stone",
+                60 => "tileset_crystal",
+                61 => "tileset_alien",
+                71 => "tileset_oasis",
+                72 => "tileset_explosive_forest",
+                73 => "tileset_explosive_desert",
+
                 _ => null
             };
 
@@ -308,10 +317,8 @@ namespace ckAccess.MapReader
                 return LocalizationManager.GetText(tilesetKey);
             }
 
-            // Si no hay mapeo, usar el mapeo hardcodeado como último recurso
-            return TilesetToMaterialMap.TryGetValue(tilesetIndex, out var name)
-                ? name
-                : $"Material {tilesetIndex}";
+            // Último fallback
+            return $"Material {tilesetIndex}";
         }
     }
 }

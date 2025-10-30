@@ -303,3 +303,65 @@ enemy_fly=Mosca
 enemy_bat=Murciélago
 enemy_rat=Rata
 enemy_boss=Jefe
+
+# Notification System Messages
+no_notifications=No hay notificaciones
+first_notification=Primera notificación
+last_notification=Última notificación
+
+# Object Category Descriptions
+category_core=Núcleo
+category_chest=Cofre
+category_workstation=Estación de trabajo
+category_enemy=Enemigo
+category_pickup=Objeto recolectable
+category_plant=Planta
+category_resource=Recurso
+category_decoration=Decoración
+category_furniture=Mueble
+category_animal=Animal
+category_critter=Criatura
+category_structure=Estructura
+category_door=Puerta
+category_statue=Estatua
+category_unknown=Objeto desconocido
+
+# Entity Type Prefixes
+prefix_animal=Animal
+prefix_creature=Criatura
+prefix_statue=Estatua
+prefix_furniture=Mueble
+prefix_structure=Estructura
+
+# Additional Tileset Names
+tileset_extras=extras
+tileset_base_building_wood=construcción de madera
+tileset_larva_hive=panal de larvas
+tileset_base_building_stone=construcción de piedra
+tileset_clay=arcilla
+tileset_turf=césped
+tileset_base_building_unpainted=construcción sin pintar
+tileset_base_building_yellow=construcción amarilla
+tileset_base_building_green=construcción verde
+tileset_base_building_red=construcción roja
+tileset_base_building_purple=construcción púrpura
+tileset_base_building_blue=construcción azul
+tileset_base_building_brown=construcción marrón
+tileset_base_building_white=construcción blanca
+tileset_base_building_black=construcción negra
+tileset_base_building_scarlet=construcción escarlata
+tileset_base_building_coral=construcción coral
+tileset_base_building_galaxite=construcción galaxita
+tileset_base_building_metal=construcción metálica
+tileset_base_building_valentine=construcción San Valentín
+tileset_base_building_easter=construcción Pascua
+tileset_city=ciudad
+tileset_desert_temple=templo del desierto
+tileset_desert_temple2=templo antiguo del desierto
+tileset_glass=cristal
+tileset_meadow=pradera
+tileset_explosive=explosivo
+tileset_alien=alienígena
+tileset_oasis=oasis
+tileset_explosive_forest=bosque explosivo
+tileset_explosive_desert=desierto explosivo
