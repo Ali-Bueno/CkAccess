@@ -31,3 +31,37 @@ skill_explosives=爆炸物
 # Hotbar Messages
 hotbar_slot_selected=已選擇槽位{0}
 empty_hotbar_slot=空快捷欄槽位
+
+# Auto-Targeting Messages
+enemy_in_range={0}在範圍內
+enemy_out_of_range={0}不在範圍內
+enemy_at_distance={0} {1}，{2}格
+enemy_unknown=未知敵人
+enemy_generic=敵人
+
+# Directions
+dir_east=東面
+dir_northeast=東北面
+dir_north=北面
+dir_northwest=西北面
+dir_west=西面
+dir_southwest=西南面
+dir_south=南面
+dir_southeast=東南面
+
+# Enemy Names
+enemy_slime=史萊姆
+enemy_spider=蜘蛛
+enemy_skeleton=骷髏
+enemy_goblin=哥布林
+enemy_orc=獸人
+enemy_zombie=殭屍
+enemy_demon=惡魔
+enemy_beast=野獸
+enemy_larva=幼蟲
+enemy_grub=蛆蟲
+enemy_worm=蠕蟲
+enemy_fly=蒼蠅
+enemy_bat=蝙蝠
+enemy_rat=老鼠
+enemy_boss=首領

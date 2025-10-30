@@ -269,3 +269,37 @@ item_picked_single=Recogido: {0}
 item_picked_multiple=Recogido: {0} x{1}
 level_up=¡Subiste a nivel {0}!
 skill_up={0} subió a nivel {1}
+
+# Mensajes de Auto-Targeting
+enemy_in_range={0} en rango
+enemy_out_of_range={0} fuera de rango
+enemy_at_distance={0} {1}, {2} tiles
+enemy_unknown=Enemigo desconocido
+enemy_generic=Enemigo
+
+# Direcciones
+dir_east=al este
+dir_northeast=al noreste
+dir_north=al norte
+dir_northwest=al noroeste
+dir_west=al oeste
+dir_southwest=al suroeste
+dir_south=al sur
+dir_southeast=al sureste
+
+# Nombres de Enemigos
+enemy_slime=Slime
+enemy_spider=Araña
+enemy_skeleton=Esqueleto
+enemy_goblin=Goblin
+enemy_orc=Orco
+enemy_zombie=Zombie
+enemy_demon=Demonio
+enemy_beast=Bestia
+enemy_larva=Larva
+enemy_grub=Gusano
+enemy_worm=Lombriz
+enemy_fly=Mosca
+enemy_bat=Murciélago
+enemy_rat=Rata
+enemy_boss=Jefe

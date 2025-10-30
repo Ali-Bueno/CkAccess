@@ -31,3 +31,37 @@ skill_explosives=Materiały wybuchowe
 # Hotbar Messages
 hotbar_slot_selected=Slot {0} wybrany
 empty_hotbar_slot=Pusty slot paska szybkiego dostępu
+
+# Auto-Targeting Messages
+enemy_in_range={0} w zasięgu
+enemy_out_of_range={0} poza zasięgiem
+enemy_at_distance={0} {1}, {2} pól
+enemy_unknown=Nieznany wróg
+enemy_generic=Wróg
+
+# Directions
+dir_east=na wschodzie
+dir_northeast=na północnym wschodzie
+dir_north=na północy
+dir_northwest=na północnym zachodzie
+dir_west=na zachodzie
+dir_southwest=na południowym zachodzie
+dir_south=na południu
+dir_southeast=na południowym wschodzie
+
+# Enemy Names
+enemy_slime=Śluz
+enemy_spider=Pająk
+enemy_skeleton=Szkielet
+enemy_goblin=Goblin
+enemy_orc=Ork
+enemy_zombie=Zombie
+enemy_demon=Demon
+enemy_beast=Bestia
+enemy_larva=Larwa
+enemy_grub=Robak
+enemy_worm=Dżdżownica
+enemy_fly=Mucha
+enemy_bat=Nietoperz
+enemy_rat=Szczur
+enemy_boss=Boss

@@ -31,3 +31,37 @@ skill_explosives=Patlayıcılar
 # Hotbar Messages
 hotbar_slot_selected=Yuva {0} seçildi
 empty_hotbar_slot=Boş hızlı erişim yuvası
+
+# Auto-Targeting Messages
+enemy_in_range={0} menzilde
+enemy_out_of_range={0} menzil dışında
+enemy_at_distance={0} {1}, {2} kare
+enemy_unknown=Bilinmeyen düşman
+enemy_generic=Düşman
+
+# Directions
+dir_east=doğuda
+dir_northeast=kuzeydoğuda
+dir_north=kuzeyde
+dir_northwest=kuzeybatıda
+dir_west=batıda
+dir_southwest=güneybatıda
+dir_south=güneyde
+dir_southeast=güneydoğuda
+
+# Enemy Names
+enemy_slime=Sümük
+enemy_spider=Örümcek
+enemy_skeleton=İskelet
+enemy_goblin=Goblin
+enemy_orc=Ork
+enemy_zombie=Zombi
+enemy_demon=İblis
+enemy_beast=Canavar
+enemy_larva=Larva
+enemy_grub=Kurtçuk
+enemy_worm=Solucan
+enemy_fly=Sinek
+enemy_bat=Yarasa
+enemy_rat=Fare
+enemy_boss=Patron

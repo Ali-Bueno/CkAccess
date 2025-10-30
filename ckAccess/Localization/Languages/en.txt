@@ -269,3 +269,37 @@ item_picked_single=Picked up: {0}
 item_picked_multiple=Picked up: {0} x{1}
 level_up=Leveled up to {0}!
 skill_up={0} increased to level {1}
+
+# Auto-Targeting Messages
+enemy_in_range={0} in range
+enemy_out_of_range={0} out of range
+enemy_at_distance={0} {1}, {2} tiles
+enemy_unknown=Unknown enemy
+enemy_generic=Enemy
+
+# Directions
+dir_east=to the east
+dir_northeast=to the northeast
+dir_north=to the north
+dir_northwest=to the northwest
+dir_west=to the west
+dir_southwest=to the southwest
+dir_south=to the south
+dir_southeast=to the southeast
+
+# Enemy Names
+enemy_slime=Slime
+enemy_spider=Spider
+enemy_skeleton=Skeleton
+enemy_goblin=Goblin
+enemy_orc=Orc
+enemy_zombie=Zombie
+enemy_demon=Demon
+enemy_beast=Beast
+enemy_larva=Larva
+enemy_grub=Grub
+enemy_worm=Worm
+enemy_fly=Fly
+enemy_bat=Bat
+enemy_rat=Rat
+enemy_boss=Boss

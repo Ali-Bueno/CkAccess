@@ -31,3 +31,37 @@ skill_explosives=Вибухівка
 # Hotbar Messages
 hotbar_slot_selected=Слот {0} вибрано
 empty_hotbar_slot=Порожній слот швидкого доступу
+
+# Auto-Targeting Messages
+enemy_in_range={0} в радіусі дії
+enemy_out_of_range={0} поза радіусом дії
+enemy_at_distance={0} {1}, {2} клітинок
+enemy_unknown=Невідомий ворог
+enemy_generic=Ворог
+
+# Directions
+dir_east=на сході
+dir_northeast=на північному сході
+dir_north=на півночі
+dir_northwest=на північному заході
+dir_west=на заході
+dir_southwest=на південному заході
+dir_south=на півдні
+dir_southeast=на південному сході
+
+# Enemy Names
+enemy_slime=Слиз
+enemy_spider=Павук
+enemy_skeleton=Скелет
+enemy_goblin=Гоблін
+enemy_orc=Орк
+enemy_zombie=Зомбі
+enemy_demon=Демон
+enemy_beast=Звір
+enemy_larva=Личинка
+enemy_grub=Черв'як
+enemy_worm=Хробак
+enemy_fly=Муха
+enemy_bat=Кажан
+enemy_rat=Щур
+enemy_boss=Бос

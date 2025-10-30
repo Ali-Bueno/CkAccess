@@ -31,3 +31,37 @@ skill_explosives=Sprängämnen
 # Hotbar Messages
 hotbar_slot_selected=Plats {0} vald
 empty_hotbar_slot=Tom snabbåtkomstplats
+
+# Auto-Targeting Messages
+enemy_in_range={0} inom räckvidd
+enemy_out_of_range={0} utanför räckvidd
+enemy_at_distance={0} {1}, {2} rutor
+enemy_unknown=Okänd fiende
+enemy_generic=Fiende
+
+# Directions
+dir_east=i öster
+dir_northeast=i nordost
+dir_north=i norr
+dir_northwest=i nordväst
+dir_west=i väster
+dir_southwest=i sydväst
+dir_south=i söder
+dir_southeast=i sydost
+
+# Enemy Names
+enemy_slime=Slem
+enemy_spider=Spindel
+enemy_skeleton=Skelett
+enemy_goblin=Goblin
+enemy_orc=Ork
+enemy_zombie=Zombie
+enemy_demon=Demon
+enemy_beast=Best
+enemy_larva=Larv
+enemy_grub=Mask
+enemy_worm=Daggmask
+enemy_fly=Fluga
+enemy_bat=Fladdermus
+enemy_rat=Råtta
+enemy_boss=Boss

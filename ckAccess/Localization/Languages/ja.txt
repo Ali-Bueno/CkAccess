@@ -31,3 +31,37 @@ skill_explosives=爆発物
 # Hotbar Messages
 hotbar_slot_selected=スロット{0}を選択
 empty_hotbar_slot=空きホットバースロット
+
+# Auto-Targeting Messages
+enemy_in_range={0}が範囲内
+enemy_out_of_range={0}が範囲外
+enemy_at_distance={0} {1}、{2}マス
+enemy_unknown=不明な敵
+enemy_generic=敵
+
+# Directions
+dir_east=東
+dir_northeast=北東
+dir_north=北
+dir_northwest=北西
+dir_west=西
+dir_southwest=南西
+dir_south=南
+dir_southeast=南東
+
+# Enemy Names
+enemy_slime=スライム
+enemy_spider=クモ
+enemy_skeleton=スケルトン
+enemy_goblin=ゴブリン
+enemy_orc=オーク
+enemy_zombie=ゾンビ
+enemy_demon=デーモン
+enemy_beast=ビースト
+enemy_larva=幼虫
+enemy_grub=ウジ
+enemy_worm=ミミズ
+enemy_fly=ハエ
+enemy_bat=コウモリ
+enemy_rat=ネズミ
+enemy_boss=ボス

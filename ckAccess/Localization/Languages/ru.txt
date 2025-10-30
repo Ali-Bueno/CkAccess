@@ -31,3 +31,37 @@ skill_explosives=Взрывчатка
 # Hotbar Messages
 hotbar_slot_selected=Слот {0} выбран
 empty_hotbar_slot=Пустой слот панели быстрого доступа
+
+# Auto-Targeting Messages
+enemy_in_range={0} в радиусе действия
+enemy_out_of_range={0} вне радиуса действия
+enemy_at_distance={0} {1}, {2} клеток
+enemy_unknown=Неизвестный враг
+enemy_generic=Враг
+
+# Directions
+dir_east=на востоке
+dir_northeast=на северо-востоке
+dir_north=на севере
+dir_northwest=на северо-западе
+dir_west=на западе
+dir_southwest=на юго-западе
+dir_south=на юге
+dir_southeast=на юго-востоке
+
+# Enemy Names
+enemy_slime=Слизень
+enemy_spider=Паук
+enemy_skeleton=Скелет
+enemy_goblin=Гоблин
+enemy_orc=Орк
+enemy_zombie=Зомби
+enemy_demon=Демон
+enemy_beast=Зверь
+enemy_larva=Личинка
+enemy_grub=Червь
+enemy_worm=Червяк
+enemy_fly=Муха
+enemy_bat=Летучая мышь
+enemy_rat=Крыса
+enemy_boss=Босс

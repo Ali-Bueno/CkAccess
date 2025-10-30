@@ -107,3 +107,37 @@ skill_up={0} auf Level {1} erhöht
 # Hotbar Messages
 hotbar_slot_selected=Slot {0} ausgewählt
 empty_hotbar_slot=Leerer Hotbar-Slot
+
+# Auto-Targeting Messages
+enemy_in_range={0} in Reichweite
+enemy_out_of_range={0} außer Reichweite
+enemy_at_distance={0} {1}, {2} Felder
+enemy_unknown=Unbekannter Feind
+enemy_generic=Feind
+
+# Directions
+dir_east=nach Osten
+dir_northeast=nach Nordosten
+dir_north=nach Norden
+dir_northwest=nach Nordwesten
+dir_west=nach Westen
+dir_southwest=nach Südwesten
+dir_south=nach Süden
+dir_southeast=nach Südosten
+
+# Enemy Names
+enemy_slime=Schleim
+enemy_spider=Spinne
+enemy_skeleton=Skelett
+enemy_goblin=Goblin
+enemy_orc=Ork
+enemy_zombie=Zombie
+enemy_demon=Dämon
+enemy_beast=Bestie
+enemy_larva=Larve
+enemy_grub=Wurm
+enemy_worm=Regenwurm
+enemy_fly=Fliege
+enemy_bat=Fledermaus
+enemy_rat=Ratte
+enemy_boss=Boss

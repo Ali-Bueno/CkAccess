@@ -31,3 +31,37 @@ skill_explosives=폭발물
 # Hotbar Messages
 hotbar_slot_selected=슬롯 {0} 선택됨
 empty_hotbar_slot=빈 단축키 슬롯
+
+# Auto-Targeting Messages
+enemy_in_range={0} 사정거리 내
+enemy_out_of_range={0} 사정거리 밖
+enemy_at_distance={0} {1}, {2}칸
+enemy_unknown=알 수 없는 적
+enemy_generic=적
+
+# Directions
+dir_east=동쪽
+dir_northeast=북동쪽
+dir_north=북쪽
+dir_northwest=북서쪽
+dir_west=서쪽
+dir_southwest=남서쪽
+dir_south=남쪽
+dir_southeast=남동쪽
+
+# Enemy Names
+enemy_slime=슬라임
+enemy_spider=거미
+enemy_skeleton=해골
+enemy_goblin=고블린
+enemy_orc=오크
+enemy_zombie=좀비
+enemy_demon=악마
+enemy_beast=야수
+enemy_larva=유충
+enemy_grub=구더기
+enemy_worm=벌레
+enemy_fly=파리
+enemy_bat=박쥐
+enemy_rat=쥐
+enemy_boss=보스

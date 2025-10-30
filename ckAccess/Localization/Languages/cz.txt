@@ -31,3 +31,37 @@ skill_explosives=Výbušniny
 # Hotbar Messages
 hotbar_slot_selected=Slot {0} vybrán
 empty_hotbar_slot=Prázdný slot rychlého přístupu
+
+# Auto-Targeting Messages
+enemy_in_range={0} v dosahu
+enemy_out_of_range={0} mimo dosah
+enemy_at_distance={0} {1}, {2} políček
+enemy_unknown=Neznámý nepřítel
+enemy_generic=Nepřítel
+
+# Directions
+dir_east=na východě
+dir_northeast=na severovýchodě
+dir_north=na severu
+dir_northwest=na severozápadě
+dir_west=na západě
+dir_southwest=na jihozápadě
+dir_south=na jihu
+dir_southeast=na jihovýchodě
+
+# Enemy Names
+enemy_slime=Sliz
+enemy_spider=Pavouk
+enemy_skeleton=Kostra
+enemy_goblin=Goblin
+enemy_orc=Ork
+enemy_zombie=Zombie
+enemy_demon=Démon
+enemy_beast=Bestie
+enemy_larva=Larva
+enemy_grub=Červ
+enemy_worm=Žížala
+enemy_fly=Moucha
+enemy_bat=Netopýr
+enemy_rat=Krysa
+enemy_boss=Boss

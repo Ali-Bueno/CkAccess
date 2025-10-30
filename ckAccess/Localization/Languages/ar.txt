@@ -31,3 +31,37 @@ skill_explosives=المتفجرات
 # Hotbar Messages
 hotbar_slot_selected=تم تحديد الفتحة {0}
 empty_hotbar_slot=فتحة شريط سريع فارغة
+
+# Auto-Targeting Messages
+enemy_in_range={0} في المدى
+enemy_out_of_range={0} خارج المدى
+enemy_at_distance={0} {1}، {2} مربعات
+enemy_unknown=عدو غير معروف
+enemy_generic=عدو
+
+# Directions
+dir_east=الشرق
+dir_northeast=الشمال الشرقي
+dir_north=الشمال
+dir_northwest=الشمال الغربي
+dir_west=الغرب
+dir_southwest=الجنوب الغربي
+dir_south=الجنوب
+dir_southeast=الجنوب الشرقي
+
+# Enemy Names
+enemy_slime=سلايم
+enemy_spider=عنكبوت
+enemy_skeleton=هيكل عظمي
+enemy_goblin=غوبلن
+enemy_orc=أورك
+enemy_zombie=زومبي
+enemy_demon=شيطان
+enemy_beast=وحش
+enemy_larva=يرقة
+enemy_grub=دودة
+enemy_worm=دودة أرضية
+enemy_fly=ذبابة
+enemy_bat=خفاش
+enemy_rat=فأر
+enemy_boss=زعيم

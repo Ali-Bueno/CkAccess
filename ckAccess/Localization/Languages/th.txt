@@ -31,3 +31,37 @@ skill_explosives=วัตถุระเบิด
 # Hotbar Messages
 hotbar_slot_selected=เลือกช่อง {0}
 empty_hotbar_slot=ช่องแถบด่วนว่าง
+
+# Auto-Targeting Messages
+enemy_in_range={0} อยู่ในระยะ
+enemy_out_of_range={0} อยู่นอกระยะ
+enemy_at_distance={0} {1}, {2} ช่อง
+enemy_unknown=ศัตรูที่ไม่รู้จัก
+enemy_generic=ศัตรู
+
+# Directions
+dir_east=ทิศตะวันออก
+dir_northeast=ทิศตะวันออกเฉียงเหนือ
+dir_north=ทิศเหนือ
+dir_northwest=ทิศตะวันตกเฉียงเหนือ
+dir_west=ทิศตะวันตก
+dir_southwest=ทิศตะวันตกเฉียงใต้
+dir_south=ทิศใต้
+dir_southeast=ทิศตะวันออกเฉียงใต้
+
+# Enemy Names
+enemy_slime=สไลม์
+enemy_spider=แมงมุม
+enemy_skeleton=โครงกระดูก
+enemy_goblin=ก็อบลิน
+enemy_orc=อ็อค
+enemy_zombie=ซอมบี้
+enemy_demon=ปีศาจ
+enemy_beast=อสูร
+enemy_larva=ตัวอ่อน
+enemy_grub=หนอน
+enemy_worm=ไส้เดือน
+enemy_fly=แมลงวัน
+enemy_bat=ค้างคาว
+enemy_rat=หนู
+enemy_boss=บอส

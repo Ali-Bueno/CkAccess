@@ -2,6 +2,7 @@ extern alias PugOther;
 extern alias Core;
 extern alias PugComps;
 using HarmonyLib;
+using ckAccess.Localization;
 using ckAccess.Patches.UI;
 using System.Collections.Generic;
 using System.Linq;
@@ -734,19 +735,20 @@ namespace ckAccess.Patches.Player
 
                     if (enteringRange)
                     {
-                        UIManager.Speak($"{enemyName} {direction}, {(int)math.round(distance)} tiles");
+                        string message = LocalizationManager.GetText("enemy_at_distance", enemyName, direction, ((int)math.round(distance)).ToString());
+                        UIManager.Speak(message);
                     }
                     else
                     {
-                        UIManager.Speak($"{enemyName} fuera de rango");
+                        string message = LocalizationManager.GetText("enemy_out_of_range", enemyName);
+                        UIManager.Speak(message);
                     }
                 }
                 else
                 {
                     // Fallback simple sin dirección
-                    string message = enteringRange ?
-                        $"{enemyName} en rango" :
-                        $"{enemyName} fuera de rango";
+                    string key = enteringRange ? "enemy_in_range" : "enemy_out_of_range";
+                    string message = LocalizationManager.GetText(key, enemyName);
                     UIManager.Speak(message);
                 }
             }
@@ -769,21 +771,21 @@ namespace ckAccess.Patches.Player
 
             // Determinar dirección cardinal
             if (angle >= 337.5f || angle < 22.5f)
-                return "al este";
+                return LocalizationManager.GetText("dir_east");
             else if (angle >= 22.5f && angle < 67.5f)
-                return "al noreste";
+                return LocalizationManager.GetText("dir_northeast");
             else if (angle >= 67.5f && angle < 112.5f)
-                return "al norte";
+                return LocalizationManager.GetText("dir_north");
             else if (angle >= 112.5f && angle < 157.5f)
-                return "al noroeste";
+                return LocalizationManager.GetText("dir_northwest");
             else if (angle >= 157.5f && angle < 202.5f)
-                return "al oeste";
+                return LocalizationManager.GetText("dir_west");
             else if (angle >= 202.5f && angle < 247.5f)
-                return "al suroeste";
+                return LocalizationManager.GetText("dir_southwest");
             else if (angle >= 247.5f && angle < 292.5f)
-                return "al sur";
+                return LocalizationManager.GetText("dir_south");
             else
-                return "al sureste";
+                return LocalizationManager.GetText("dir_southeast");
         }
 
         /// <summary>
@@ -794,7 +796,7 @@ namespace ckAccess.Patches.Player
             try
             {
                 if (enemy?.gameObject?.name == null)
-                    return "Enemigo desconocido";
+                    return LocalizationManager.GetText("enemy_unknown");
 
                 string rawName = enemy.gameObject.name.ToLower();
 
@@ -811,24 +813,24 @@ namespace ckAccess.Patches.Player
                     cleanName = cleanName.Substring(0, cleanName.Length - 1);
                 }
 
-                // Mapear nombres conocidos a versiones más amigables
+                // Mapear nombres conocidos a claves de localización
                 var nameMapping = new Dictionary<string, string>
                 {
-                    { "slime", "Slime" },
-                    { "spider", "Araña" },
-                    { "skeleton", "Esqueleto" },
-                    { "goblin", "Goblin" },
-                    { "orc", "Orco" },
-                    { "zombie", "Zombie" },
-                    { "demon", "Demonio" },
-                    { "beast", "Bestia" },
-                    { "larva", "Larva" },
-                    { "grub", "Gusano" },
-                    { "worm", "Lombriz" },
-                    { "fly", "Mosca" },
-                    { "bat", "Murciélago" },
-                    { "rat", "Rata" },
-                    { "boss", "Jefe" }
+                    { "slime", "enemy_slime" },
+                    { "spider", "enemy_spider" },
+                    { "skeleton", "enemy_skeleton" },
+                    { "goblin", "enemy_goblin" },
+                    { "orc", "enemy_orc" },
+                    { "zombie", "enemy_zombie" },
+                    { "demon", "enemy_demon" },
+                    { "beast", "enemy_beast" },
+                    { "larva", "enemy_larva" },
+                    { "grub", "enemy_grub" },
+                    { "worm", "enemy_worm" },
+                    { "fly", "enemy_fly" },
+                    { "bat", "enemy_bat" },
+                    { "rat", "enemy_rat" },
+                    { "boss", "enemy_boss" }
                 };
 
                 // Buscar coincidencias en el mapeo
@@ -836,7 +838,7 @@ namespace ckAccess.Patches.Player
                 {
                     if (cleanName.Contains(mapping.Key))
                     {
-                        return mapping.Value;
+                        return LocalizationManager.GetText(mapping.Value);
                     }
                 }
 
@@ -846,11 +848,11 @@ namespace ckAccess.Patches.Player
                     return char.ToUpper(cleanName[0]) + cleanName.Substring(1);
                 }
 
-                return "Enemigo";
+                return LocalizationManager.GetText("enemy_generic");
             }
             catch
             {
-                return "Enemigo";
+                return LocalizationManager.GetText("enemy_generic");
             }
         }
 

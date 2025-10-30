@@ -31,3 +31,37 @@ skill_explosives=Explosieven
 # Hotbar Messages
 hotbar_slot_selected=Slot {0} geselecteerd
 empty_hotbar_slot=Lege hotbar slot
+
+# Auto-Targeting Messages
+enemy_in_range={0} binnen bereik
+enemy_out_of_range={0} buiten bereik
+enemy_at_distance={0} {1}, {2} vakjes
+enemy_unknown=Onbekende vijand
+enemy_generic=Vijand
+
+# Directions
+dir_east=naar het oosten
+dir_northeast=naar het noordoosten
+dir_north=naar het noorden
+dir_northwest=naar het noordwesten
+dir_west=naar het westen
+dir_southwest=naar het zuidwesten
+dir_south=naar het zuiden
+dir_southeast=naar het zuidoosten
+
+# Enemy Names
+enemy_slime=Slime
+enemy_spider=Spin
+enemy_skeleton=Skelet
+enemy_goblin=Goblin
+enemy_orc=Orc
+enemy_zombie=Zombie
+enemy_demon=Demon
+enemy_beast=Beest
+enemy_larva=Larve
+enemy_grub=Worm
+enemy_worm=Regenworm
+enemy_fly=Vlieg
+enemy_bat=Vleermuis
+enemy_rat=Rat
+enemy_boss=Baas

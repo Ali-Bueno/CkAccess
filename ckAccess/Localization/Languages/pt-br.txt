@@ -31,3 +31,37 @@ skill_explosives=Explosivos
 # Hotbar Messages
 hotbar_slot_selected=Slot {0} selecionado
 empty_hotbar_slot=Slot da barra de ação vazio
+
+# Auto-Targeting Messages
+enemy_in_range={0} ao alcance
+enemy_out_of_range={0} fora de alcance
+enemy_at_distance={0} {1}, {2} blocos
+enemy_unknown=Inimigo desconhecido
+enemy_generic=Inimigo
+
+# Directions
+dir_east=ao leste
+dir_northeast=ao nordeste
+dir_north=ao norte
+dir_northwest=ao noroeste
+dir_west=ao oeste
+dir_southwest=ao sudoeste
+dir_south=ao sul
+dir_southeast=ao sudeste
+
+# Enemy Names
+enemy_slime=Slime
+enemy_spider=Aranha
+enemy_skeleton=Esqueleto
+enemy_goblin=Goblin
+enemy_orc=Orc
+enemy_zombie=Zumbi
+enemy_demon=Demônio
+enemy_beast=Besta
+enemy_larva=Larva
+enemy_grub=Verme
+enemy_worm=Minhoca
+enemy_fly=Mosca
+enemy_bat=Morcego
+enemy_rat=Rato
+enemy_boss=Chefe
