@@ -8,6 +8,7 @@ cursor_initialization_error=خطأ في تهيئة المؤشر
 cursor_reset=تمت إعادة تعيين المؤشر: x={0}, z={1}
 cursor_reset_error=خطأ في إعادة تعيين المؤشر
 limit_reached=تم الوصول إلى الحد
+cursor_limit_reached=Cursor limit reached
 primary_action_error=خطأ في الإجراء الأساسي: {0}
 placing_at_position=الوضع في الموضع x={0}, z={1}
 item_placed_at_position={0} تم وضعه في الموضع x={1}, z={2}

@@ -1,3 +1,8 @@
+#if false
+// ARCHIVO DESACTIVADO - Ya no es necesario
+// El nuevo sistema usa directamente el cursor nativo del juego (UIMouse.pointer)
+// en lugar de intentar modificar el sistema de input del juego.
+
 extern alias PugOther;
 using HarmonyLib;
 using Unity.Mathematics;
@@ -119,3 +124,4 @@ namespace ckAccess.VirtualCursor
 
     }
 }
+#endif

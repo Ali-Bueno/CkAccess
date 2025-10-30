@@ -5,7 +5,8 @@
 * Los parches de menús deben ser lo menos invasivo posible para evitar cambios en el comportamiento del juego.
 * Al buscar en el código del juego, ignorar siempre los patrones de .gitignore para asegurar un análisis completo. **Recordatorio: Forzar siempre la opción para ignorar .gitignore en las herramientas de búsqueda de archivos, ya que a veces se olvida.**
 * Al compilar, ignorar las advertencias de BepInEx si la compilación se completa correctamente.
-*   **Convención de Referencias:** Todas las clases de la interfaz de usuario (UI) del juego se encuentran en el ensamblado `Pug.Other.dll`. Para acceder a ellas, se debe utilizar el alias `PugOther` (ej. `PugOther.InventorySlotUI`). No existe un `Pug.UI.dll` separado.
+* **Convención de Referencias:** Todas las clases de la interfaz de usuario (UI) del juego se encuentran en el ensamblado `Pug.Other.dll`. Para acceder a ellas, se debe utilizar el alias `PugOther` (ej. `PugOther.InventorySlotUI`). No existe un `Pug.UI.dll` separado.
+* **Convención de Git:** TODOS los commits deben ser escritos en inglés, siguiendo las mejores prácticas de commits convencionales.
 
 ---
 ### Información del Repositorio

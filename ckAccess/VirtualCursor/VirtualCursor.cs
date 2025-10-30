@@ -99,7 +99,7 @@ namespace ckAccess.VirtualCursor
 
         /// <summary>
         /// Acción primaria en la posición del cursor (tecla U).
-        /// Simula click izquierdo en la posición del cursor virtual.
+        /// SOLO mueve el cursor nativo del juego - el juego detecta el click automáticamente.
         /// INTEGRADO con auto-targeting para automáticamente apuntar a enemigos cercanos.
         /// </summary>
         public static void PrimaryAction()
@@ -124,16 +124,10 @@ namespace ckAccess.VirtualCursor
                     // Si hay auto-target activo, usar la posición del enemigo en lugar del cursor
                     var enemyPos = autoTarget.WorldPosition;
                     targetPosition = new Vector3(enemyPos.x, enemyPos.y, enemyPos.z);
-
-                    // Opcional: feedback de que se está usando auto-targeting
-                    // UIManager.Speak("Auto-target");
                 }
 
-                // Usar la posición objetivo (cursor o auto-target)
-                var worldPos = new float3(targetPosition.x, targetPosition.y, targetPosition.z);
-                SendClientInputSystemPatch.SetVirtualCursorPrimaryAction(worldPos);
-
-                // Removed verbose debug message to avoid spam when holding keys
+                // Simplemente mover el cursor - el juego detecta el click de la tecla U automáticamente
+                MoveNativeCursorToPosition(targetPosition);
             }
             catch (System.Exception ex)
             {
@@ -143,7 +137,7 @@ namespace ckAccess.VirtualCursor
 
         /// <summary>
         /// Acción secundaria en la posición del cursor (tecla O).
-        /// Simula click derecho en la posición del cursor virtual para usar objetos equipados.
+        /// SOLO mueve el cursor nativo del juego - el juego detecta el click automáticamente.
         /// </summary>
         public static void SecondaryAction()
         {
@@ -158,26 +152,11 @@ namespace ckAccess.VirtualCursor
                 // Asegurar que el jugador tenga un slot válido equipado
                 EnsureValidSlotEquipped();
 
-                // Verificar si se está usando un item colocable
-                // Por ahora, usamos un enfoque más simple basado en patrones de comportamiento
-                // En el futuro se puede mejorar con detección de items específica
-
-                // Solo anunciar posición para items que probablemente sean colocables
-                // Esto se hace de manera conservadora para evitar spam de TTS
-                int tileX = (int)math.round(_currentPosition.x);
-                int tileZ = (int)math.round(_currentPosition.z);
-
-                // Nota: Por ahora usamos un enfoque silencioso por defecto
-                // Solo anunciará si realmente se coloca algo (lo que detectará el juego)
-
-                // Usar el nuevo sistema de parches para simular la acción secundaria (usar objetos)
-                var worldPos = new float3(_currentPosition.x, _currentPosition.y, _currentPosition.z);
-                SendClientInputSystemPatch.SetVirtualCursorSecondaryAction(worldPos);
+                // Simplemente mover el cursor - el juego detecta el click de la tecla O automáticamente
+                MoveNativeCursorToPosition(_currentPosition);
 
                 // Programar actualización después de la acción
                 SchedulePositionUpdate();
-
-                // Removed verbose debug message to avoid spam when holding keys
             }
             catch (System.Exception ex)
             {
@@ -185,93 +164,51 @@ namespace ckAccess.VirtualCursor
             }
         }
 
-        // Método de interacción eliminado - el juego maneja la interacción automáticamente
-
         /// <summary>
-        /// Detiene la acción primaria (cuando se suelta la tecla U)
+        /// Ya no es necesario detener nada - el juego maneja todo automáticamente
         /// </summary>
         public static void StopPrimaryAction()
         {
-            try
-            {
-                SendClientInputSystemPatch.StopVirtualCursorAction();
-                PlayerInputPatch.StopAllSimulations();
-            }
-            catch (System.Exception ex)
-            {
-                UIManager.Speak($"Error deteniendo acción primaria: {ex.Message}");
-            }
+            // No hacer nada - el juego maneja esto automáticamente
         }
 
         /// <summary>
-        /// Detiene la acción secundaria (cuando se suelta la tecla O)
+        /// Ya no es necesario detener nada - el juego maneja todo automáticamente
         /// </summary>
         public static void StopSecondaryAction()
         {
-            try
-            {
-                SendClientInputSystemPatch.StopVirtualCursorAction();
-                PlayerInputPatch.StopAllSimulations();
-            }
-            catch (System.Exception ex)
-            {
-                UIManager.Speak($"Error deteniendo acción secundaria: {ex.Message}");
-            }
+            // No hacer nada - el juego maneja esto automáticamente
         }
-
-        // Método StopInteractionAction eliminado - no es necesario
 
         #endregion
 
-        #region Funciones auxiliares para simulación de clicks
+        #region Native Cursor Movement
 
         /// <summary>
-        /// Convierte una posición del mundo a coordenadas de pantalla para el mouse
+        /// Mueve el cursor nativo del juego a la posición del mundo especificada.
+        /// Usa el método ToMouseViewSpace del juego para convertir correctamente las coordenadas.
         /// </summary>
-        private static Vector3 WorldToScreenPosition(Vector3 worldPosition)
+        private static void MoveNativeCursorToPosition(Vector3 worldPosition)
         {
             try
             {
-                var camera = PugOther.Manager.camera?.gameCamera;
-                if (camera != null)
+                var uiMouse = PugOther.Manager.ui?.mouse;
+                if (uiMouse?.pointer == null)
                 {
-                    // Convertir posición del mundo a coordenadas de pantalla
-                    var screenPos = camera.WorldToScreenPoint(worldPosition);
-                    return screenPos;
+                    return;
                 }
-                return Vector3.zero;
+
+                // Convertir posición del mundo a vista usando el método NATIVO del juego
+                // Este método ya existe en UIMouse y hace la conversión correcta
+                var viewPosition = uiMouse.ToMouseViewSpace(worldPosition);
+
+                // Simplemente asignar la posición - el juego se encarga del resto
+                uiMouse.pointer.localPosition = new Vector3(viewPosition.x, viewPosition.y, 0f);
             }
             catch (System.Exception ex)
             {
-                UIManager.Speak($"Error convirtiendo coordenadas: {ex.Message}");
-                return Vector3.zero;
+                UnityEngine.Debug.LogError($"Error moving cursor: {ex}");
             }
-        }
-
-
-        /// <summary>
-        /// Programa la restauración de la posición del mouse
-        /// </summary>
-        private static void ScheduleMouseRestore(PugOther.UIMouse uiMouse, Vector3 originalPosition)
-        {
-            var timer = new System.Timers.Timer(50); // 50ms después
-            timer.Elapsed += (sender, e) =>
-            {
-                try
-                {
-                    if (uiMouse?.pointer != null)
-                    {
-                        uiMouse.pointer.position = originalPosition;
-                    }
-                    timer.Dispose();
-                }
-                catch (System.Exception ex)
-                {
-                    UIManager.Speak($"Error restaurando mouse: {ex.Message}");
-                }
-            };
-            timer.AutoReset = false;
-            timer.Start();
         }
 
         /// <summary>

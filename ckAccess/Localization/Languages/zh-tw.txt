@@ -8,6 +8,7 @@ cursor_initialization_error=初始化遊標時出錯
 cursor_reset=遊標已重置：x={0}，z={1}
 cursor_reset_error=重置遊標時出錯
 limit_reached=已達到限制
+cursor_limit_reached=Cursor limit reached
 primary_action_error=主要動作出錯：{0}
 placing_at_position=正在位置 x={0}，z={1} 放置
 item_placed_at_position={0} 已放置在位置 x={1}，z={2}

@@ -8,6 +8,7 @@ cursor_initialization_error=커서 초기화 중 오류 발생
 cursor_reset=커서 초기화됨: x={0}, z={1}
 cursor_reset_error=커서 초기화 중 오류 발생
 limit_reached=한계에 도달했습니다
+cursor_limit_reached=Cursor limit reached
 primary_action_error=주 동작 오류: {0}
 placing_at_position=위치에 배치 중 x={0}, z={1}
 item_placed_at_position={0}을(를) 위치 x={1}, z={2}에 배치했습니다

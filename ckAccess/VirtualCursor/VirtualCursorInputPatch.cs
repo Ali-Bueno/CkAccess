@@ -26,10 +26,14 @@ namespace ckAccess.VirtualCursor
         {
             try
             {
-                // OPTIMIZACIÓN: Solo ejecutar si hay teclas presionadas para minimizar interferencia
+                // SIEMPRE actualizar el stick virtual cada frame
+                // Esto es crítico para emular el gamepad correctamente
+                PlayerInputPatch.UpdateVirtualAimInput();
+
+                // OPTIMIZACIÓN: Solo ejecutar el resto si hay teclas presionadas
                 if (!HasAnyVirtualCursorKeyPressed())
                 {
-                    return; // No hay input del cursor virtual, evitar procesamiento innecesario
+                    return;
                 }
 
                 // Only handle virtual cursor input when not in UI/inventory mode
@@ -51,8 +55,7 @@ namespace ckAccess.VirtualCursor
                     return; // Hotbar navigation handled, don't process other input
                 }
 
-                // Handle virtual cursor input - this runs AFTER the original method
-                // so it doesn't interfere with mouse input
+                // Handle debug/feedback inputs
                 HandleVirtualCursorInput();
             }
             catch (System.Exception ex)
@@ -84,50 +87,14 @@ namespace ckAccess.VirtualCursor
         {
             float currentTime = UnityEngine.Time.time;
 
-            // Virtual cursor movement with I, J, K, L keys (vi/vim style)
-            // Top-down view: I=up, K=down, J=left, L=right
-            if (Input.GetKeyDown(KeyCode.I) && CanProcessInput(KeyCode.I, currentTime))
-            {
-                VirtualCursor.MoveCursor(CursorDirection.Up);     // I = Up (+Z)
-            }
-            else if (Input.GetKeyDown(KeyCode.K) && CanProcessInput(KeyCode.K, currentTime))
-            {
-                VirtualCursor.MoveCursor(CursorDirection.Down);   // K = Down (-Z)
-            }
-            else if (Input.GetKeyDown(KeyCode.J) && CanProcessInput(KeyCode.J, currentTime))
-            {
-                VirtualCursor.MoveCursor(CursorDirection.Left);   // J = Left (-X)
-            }
-            else if (Input.GetKeyDown(KeyCode.L) && CanProcessInput(KeyCode.L, currentTime))
-            {
-                VirtualCursor.MoveCursor(CursorDirection.Right);  // L = Right (+X)
-            }
-            else if (Input.GetKeyDown(KeyCode.R) && CanProcessInput(KeyCode.R, currentTime))
+            // I/J/K/L ahora controlan el stick derecho virtual - el feedback lo da PlayerInputPatch
+            // Solo manejamos teclas de debug/info aquí
+
+            if (Input.GetKeyDown(KeyCode.R) && CanProcessInput(KeyCode.R, currentTime))
             {
                 VirtualCursor.ResetToPlayer();
+                PlayerInputPatch.ResetCursorDistance(); // Resetear también la distancia del cursor
             }
-            // Manejar teclas de acción - detectar presión inicial y estado mantenido
-            if (Input.GetKeyDown(KeyCode.U) && CanProcessInput(KeyCode.U, currentTime))
-            {
-                _uKeyHeld = true;
-                VirtualCursor.PrimaryAction(); // Left click equivalent
-            }
-            else if (Input.GetKeyUp(KeyCode.U))
-            {
-                _uKeyHeld = false;
-                VirtualCursor.StopPrimaryAction(); // Stop action when key released
-            }
-            else if (Input.GetKeyDown(KeyCode.O) && CanProcessInput(KeyCode.O, currentTime))
-            {
-                _oKeyHeld = true;
-                VirtualCursor.SecondaryAction(); // Right click equivalent (usar objetos)
-            }
-            else if (Input.GetKeyUp(KeyCode.O))
-            {
-                _oKeyHeld = false;
-                VirtualCursor.StopSecondaryAction();
-            }
-            // Tecla E eliminada - el juego maneja la interacción automáticamente
             else if (Input.GetKeyDown(KeyCode.P) && CanProcessInput(KeyCode.P, currentTime))
             {
                 VirtualCursor.DebugCurrentPosition(); // Debug position information
@@ -140,7 +107,9 @@ namespace ckAccess.VirtualCursor
             {
                 VirtualCursor.AnnouncePlayerPositionDetailed(); // Posición detallada del jugador
             }
-            // Teclas G y H eliminadas - sistemas siempre activos
+
+            // U/O ahora son manejados directamente por PlayerInputPatch como triggers
+            // Ya no necesitamos PrimaryAction/SecondaryAction
         }
         
         private static bool CanProcessInput(KeyCode key, float currentTime)

@@ -8,6 +8,7 @@ cursor_initialization_error=Помилка ініціалізації курсо
 cursor_reset=Курсор скинуто: x={0}, z={1}
 cursor_reset_error=Помилка скидання курсора
 limit_reached=Досягнуто межі
+cursor_limit_reached=Cursor limit reached
 primary_action_error=Помилка первинної дії: {0}
 placing_at_position=Розміщення на позиції x={0}, z={1}
 item_placed_at_position={0} розміщено на позиції x={1}, z={2}
