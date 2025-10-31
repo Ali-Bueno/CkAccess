@@ -294,6 +294,53 @@ level_up=Leveled up to {0}!
 skill_up={0} increased to level {1}
 ```
 
+### Sistema de Buffer de Tutoriales ✅ **COMPLETADO**
+
+Se ha implementado un sistema separado y dedicado para mensajes de tutorial con navegación independiente del buffer de notificaciones.
+
+#### Detección Universal Multiidioma:
+
+**Método basado en Call Stack (Pila de Llamadas):**
+- El sistema analiza la pila de llamadas cuando se muestra un mensaje (Emote o PopUpText)
+- Detecta si el origen es una clase del juego que contiene "Tutorial" en su nombre
+- **Funciona en todos los 19 idiomas soportados** sin necesidad de listas de palabras clave
+- No requiere hardcoding ni mantenimiento por idioma
+
+#### Navegación del Buffer de Tutoriales:
+- **' (apóstrofe)**: Siguiente tutorial (más reciente)
+- **Ñ (tecla Semicolon)**: Tutorial anterior (más antiguo)
+- **Shift + '**: Saltar al último tutorial
+- **Shift + Ñ**: Saltar al primer tutorial
+- Buffer de hasta **50 tutoriales** en memoria
+
+#### Clasificación Automática de Mensajes:
+
+1. **Buffer de Tutoriales** (teclas '/Ñ):
+   - Detectados por call stack (vienen de clases `*Tutorial`)
+   - Ejemplos: "Esa madera me podría ser útil", "Ojalá tuviera algo para iluminarme"
+   - Se anuncian automáticamente cuando aparecen
+
+2. **Buffer de Notificaciones** (teclas ,/punto):
+   - Items recogidos, subidas de nivel, mejoras de skills
+   - Comentarios generales del personaje (no tutoriales)
+
+3. **Anuncios Directos** (sin buffer):
+   - Feedback crítico inmediato: "No hay energía", "Skill insuficiente"
+
+#### Archivos del Sistema:
+
+- **`TutorialBufferSystem.cs`**: Buffer dedicado con capacidad de 50 tutoriales
+- **`TutorialNavigationPatch.cs`**: Controles de navegación ('/Ñ con/sin Shift)
+- **`EmoteTextAccessibilityPatch.cs`**: Detección de tutoriales en emotes usando call stack
+- **`PopUpTextPatch.cs`**: Detección de tutoriales en popups usando call stack
+
+#### Prevención de Bloqueo de Input:
+
+Todos los parches de mensajes (Chat, PopUp, Emotes) incluyen verificación de cutscenes activas:
+- Detecta `CutsceneHandler.isPlaying` e `IntroHandler.showing`
+- Previene anuncios durante cutscenes de intro y spawn
+- Soluciona el problema de input bloqueado tras la cutscene inicial
+
 ### Sistema de Anunciador de Tiles al Frente ✅ **COMPLETADO**
 
 Anuncia automáticamente el tile que está en frente del jugador según la dirección de movimiento.
