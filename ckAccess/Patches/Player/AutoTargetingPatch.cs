@@ -364,7 +364,7 @@ namespace ckAccess.Patches.Player
                 if (gameObject == null) return false;
 
                 // FILTRO CRÍTICO: Excluir MINIONS y PETS del jugador
-                // Los minions invocados tienen el componente MinionCD
+                // Los minions invocados tienen el componente MinionCD o MinionOwnerCD
                 // Las mascotas tienen el componente PetCD
                 try
                 {
@@ -384,6 +384,12 @@ namespace ckAccess.Patches.Player
                         {
                             return false; // Es una mascota, NO es enemigo
                         }
+
+                        // NUEVO: Verificar MinionOwnerCD (componente alternativo para minions)
+                        if (world.EntityManager.HasComponent<PugComps.MinionOwnerCD>(entityData))
+                        {
+                            return false; // Es un minion con dueño, NO es enemigo
+                        }
                     }
                 }
                 catch
@@ -392,6 +398,18 @@ namespace ckAccess.Patches.Player
                 }
 
                 string name = gameObject.name.ToLower();
+
+                // FILTRO ADICIONAL POR NOMBRE: Excluir minions por patrones de nombre comunes
+                // Los minions del jugador suelen tener estos patrones en sus nombres
+                if (name.Contains("minion") ||
+                    name.Contains("summon") ||
+                    name.Contains("companion") ||
+                    name.Contains("familiar") ||
+                    name.Contains("pet") ||
+                    name.Contains("ally"))
+                {
+                    return false; // Es un minion/aliado del jugador, NO es enemigo
+                }
 
                 // FILTRO ULTRA ESTRICTO: Si contiene "statue" EN CUALQUIER PARTE, NO es enemigo
                 if (name.Contains("statue") || name.Contains("statua"))
@@ -403,15 +421,12 @@ namespace ckAccess.Patches.Player
 
                 // FILTRO MEJORADO: Excluir objetos que definitivamente NO son enemigos
                 // Decoraciones y objetos del entorno
-                if (name.Contains("statue") ||
-                    name.Contains("summon") ||
-                    name.Contains("totem") ||
+                if (name.Contains("totem") ||
                     name.Contains("spawner") ||
                     name.Contains("turret") ||
                     name.Contains("trap") ||
                     name.Contains("decoration") ||
                     name.Contains("prop") ||
-                    name.Contains("dummy") ||
                     name.Contains("destructible") ||
                     name.Contains("breakable") ||
                     name.Contains("crate") ||

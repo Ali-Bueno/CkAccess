@@ -19,6 +19,7 @@ namespace ckAccess.VirtualCursor
         // Cache del último tile anunciado para evitar repeticiones
         private static string _lastAnnouncedTile = null;
         private static Vector3 _lastAnnouncedPosition = new Vector3(float.MinValue, 0, float.MinValue);
+        private static Vector3 _lastPlayerPosition = Vector3.zero;
 
         // Distancia en frente del jugador (1 tile adelante)
         private const float AHEAD_DISTANCE = 1.0f;
@@ -26,6 +27,9 @@ namespace ckAccess.VirtualCursor
         // Control de tiempo para evitar spam
         private static float _lastAnnounceTime = 0f;
         private const float MIN_ANNOUNCE_INTERVAL = 0.3f; // Mínimo 300ms entre anuncios
+
+        // Umbral de movimiento para detectar que el jugador se movió
+        private const float MOVEMENT_THRESHOLD = 0.1f;
 
         /// <summary>
         /// Parche en PlayerController.ManagedUpdate para detectar movimiento
@@ -44,25 +48,44 @@ namespace ckAccess.VirtualCursor
                 if (Time.time - _lastAnnounceTime < MIN_ANNOUNCE_INTERVAL)
                     return;
 
-                // Detectar dirección de movimiento según input
-                var movementDirection = DetectMovementDirection();
-
-                if (movementDirection == Vector3.zero)
-                    return; // No hay movimiento
-
-                // Obtener posición del jugador
+                // Obtener posición actual del jugador
                 if (!TryGetPlayerPosition(__instance, out Vector3 playerPos))
                     return;
 
-                // Calcular posición del tile en frente según la dirección de movimiento
+                // Inicializar la posición previa si es la primera vez
+                if (_lastPlayerPosition == Vector3.zero)
+                {
+                    _lastPlayerPosition = playerPos;
+                    return;
+                }
+
+                // NUEVO ENFOQUE: Detectar movimiento real comparando posiciones
+                Vector3 movement = playerPos - _lastPlayerPosition;
+                float movementDistance = new Vector3(movement.x, 0, movement.z).magnitude;
+
+                // Si el jugador no se movió suficiente, no hacer nada
+                if (movementDistance < MOVEMENT_THRESHOLD)
+                {
+                    return;
+                }
+
+                // El jugador se movió, calcular dirección del movimiento
+                Vector3 movementDirection = new Vector3(movement.x, 0, movement.z).normalized;
+
+                // Calcular posición del tile en frente según la dirección de movimiento REAL
                 Vector3 aheadPosition = CalculateAheadPosition(playerPos, movementDirection);
 
                 // Verificar si es una posición diferente a la última anunciada
                 float dx = aheadPosition.x - _lastAnnouncedPosition.x;
                 float dz = aheadPosition.z - _lastAnnouncedPosition.z;
                 float distanceSq = (dx * dx) + (dz * dz);
+
                 if (distanceSq < 0.25f) // 0.5f * 0.5f = 0.25f
+                {
+                    // Actualizar posición del jugador para el próximo frame
+                    _lastPlayerPosition = playerPos;
                     return; // Misma posición, no anunciar
+                }
 
                 // Obtener descripción del tile en frente
                 string tileDescription = SimpleWorldReader.GetSimpleDescription(aheadPosition);
@@ -81,6 +104,9 @@ namespace ckAccess.VirtualCursor
                     _lastAnnouncedPosition = aheadPosition;
                     _lastAnnounceTime = Time.time;
                 }
+
+                // Actualizar posición del jugador SIEMPRE al final
+                _lastPlayerPosition = playerPos;
             }
             catch (System.Exception ex)
             {
@@ -109,63 +135,6 @@ namespace ckAccess.VirtualCursor
             }
         }
 
-        /// <summary>
-        /// Detecta la dirección de movimiento según las teclas WASD presionadas
-        /// </summary>
-        private static Vector3 DetectMovementDirection()
-        {
-            Vector3 direction = Vector3.zero;
-
-            // Detectar teclas WASD
-            // W = arriba (norte, +Z)
-            if (Input.GetKey(KeyCode.W))
-            {
-                direction.z = 1f;
-            }
-            // S = abajo (sur, -Z)
-            else if (Input.GetKey(KeyCode.S))
-            {
-                direction.z = -1f;
-            }
-
-            // D = derecha (este, +X)
-            if (Input.GetKey(KeyCode.D))
-            {
-                direction.x = 1f;
-            }
-            // A = izquierda (oeste, -X)
-            else if (Input.GetKey(KeyCode.A))
-            {
-                direction.x = -1f;
-            }
-
-            // También detectar flechas
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                direction.z = 1f;
-            }
-            else if (Input.GetKey(KeyCode.DownArrow))
-            {
-                direction.z = -1f;
-            }
-
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                direction.x = 1f;
-            }
-            else if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                direction.x = -1f;
-            }
-
-            // Normalizar si hay movimiento diagonal
-            if (direction != Vector3.zero)
-            {
-                direction = direction.normalized;
-            }
-
-            return direction;
-        }
 
         /// <summary>
         /// Calcula la posición del tile en frente del jugador según la dirección de movimiento

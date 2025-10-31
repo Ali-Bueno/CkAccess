@@ -209,6 +209,36 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
 - **Eliminado**: Claves de localización sin usar (`opening_talent_tree_*`)
 - **Mejorado**: Manejo de errores y logging de exceptions
 
+#### Corrección de Línea de Visión para Sistemas de Proximidad (2025)
+- **Problema**: Los sonidos de proximidad (interactuables y enemigos) se reproducían a través de paredes sólidas.
+- **Solución**: Implementado algoritmo de Bresenham para verificar línea de visión entre jugador y objeto/enemigo.
+- **Funcionalidad**:
+  - Verifica cada tile entre dos puntos para detectar paredes bloqueantes
+  - Permite ver/escuchar a través de materiales transparentes (cristales - tileset 34, vallas)
+  - Bloquea sonidos cuando hay paredes sólidas en el camino
+  - Distancias menores a 2 tiles siempre tienen línea de visión directa
+- **Archivos modificados**: `ProximityAudioPatch.cs`, `EnemyProximityAudioPatch.cs`
+
+#### Corrección de Detección de Minions del Jugador (2025)
+- **Problema**: Los minions invocados por el jugador se detectaban como enemigos durante combate en sistemas de auto-targeting y proximidad de audio.
+- **Solución**: Implementado sistema triple de verificación con redundancia completa:
+  1. **Verificación de componentes ECS**: `MinionCD`, `PetCD`, `MinionOwnerCD`
+  2. **Filtro por patrones de nombre**: minion, summon, companion, familiar, pet, ally
+  3. **Orden de verificación optimizado**: Las verificaciones de minions se ejecutan ANTES de marcar como enemigo
+- **Resultado**: Los minions NUNCA se detectan como enemigos, independientemente del estado de combate
+- **Archivos modificados**: `AutoTargetingPatch.cs` (que también afecta a `EnemyProximityAudioPatch.cs`)
+
+#### Corrección de Tile-Ahead Announcer con Gamepad (2025)
+- **Problema**: El sistema de anuncio de tiles adelante solo funcionaba con teclado (WASD), no con gamepad.
+- **Causa**: El sistema intentaba detectar el input del stick del mando, pero el juego consumía el input antes de que el parche pudiera leerlo.
+- **Solución**: Cambio completo de enfoque para detectar **movimiento real** en lugar de input:
+  - Compara la posición del jugador entre frames para calcular la dirección de movimiento
+  - Funciona automáticamente con cualquier método de control (teclado, gamepad, o futuro)
+  - Inicialización correcta de posición previa para evitar falsos positivos
+  - Actualización de posición en un solo punto del código para evitar inconsistencias
+- **Ventajas**: Más robusto, más simple, funciona con cualquier input sin necesidad de detectar cada tipo
+- **Archivos modificados**: `TileAheadAnnouncerPatch.cs`
+
 #### Accesibilidad del Hotbar (2024)
 - **Problema**: El usuario solicitó anuncios de items al seleccionar slots del hotbar con teclas 1-0.
 - **Implementación**: Creado `HotbarSelectionAccessibilityPatch.cs` que intercepta `PlayerController.EquipSlot`.
