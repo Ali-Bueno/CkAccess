@@ -151,6 +151,12 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
   - **Completado:** Acciones U/O en el mundo (minar, atacar, colocar) - tecla E eliminada, el juego maneja interacciones automáticamente.
   - **Completado:** Integración completa con sistema de inventario y UI mediante U/O.
   - **Completado:** Soporte para teclas mantenidas emulando comportamiento de ratón.
+  - **Completado:** Soporte completo de mando (gamepad) para cursor virtual.
+    - **Completado:** Stick derecho para movimiento discreto del cursor (tile por tile).
+    - **Completado:** Comportamiento idéntico entre teclado (I/J/K/L) y stick derecho del mando.
+    - **Completado:** R2/L2 (triggers) integrados para acciones U/O.
+    - **Completado:** Sistema unificado que comparte variables de estado entre teclado y mando.
+    - **Nota técnica:** Botones individuales del mando no detectables por limitaciones de Core Keeper/Rewired.
 - **Completado:** Sistema de Auto-Targeting inteligente.
   - **Completado:** Detección automática de enemigos cercanos con filtrado mejorado (excluye estatuas y decoraciones).
   - **Completado:** Rango adaptativo según el arma equipada (melee: 3 tiles, ranged: 10 tiles, magic: 8 tiles).
@@ -217,7 +223,9 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
 ### Controles del Cursor Virtual y Sistemas de Accesibilidad
 
 #### Cursor Virtual (se activa automáticamente al entrar al mundo):
-- **I/J/K/L:** Mover cursor (arriba/izquierda/abajo/derecha)
+
+**Controles con Teclado:**
+- **I/J/K/L:** Mover cursor discreto (arriba/izquierda/abajo/derecha) - 1 tile por pulsación
 - **R:** Resetear cursor a la posición del jugador
 - **U:** Acción primaria (atacar/minar) - con auto-target activo apunta automáticamente a enemigos
 - **O:** Acción secundaria (usar/colocar objetos)
@@ -225,8 +233,24 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
 - **M:** Posición detallada del jugador
 - **T:** Test de coordenadas
 
+**Controles con Mando (Gamepad):**
+- **Stick Derecho:** Mover cursor discreto (tile por tile) - comportamiento idéntico a I/J/K/L
+  - Movimiento en un solo eje a la vez (prioriza el eje con mayor magnitud)
+  - Debounce de 200ms para control preciso
+  - Zona muerta (deadzone) de 0.5 para evitar drift
+- **R2 (Trigger Derecho):** Acción primaria - equivalente a tecla U
+- **L2 (Trigger Izquierdo):** Acción secundaria - equivalente a tecla O
+- **Tecla R (teclado):** Reset del cursor (botones del mando no disponibles por limitaciones técnicas)
+
+**Implementación Técnica del Soporte de Mando:**
+- **Archivo principal:** `PlayerInputPatch.cs`
+- **Detección de stick:** Usa acciones de Rewired (`RightJoyStickX`, `RightJoyStickY` - constantes 59 y 60)
+- **Sistema unificado:** Teclado y mando comparten las mismas variables de estado (`_cursorOffsetX`, `_cursorOffsetZ`)
+- **Comportamiento idéntico:** Ambos métodos de input producen exactamente el mismo resultado
+- **Limitación conocida:** Los botones individuales del mando (L3, R3, Select, Start) no se pueden detectar porque Core Keeper/Rewired consume el input antes de que los parches puedan interceptarlo. Esto es una limitación del motor del juego, no del mod.
+
 #### Sistemas Automáticos (siempre activos):
-- **Auto-Targeting:** Apunta automáticamente al enemigo más cercano al usar U
+- **Auto-Targeting:** Apunta automáticamente al enemigo más cercano al usar U/R2
 - **Sonidos de Proximidad:** Emite tonos que varían en pitch según la distancia (grave=lejos, agudo=cerca)
   - Para objetos interactuables: se activa al caminar
   - Para enemigos: se actualiza constantemente con su posición

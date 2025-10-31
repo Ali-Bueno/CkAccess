@@ -3,6 +3,7 @@ extern alias Core;
 using HarmonyLib;
 using UnityEngine;
 using ckAccess.Patches.UI;
+using Rewired;
 
 namespace ckAccess.VirtualCursor
 {
@@ -90,7 +91,8 @@ namespace ckAccess.VirtualCursor
             // I/J/K/L ahora controlan el stick derecho virtual - el feedback lo da PlayerInputPatch
             // Solo manejamos teclas de debug/info aquí
 
-            if (Input.GetKeyDown(KeyCode.R) && CanProcessInput(KeyCode.R, currentTime))
+            // R en teclado o L3 (presión del stick izquierdo) del mando
+            if ((Input.GetKeyDown(KeyCode.R) || IsR3Pressed()) && CanProcessInput(KeyCode.R, currentTime))
             {
                 VirtualCursor.ResetToPlayer();
                 PlayerInputPatch.ResetCursorDistance(); // Resetear también la distancia del cursor
@@ -110,6 +112,19 @@ namespace ckAccess.VirtualCursor
 
             // U/O ahora son manejados directamente por PlayerInputPatch como triggers
             // Ya no necesitamos PrimaryAction/SecondaryAction
+        }
+
+        /// <summary>
+        /// Placeholder para detección de botones del mando
+        /// Nota: Core Keeper/Rewired captura completamente el input de los botones del mando
+        /// antes de que podamos detectarlos, por lo que esta funcionalidad no está disponible.
+        /// El reset del cursor solo funciona con la tecla R del teclado.
+        /// </summary>
+        private static bool IsR3Pressed()
+        {
+            // Los botones del mando no se pueden detectar debido a cómo Core Keeper maneja el input
+            // El juego consume el input de los botones antes de que nuestros parches puedan interceptarlo
+            return false;
         }
         
         private static bool CanProcessInput(KeyCode key, float currentTime)

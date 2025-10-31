@@ -2,6 +2,7 @@ extern alias PugOther;
 using HarmonyLib;
 using UnityEngine;
 using System.Collections.Generic;
+using Rewired;
 
 namespace ckAccess.VirtualCursor
 {
@@ -10,23 +11,28 @@ namespace ckAccess.VirtualCursor
     /// I/J/K/L = Stick derecho para apuntar
     /// U = R2 (Right Trigger) = INTERACT
     /// O = L2 (Left Trigger) = SECOND_INTERACT
+    /// STICK DERECHO (Right Stick) = Movimiento discreto del cursor (tile por tile)
+    /// R3 (presión del stick derecho) = Reset del cursor a posición del jugador
     /// </summary>
     [HarmonyPatch(typeof(PugOther.PlayerInput))]
     public static class PlayerInputPatch
     {
-        // Estado actual del "stick derecho virtual" basado en I/J/K/L
+        // Estado actual del "stick derecho virtual" basado en I/J/K/L o stick derecho del mando
         private static Vector2 _virtualAimInput = Vector2.zero;
 
         // Sistema de coordenadas del cursor relativo al jugador
-        private static int _cursorOffsetX = 0; // Offset en eje X (J/L)
-        private static int _cursorOffsetZ = 0; // Offset en eje Z (I/K)
+        private static int _cursorOffsetX = 0; // Offset en eje X (J/L o stick izquierda/derecha)
+        private static int _cursorOffsetZ = 0; // Offset en eje Z (I/K o stick arriba/abajo)
 
         private static float _lastKeyPressTime = 0f; // Para debounce de teclado
+        private static float _lastStickInputTime = 0f; // Para debounce del stick derecho
         private const int MAX_CURSOR_OFFSET = 10; // Máximo offset en cualquier dirección
         private const float KEY_DEBOUNCE_TIME = 0.2f; // 200ms para evitar repetición automática del teclado
+        private const float STICK_DEBOUNCE_TIME = 0.2f; // 200ms para movimiento discreto del stick
+        private const float STICK_DEADZONE = 0.5f; // Zona muerta del stick para considerar input válido
 
         /// <summary>
-        /// Actualiza el estado del stick derecho virtual basado en las teclas presionadas
+        /// Actualiza el estado del stick derecho virtual basado en las teclas presionadas o el stick del mando
         /// </summary>
         public static void UpdateVirtualAimInput()
         {
@@ -46,8 +52,12 @@ namespace ckAccess.VirtualCursor
 
             float currentTime = UnityEngine.Time.time;
 
-            // Detectar pulsaciones únicas con debounce
-            if ((Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K) ||
+            // NUEVO: Detectar input del stick derecho del mando con Rewired
+            bool stickInputDetected = HandleRightStickInput(currentTime);
+
+            // Detectar pulsaciones únicas de teclado con debounce (solo si no hubo input del stick)
+            if (!stickInputDetected &&
+                (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.K) ||
                 Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.L)) &&
                 (currentTime - _lastKeyPressTime) > KEY_DEBOUNCE_TIME)
             {
@@ -116,6 +126,123 @@ namespace ckAccess.VirtualCursor
             else
             {
                 _virtualAimInput = Vector2.zero;
+            }
+        }
+
+        /// <summary>
+        /// Maneja el input del stick derecho del mando de forma discreta (tile por tile)
+        /// </summary>
+        /// <returns>true si se detectó y procesó input del stick, false en caso contrario</returns>
+        private static bool HandleRightStickInput(float currentTime)
+        {
+            try
+            {
+                // Obtener el jugador de Rewired (siempre es player 0)
+                Player rewiredPlayer = ReInput.players.GetPlayer(0);
+                if (rewiredPlayer == null)
+                    return false;
+
+                // Leer los valores del stick derecho usando las acciones correctas de Core Keeper
+                // Según RewiredConsts/Action.cs:
+                // - RightJoyStickX = 59 (input raw)
+                // - RightJoyStickY = 60 (input raw)
+                float horizontalAxis = rewiredPlayer.GetAxis("RightJoyStickX");
+                float verticalAxis = rewiredPlayer.GetAxis("RightJoyStickY");
+
+                // DEBUG: Log valores si hay algún movimiento significativo
+                if (Mathf.Abs(horizontalAxis) > 0.1f || Mathf.Abs(verticalAxis) > 0.1f)
+                {
+                    UnityEngine.Debug.Log($"[ckAccess] Right Stick: H={horizontalAxis:F2}, V={verticalAxis:F2}");
+                }
+
+                // Verificar zona muerta (deadzone) para evitar drift del stick
+                if (Mathf.Abs(horizontalAxis) < STICK_DEADZONE && Mathf.Abs(verticalAxis) < STICK_DEADZONE)
+                    return false;
+
+                // Verificar debounce para movimiento discreto
+                if ((currentTime - _lastStickInputTime) < STICK_DEBOUNCE_TIME)
+                    return false;
+
+                // Determinar dirección predominante y mover en UN SOLO EJE a la vez
+                bool hitLimit = false;
+                bool movedCursor = false;
+
+                // Priorizar el eje con mayor magnitud para movimiento discreto
+                if (Mathf.Abs(horizontalAxis) > Mathf.Abs(verticalAxis))
+                {
+                    // Movimiento en eje X (horizontal)
+                    if (horizontalAxis > STICK_DEADZONE) // Derecha (X+)
+                    {
+                        _cursorOffsetX++;
+                        if (_cursorOffsetX > MAX_CURSOR_OFFSET)
+                        {
+                            _cursorOffsetX = MAX_CURSOR_OFFSET;
+                            hitLimit = true;
+                        }
+                        movedCursor = true;
+                    }
+                    else if (horizontalAxis < -STICK_DEADZONE) // Izquierda (X-)
+                    {
+                        _cursorOffsetX--;
+                        if (_cursorOffsetX < -MAX_CURSOR_OFFSET)
+                        {
+                            _cursorOffsetX = -MAX_CURSOR_OFFSET;
+                            hitLimit = true;
+                        }
+                        movedCursor = true;
+                    }
+                }
+                else
+                {
+                    // Movimiento en eje Z (vertical)
+                    if (verticalAxis > STICK_DEADZONE) // Arriba (Z+)
+                    {
+                        _cursorOffsetZ++;
+                        if (_cursorOffsetZ > MAX_CURSOR_OFFSET)
+                        {
+                            _cursorOffsetZ = MAX_CURSOR_OFFSET;
+                            hitLimit = true;
+                        }
+                        movedCursor = true;
+                    }
+                    else if (verticalAxis < -STICK_DEADZONE) // Abajo (Z-)
+                    {
+                        _cursorOffsetZ--;
+                        if (_cursorOffsetZ < -MAX_CURSOR_OFFSET)
+                        {
+                            _cursorOffsetZ = -MAX_CURSOR_OFFSET;
+                            hitLimit = true;
+                        }
+                        movedCursor = true;
+                    }
+                }
+
+                if (movedCursor)
+                {
+                    _lastStickInputTime = currentTime;
+
+                    // Calcular la dirección del stick virtual basado en la posición del cursor
+                    UpdateStickDirectionFromCursorPosition();
+
+                    // Anunciar la nueva posición o el límite
+                    if (hitLimit)
+                    {
+                        Patches.UI.UIManager.Speak(Localization.LocalizationManager.GetText("cursor_limit_reached"));
+                    }
+                    else
+                    {
+                        AnnounceCursorPosition();
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error handling right stick input: {ex}");
+                return false;
             }
         }
 

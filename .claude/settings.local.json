@@ -14,7 +14,8 @@
       "Bash(del \"D:\\code\\unity and such\\Core Keeper Access\\nul\")",
       "Bash(find:*)",
       "Bash(if not exist \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\Patches\\UI\\TEMP_DISABLED\" mkdir \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\Patches\\UI\\TEMP_DISABLED\")",
-      "Bash(del \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\Patches\\UI\\EmoteAccessibilityPatch.cs\")"
+      "Bash(del \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\Patches\\UI\\EmoteAccessibilityPatch.cs\")",
+      "Bash(del \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\VirtualCursor\\RewiredDebugPatch.cs\")"
     ],
     "deny": [],
     "ask": []
