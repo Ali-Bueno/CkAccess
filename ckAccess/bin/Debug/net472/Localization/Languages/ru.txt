@@ -8,6 +8,7 @@ cursor_initialization_error=Ошибка инициализации курсор
 cursor_reset=Курсор сброшен: x={0}, z={1}
 cursor_reset_error=Ошибка сброса курсора
 limit_reached=Достигнут предел
+cursor_limit_reached=Cursor limit reached
 primary_action_error=Ошибка основного действия: {0}
 placing_at_position=Размещение в позиции x={0}, z={1}
 item_placed_at_position={0} размещен в позиции x={1}, z={2}

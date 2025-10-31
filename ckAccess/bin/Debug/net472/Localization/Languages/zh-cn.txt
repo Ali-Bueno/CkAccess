@@ -8,6 +8,7 @@ cursor_initialization_error=初始化光标出错
 cursor_reset=光标已重置: x={0}, z={1}
 cursor_reset_error=重置光标出错
 limit_reached=已达到限制
+cursor_limit_reached=Cursor limit reached
 primary_action_error=主要操作出错: {0}
 placing_at_position=正在放置于位置 x={0}, z={1}
 item_placed_at_position={0} 已放置于位置 x={1}, z={2}

@@ -8,6 +8,7 @@ cursor_initialization_error=カーソル初期化エラー
 cursor_reset=カーソルをリセット: x={0}, z={1}
 cursor_reset_error=カーソルリセットエラー
 limit_reached=上限に達しました
+cursor_limit_reached=Cursor limit reached
 primary_action_error=主アクション エラー: {0}
 placing_at_position=位置 x={0}, z={1} に配置中
 item_placed_at_position={0} を位置 x={1}, z={2} に配置しました

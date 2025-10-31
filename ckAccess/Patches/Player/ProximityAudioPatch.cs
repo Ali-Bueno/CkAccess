@@ -75,11 +75,10 @@ namespace ckAccess.Patches.Player
             {
                 if (!_systemEnabled || _proximityAudioClip == null) return;
 
-                // SINCRONIZACIÓN: Si el sistema de colisiones detecta que el jugador está bloqueado,
-                // no reproducir sonidos de proximidad (igual que los pasos se pausan)
+                // SINCRONIZADO: No reproducir sonido si el jugador está bloqueado por colisión
                 if (MovementCollisionDetectionPatch.IsCollisionDetected)
                 {
-                    return; // No reproducir sonidos si el jugador está bloqueado
+                    return;
                 }
 
                 // Actualizar objetos cercanos y reproducir sonido CON CADA PASO

@@ -8,6 +8,7 @@ cursor_initialization_error=Error inicializando cursor
 cursor_reset=Cursor reseteado: x={0}, z={1}
 cursor_reset_error=Error reseteando cursor
 limit_reached=Límite alcanzado
+cursor_limit_reached=Límite de cursor alcanzado
 primary_action_error=Error en acción primaria: {0}
 placing_at_position=Colocando en posición x={0}, z={1}
 item_placed_at_position={0} colocado en posición x={1}, z={2}
@@ -365,3 +366,16 @@ tileset_alien=alienígena
 tileset_oasis=oasis
 tileset_explosive_forest=bosque explosivo
 tileset_explosive_desert=desierto explosivo
+
+# Mensajes de Interacción
+interact_available=Presiona E para interactuar con {0}
+interactable_object=objeto
+object_type_chest=cofre
+object_type_door=puerta
+object_type_workstation=estación de trabajo
+
+# Intro/Outro
+intro_skip_message=Mantén espacio para saltar la introducción
+
+# Tutorial Buffer
+no_tutorials=No hay tutoriales en el buffer

@@ -10,29 +10,24 @@ namespace ckAccess.Patches.UI
 {
     /// <summary>
     /// Patches ChatWindow to announce game messages (items picked up, level ups, etc.)
-    /// These messages are different from the NotificationSystem - they come from the game itself.
+    /// VERSIÓN SEGURA: Solo funciona cuando NO hay cutscenes activas
     /// </summary>
     [HarmonyPatch]
     public static class ChatWindowAccessibilityPatch
     {
         private static string lastAnnouncedMessage = "";
         private static float lastAnnounceTime = 0f;
-        private const float DEBOUNCE_TIME = 0.3f; // Prevent duplicate announcements
+        private const float DEBOUNCE_TIME = 0.3f;
 
-        /// <summary>
-        /// Specify the method to patch using TargetMethod
-        /// </summary>
         static MethodBase TargetMethod()
         {
-            // Get the ChatWindow type from the PugOther assembly
             var chatWindowType = AccessTools.TypeByName("ChatWindow");
             if (chatWindowType == null)
             {
-                UnityEngine.Debug.LogError("Could not find ChatWindow type");
+                UnityEngine.Debug.LogError("[ChatPatch] Could not find ChatWindow type");
                 return null;
             }
 
-            // Find the AddInfoText method with the specific signature
             var method = AccessTools.Method(chatWindowType, "AddInfoText", new Type[] {
                 typeof(string[]),
                 typeof(Rarity),
@@ -42,15 +37,12 @@ namespace ckAccess.Patches.UI
 
             if (method == null)
             {
-                UnityEngine.Debug.LogError("Could not find ChatWindow.AddInfoText method");
+                UnityEngine.Debug.LogError("[ChatPatch] Could not find ChatWindow.AddInfoText method");
             }
 
             return method;
         }
 
-        /// <summary>
-        /// Use a coroutine to read the message after it's been created and rendered
-        /// </summary>
         [HarmonyPostfix]
         public static void Postfix(
             string[] formatFields,
@@ -58,37 +50,97 @@ namespace ckAccess.Patches.UI
         {
             try
             {
-                // Use a small delay to ensure the message has been processed
+                // CRÍTICO: NO anunciar si hay cutscene activa
+                if (IsCutsceneActive())
+                {
+                    return;
+                }
+
                 Plugin.Instance.StartCoroutine(AnnounceMessageDelayed(formatFields, messageTextType));
             }
             catch (Exception ex)
             {
-                UnityEngine.Debug.LogError($"Error in ChatWindow accessibility patch: {ex}");
+                UnityEngine.Debug.LogError($"[ChatPatch] Error: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Verifica si hay una cutscene activa (intro, spawn desde núcleo, etc.)
+        /// </summary>
+        private static bool IsCutsceneActive()
+        {
+            try
+            {
+                // 1. Verificar CutsceneHandler
+                var cutsceneHandlerType = AccessTools.TypeByName("CutsceneHandler");
+                if (cutsceneHandlerType != null)
+                {
+                    var cutsceneHandler = UnityEngine.Object.FindObjectOfType(cutsceneHandlerType);
+                    if (cutsceneHandler != null)
+                    {
+                        var isPlayingProp = AccessTools.Property(cutsceneHandlerType, "isPlaying");
+                        if (isPlayingProp != null)
+                        {
+                            bool isPlaying = (bool)isPlayingProp.GetValue(cutsceneHandler);
+                            if (isPlaying)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                // 2. Verificar IntroHandler
+                var introHandlerType = AccessTools.TypeByName("IntroHandler");
+                if (introHandlerType != null)
+                {
+                    var introHandler = UnityEngine.Object.FindObjectOfType(introHandlerType);
+                    if (introHandler != null)
+                    {
+                        var showingField = AccessTools.Field(introHandlerType, "showing");
+                        if (showingField != null)
+                        {
+                            bool showing = (bool)showingField.GetValue(introHandler);
+                            if (showing)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            }
+            catch
+            {
+                // En caso de error, ser conservadores y no anunciar
+                return true;
             }
         }
 
         private static System.Collections.IEnumerator AnnounceMessageDelayed(string[] formatFields, PugOther.ChatWindow.MessageTextType messageTextType)
         {
-            // Wait a frame for the message to be created
             yield return null;
 
             try
             {
-                // Get the localization key for this message type
+                // Verificar NUEVAMENTE antes de anunciar (por si la cutscene empezó mientras esperábamos)
+                if (IsCutsceneActive())
+                {
+                    yield break;
+                }
+
                 string locKey = GetLocalizationKeyForMessageType(messageTextType);
 
                 if (!string.IsNullOrEmpty(locKey))
                 {
-                    // Get the localized text
                     string messageText = I2Loc::I2.Loc.LocalizationManager.GetTranslation(locKey);
 
-                    // Apply format fields if provided
                     if (formatFields != null && formatFields.Length > 0)
                     {
                         messageText = string.Format(messageText, (object[])formatFields);
                     }
 
-                    // Debounce: prevent duplicate announcements
                     float currentTime = Time.unscaledTime;
                     if (messageText == lastAnnouncedMessage &&
                         (currentTime - lastAnnounceTime) < DEBOUNCE_TIME)
@@ -99,20 +151,17 @@ namespace ckAccess.Patches.UI
                     lastAnnouncedMessage = messageText;
                     lastAnnounceTime = currentTime;
 
-                    // Announce the message
                     UIManager.Speak(messageText);
                 }
             }
             catch (Exception ex)
             {
-                UnityEngine.Debug.LogError($"Error announcing chat message: {ex}");
+                UnityEngine.Debug.LogError($"[ChatPatch] Error announcing: {ex}");
             }
         }
 
         private static string GetLocalizationKeyForMessageType(PugOther.ChatWindow.MessageTextType messageTextType)
         {
-            // Map message types to their localization keys
-            // These keys are used by the game to look up translations
             switch (messageTextType)
             {
                 case PugOther.ChatWindow.MessageTextType.NewItem:

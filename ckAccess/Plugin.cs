@@ -17,12 +17,14 @@ namespace ckAccess
     public class Plugin : BaseUnityPlugin
     {
         public static Plugin Instance { get; private set; }
+        public static ManualLogSource Log { get; private set; }
         private Harmony harmony;
 
         private void Awake()
         {
             // Plugin startup logic
             Instance = this;
+            Log = Logger;
             Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
             harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);

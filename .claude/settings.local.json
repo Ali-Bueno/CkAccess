@@ -7,7 +7,14 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(powershell -Command:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(git push)",
+      "Bash(dir:*)",
+      "Bash(del \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\Patches\\UI\\InteractButtonAccessibilityPatch.cs\")",
+      "Bash(del \"D:\\code\\unity and such\\Core Keeper Access\\nul\")",
+      "Bash(find:*)",
+      "Bash(if not exist \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\Patches\\UI\\TEMP_DISABLED\" mkdir \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\Patches\\UI\\TEMP_DISABLED\")",
+      "Bash(del \"D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\Patches\\UI\\EmoteAccessibilityPatch.cs\")"
     ],
     "deny": [],
     "ask": []

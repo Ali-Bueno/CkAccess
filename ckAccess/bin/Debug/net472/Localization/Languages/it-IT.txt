@@ -8,6 +8,7 @@ cursor_initialization_error=Errore nell'inizializzazione del cursore
 cursor_reset=Cursore ripristinato: x={0}, z={1}
 cursor_reset_error=Errore nel ripristino del cursore
 limit_reached=Limite raggiunto
+cursor_limit_reached=Cursor limit reached
 primary_action_error=Errore nell'azione primaria: {0}
 placing_at_position=Posizionamento in posizione x={0}, z={1}
 item_placed_at_position={0} posizionato in posizione x={1}, z={2}
