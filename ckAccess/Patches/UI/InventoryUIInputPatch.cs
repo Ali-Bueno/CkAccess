@@ -288,7 +288,15 @@ namespace ckAccess.Patches.UI
                     return;
                 }
 
-                // PRIORIDAD 7: Si no es un elemento específico, simular click izquierdo genérico
+                // PRIORIDAD 7: Verificar si es un ButtonUIElement (Sort, Quick Stack, etc.)
+                var buttonElement = uiManager.currentSelectedUIElement.GetComponent<PugOther.ButtonUIElement>();
+                if (buttonElement != null)
+                {
+                    HandleButtonSelection(buttonElement);
+                    return;
+                }
+
+                // PRIORIDAD 8: Si no es un elemento específico, simular click izquierdo genérico
                 SimulateLeftClick(uiManager);
             }
             catch (System.Exception ex)
@@ -356,6 +364,78 @@ namespace ckAccess.Patches.UI
             catch (System.Exception ex)
             {
                 UIManager.Speak(LocalizationManager.GetText("skill_error", ex.Message));
+            }
+        }
+
+        /// <summary>
+        /// Maneja la selección de botones genéricos (Sort, Quick Stack, Lock, etc.)
+        /// </summary>
+        private static void HandleButtonSelection(PugOther.ButtonUIElement button)
+        {
+            try
+            {
+                // Obtener el nombre del botón antes del click
+                string buttonName = GetButtonName(button);
+
+                // Llamar al método OnLeftClicked del botón
+                button.OnLeftClicked(false, false);
+
+                // Anunciar simplemente que se presionó el botón (sin "activado" o "desactivado")
+                UIManager.Speak(LocalizationManager.GetText("button_pressed", buttonName));
+            }
+            catch (System.Exception ex)
+            {
+                UIManager.Speak(LocalizationManager.GetText("button_error", ex.Message));
+                UnityEngine.Debug.LogError($"Exception in HandleButtonSelection: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el nombre descriptivo de un botón
+        /// </summary>
+        private static string GetButtonName(PugOther.ButtonUIElement button)
+        {
+            try
+            {
+                // Intentar obtener el texto del botón procesado
+                if (button.text != null)
+                {
+                    string processedText = button.text.ProcessText();
+                    if (!string.IsNullOrEmpty(processedText))
+                    {
+                        return processedText;
+                    }
+                }
+
+                // Intentar obtener el título hover
+                var hoverTitle = button.GetHoverTitle();
+                if (hoverTitle != null && !string.IsNullOrEmpty(hoverTitle.text))
+                {
+                    string localizedText = UIManager.GetLocalizedText(hoverTitle.text);
+                    if (!string.IsNullOrEmpty(localizedText))
+                    {
+                        return localizedText;
+                    }
+                }
+
+                // Fallback: usar el nombre del GameObject
+                string objectName = button.gameObject.name;
+
+                // Detectar tipo de botón por nombre del objeto
+                if (objectName.ToLower().Contains("sort"))
+                    return LocalizationManager.GetText("button_sort");
+                if (objectName.ToLower().Contains("quickstack") || objectName.ToLower().Contains("quick_stack"))
+                    return LocalizationManager.GetText("button_quick_stack");
+                if (objectName.ToLower().Contains("lock"))
+                    return LocalizationManager.GetText("button_lock");
+                if (objectName.ToLower().Contains("nearby"))
+                    return LocalizationManager.GetText("button_quick_stack_nearby");
+
+                return objectName;
+            }
+            catch
+            {
+                return "botón";
             }
         }
 

@@ -412,3 +412,11 @@ section_crafting_inventory=Inventario de crafteo
 section_equipment=Equipamiento
 section_pouch=Bolsa
 section_unknown=Sección desconocida
+
+# Inventory Buttons
+button_pressed={0}
+button_error=Error al presionar el botón: {0}
+button_sort=Ordenar
+button_quick_stack=Apilar rápidamente
+button_lock=Bloquear/Desbloquear objetos
+button_quick_stack_nearby=Apilar en cercanos

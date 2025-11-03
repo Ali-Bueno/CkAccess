@@ -412,3 +412,11 @@ section_crafting_inventory=Crafting inventory
 section_equipment=Equipment
 section_pouch=Pouch
 section_unknown=Unknown section
+
+# Inventory Buttons
+button_pressed={0}
+button_error=Error pressing button: {0}
+button_sort=Sort
+button_quick_stack=Quick Stack
+button_lock=Lock/Unlock Items
+button_quick_stack_nearby=Quick Stack Nearby

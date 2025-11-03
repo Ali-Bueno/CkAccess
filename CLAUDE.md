@@ -185,6 +185,11 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
   - **Completado:** Anuncios correctos de apertura/cierre de árboles de talento.
   - **Completado:** Nombres de skills localizados (eliminados errores "missing:").
   - **Completado:** Limpieza de código: eliminado debug logging y código duplicado.
+- **Completado:** Accesibilidad de botones de inventario (2025).
+  - **Completado:** Soporte para botones Sort, Quick Stack, Lock/Unlock Items y Quick Stack Nearby.
+  - **Completado:** Detección automática de tipo de botón mediante `ButtonUIElement`.
+  - **Completado:** Integración completa con sistema de clicks simulados existente.
+  - **Completado:** Anuncios por TTS del nombre del botón al presionar U/R2.
 
 ---
 ### Últimas Correcciones Técnicas (2024)
@@ -525,6 +530,35 @@ El mod detecta automáticamente en qué sección del inventario estás y lo anun
 ✅ Sin conflictos con atajos del usuario
 ✅ Más simple y mantenible
 ✅ Funciona con cualquier configuración de teclas del juego
+
+#### Accesibilidad de Botones de Inventario (2025) ✅ **COMPLETADO**
+
+Se ha implementado soporte completo para los botones de acción del inventario mediante el sistema de clicks simulados existente.
+
+**Botones Soportados:**
+- **Sort** (Ordenar): Ordena automáticamente los items del inventario
+- **Quick Stack** (Apilar rápidamente): Apila items del inventario al cofre abierto
+- **Quick Stack Nearby** (Apilar en cercanos): Apila items a cofres cercanos
+- **Lock/Unlock Items** (Bloquear/Desbloquear objetos): Alterna el bloqueo de items
+
+**Funcionamiento:**
+- El usuario navega con **WASD/Flechas/D-Pad** hasta el botón deseado
+- Presiona **U** o **R2 (mando)** para ejecutar la acción del botón
+- El mod detecta automáticamente el tipo de botón (`ButtonUIElement`)
+- Llama al método nativo `OnLeftClicked()` del botón
+- Anuncia el nombre del botón por TTS
+
+**Implementación:**
+- **Archivo:** `InventoryUIInputPatch.cs`
+- **Método:** `HandleButtonSelection()` - Maneja la selección de botones genéricos
+- **Método:** `GetButtonName()` - Detecta automáticamente el tipo de botón por nombre o texto
+- **Localización:** Claves `button_pressed`, `button_sort`, `button_quick_stack`, `button_lock`, `button_quick_stack_nearby`
+
+**Ventajas:**
+✅ Aprovecha el sistema de clicks simulados existente
+✅ No requiere parches específicos por botón
+✅ Detección automática de tipo de botón
+✅ Funciona con cualquier `ButtonUIElement` del inventario
 
 ---
 
