@@ -1,0 +1,368 @@
+# Файл локалізації українською мовою для Core Keeper Accessibility Mod
+# Формат: ключ=значення
+# Рядки, що починаються з #, є коментарями
+
+# Повідомлення Віртуального Курсора
+virtual_cursor_initialized=Віртуальний курсор ініціалізовано
+cursor_initialization_error=Помилка ініціалізації курсора
+cursor_reset=Курсор скинуто: x={0}, z={1}
+cursor_reset_error=Помилка скидання курсора
+limit_reached=Досягнуто межі
+cursor_limit_reached=Cursor limit reached
+primary_action_error=Помилка первинної дії: {0}
+placing_at_position=Розміщення на позиції x={0}, z={1}
+item_placed_at_position={0} розміщено на позиції x={1}, z={2}
+secondary_action_error=Помилка вторинної дії: {0}
+interaction_error=Помилка взаємодії: {0}
+cursor_not_initialized=Курсор не ініціалізовано
+current_position=Поточна позиція: x={0}, z={1}
+position_reading_error=Помилка зчитування позиції гравця
+
+# Повідомлення Навігації UI
+no_tabs_available=Немає доступних вкладок
+no_more_tabs=Більше немає доступних вкладок
+tab_equipment=Вкладка: Спорядження
+tab_skills=Вкладка: Навички
+tab_souls=Вкладка: Душі
+tab_number=Вкладка {0}
+navigation_error=Помилка навігації вкладками: {0}
+selection_error=Помилка вибору об'єкта: {0}
+empty_slot=Порожній слот
+slot_selection_error=Помилка вибору слота: {0}
+skill_error=Помилка відкриття навички: {0}
+click_simulation_error=Помилка симуляції кліку: {0}
+no_element_selected=Жоден елемент не вибрано
+no_element_selected_secondary=Жоден елемент не вибрано для вторинної дії
+secondary_action_error_ui=Помилка вторинної дії: {0}
+empty_slot_no_action=Порожній слот, дія недоступна
+secondary_action_performed=Вторинну дію виконано
+secondary_slot_error=Помилка вторинної дії слота: {0}
+right_click_simulation_error=Помилка симуляції правого кліку: {0}
+talent_action=Дія з талантом: {0}
+talent_selected=Талант вибрано
+talent_selection_error=Помилка вибору таланту: {0}
+skills=Навички
+preset_selection_error=Помилка вибору пресету: {0}
+preset_selected=Пресет вибрано: {0}
+equipment_preset_selected=Пресет спорядження вибрано
+equipment_preset_selected_generic=Пресет спорядження {0} вибрано
+equipment_preset_error=Помилка з пресетом спорядження: {0}
+equipment_preset_not_found=Пресет спорядження не знайдено
+stats_window_toggled=Вікно статистики перемкнуто
+stats=Статистика
+stats_button_activated=Кнопку статистики активовано
+stats_error=Помилка відкриття статистики: {0}
+selected_item=Вибрано: {0}
+
+# Повідомлення Навичок та Талантів
+talent_tree_opened=Дерево талантів відкрито: {0}
+talent_tree_opened_generic=Дерево талантів відкрито
+talent_tree_closed=Дерево талантів закрито
+talent=Талант
+
+# Назви Навичок
+skill_mining=Видобуток
+skill_running=Біг
+skill_melee=Ближній Бій
+skill_vitality=Живучість
+skill_crafting=Виготовлення
+skill_range=Дальній Бій
+skill_gardening=Садівництво
+skill_fishing=Рибальство
+skill_cooking=Кулінарія
+skill_magic=Магія
+skill_summoning=Призов
+skill_explosives=Вибухівка
+
+# Повідомлення Зчитувача Світу
+empty=Порожньо
+reading_error=Помилка зчитування
+the_core=Ядро (інтерактивне)
+work_station={0} (робоча станція)
+enemy={0} (ворог)
+object={0} (об'єкт)
+plant={0} (рослина)
+resource={0} (ресурс)
+entity={0} (сутність)
+destructible_tool={0} руйнівний (використовувати {1})
+destructible_material_tool={0} з {1} руйнівний (використовувати {2})
+blocking={0} (блокуючий)
+blocking_material={0} з {1} (блокуючий)
+dangerous={0} (небезпечний)
+dangerous_material={0} з {1} (небезпечний)
+area_not_available=Область недоступна
+unknown_position=Невідома позиція
+unknown=Невідомо
+player_position_error=Не вдалося отримати позицію гравця
+cannot_read_player_position=Неможливо зчитати позицію гравця
+position_reading_error_generic=Помилка зчитування позиції
+empty_area_around=Порожня область навколо
+area_scan_error=Помилка сканування області
+
+# Повідомлення Виготовлення (Робочий Стіл)
+recipe=Рецепт: {0}
+recipe_with_amount=Рецепт: {0} x{1}
+can_craft=Можна виготовити
+cannot_craft=Неможливо виготовити
+required_materials=Необхідні матеріали
+missing_material={0}: не вистачає {1}
+available_material={0}: у вас є {1}
+and_more_materials=та інші матеріали
+invalid_recipe=Недійсний рецепт
+cannot_craft_materials=Неможливо виготовити: не вистачає матеріалів
+inventory_full=Інвентар заповнений
+crafted_item=Виготовлено {0}
+crafting_error=Помилка виготовлення
+
+# Повідомлення Прямих Дій
+empty_slot_cannot_equip=Порожній слот, неможливо екіпірувати
+item_not_equippable={0} не можна екіпірувати
+equipment_window_not_open=Вікно спорядження не відкрите
+item_equipped={0} екіпіровано
+item_cannot_equip=Неможливо екіпірувати {0}
+equip_error=Помилка екіпірування
+empty_slot_cannot_use=Порожній слот, неможливо використати
+item_not_usable={0} не можна використати
+item_used={0} використано
+item_cannot_use=Неможливо використати {0}
+item_placed={0} розміщено
+item_action_performed=Дію виконано з {0}
+use_error=Помилка використання
+no_crafting_available=Виготовлення недоступне
+crafting_station_available=Станція виготовлення доступна, використовуйте рецепти з інвентаря
+select_recipe_item=Виберіть предмет рецепту
+recipe_item_detected=Виявлено рецепт: {0}
+not_a_recipe=Цей предмет не є рецептом
+craft_error=Помилка виготовлення
+
+# Повідомлення Панелі Швидкого Доступу
+hotbar_changed=Панель швидкого доступу {0} вибрано
+no_weapon_equipped=Зброя не екіпірована
+empty_hotbar_slot=Порожній слот панелі швидкого доступу
+unknown=Невідомо
+current_hotbar_item=Панель швидкого доступу {0}, слот {1}: {2}
+hotbar_error=Помилка панелі швидкого доступу
+durability_critical=критична міцність {0}%
+durability_low=низька міцність {0}%
+durability_normal=міцність {0}%
+durability_full=повна міцність
+hotbar_info_available=Інформація панелі швидкого доступу доступна
+hotbar_slot_selected=Слот {0} вибрано
+
+# Стан Предметів
+equipped=, екіпіровано
+
+# Елементи UI
+stats_button=Кнопка статистики: {0}
+equipment_preset=Пресет спорядження: {0}
+crafting_button=Кнопка виготовлення: {0}
+organize_button=Кнопка організації: {0}
+quick_action_button=Кнопка швидкої дії: {0}
+button=Кнопка: {0}
+tab=Вкладка: {0}
+preset=Пресет: {0}
+statistics=Статистика: {0}
+bag=Сумка: {0}
+shortcut=Швидка клавіша: {0}
+element=Елемент: {0}
+
+# Повідомлення Pop-up
+hold_to_confirm=утримуйте для підтвердження
+
+# Опції Меню
+more_options=Більше опцій
+
+# Типи Тайлів
+tile_none=Порожньо
+tile_ground=Земля
+tile_wall=Стіна
+tile_water=Вода
+tile_pit=Яма
+tile_bridge=Міст
+tile_floor=Побудована підлога
+tile_roof_hole=Отвір у даху
+tile_thin_wall=Тонка стіна
+tile_dug_up_ground=Викопана земля
+tile_watered_ground=Зрошена земля
+tile_circuit_plate=Схемна пластина
+tile_ancient_circuit_plate=Стародавня схемна пластина
+tile_fence=Огорожа
+tile_rug=Килим
+tile_small_stones=Дрібні камені
+tile_small_grass=Дрібна трава
+tile_wall_grass=Трава на стіні
+tile_debris=Уламки
+tile_floor_crack=Тріщина на підлозі
+tile_rail=Рейка
+tile_great_wall=Велика стіна
+tile_lit_floor=Освітлена підлога
+tile_debris2=Уламки
+tile_loose_flooring=Розхитана підлога
+tile_immune=Захищена зона
+tile_wall_crack=Тріщина на стіні
+tile_ore=Жила руди
+tile_big_root=Великий корінь
+tile_ground_slime=Слід слизу
+tile_ancient_crystal=Стародавній кристал
+tile_chrysalis=Лялечка
+
+# Категорії Тайлів
+category_construction=Будівництво
+category_liquid=Рідина
+category_mineral=Мінерал
+category_organic=Органічне
+category_stone=Камінь
+category_crystal=Кристал
+category_unknown=Невідомо
+
+# Категорії Матеріалів Тайлів
+material_earth=Земля
+material_stone=Камінь
+material_mineral=Мінерал
+material_liquid=Рідина
+material_construction=Будівництво
+material_crystal=Кристал
+material_organic=Органічне
+material_unknown=Невідомо
+
+# Звуки Кроків
+sound_earth=Земля
+sound_stone=Камінь
+sound_metal=Метал
+sound_splash=Плескіт
+sound_wood=Дерево
+sound_gravel=Гравій
+sound_textile=Тканина
+sound_neutral=Нейтральний
+
+# Інструменти
+tool_pickaxe=Кирка
+tool_high_quality_pickaxe=Кирка високої якості
+tool_axe=Сокира
+tool_shovel=Лопата
+tool_pickaxe_or_shovel=Кирка або Лопата
+tool_none=Відсутні
+
+# Матеріали Набору Тайлів
+tileset_dirt=земля
+tileset_stone=камінь
+tileset_obsidian=обсидіан
+tileset_lava=лава
+tileset_nature=природа
+tileset_mold=цвіль
+tileset_sea=море
+tileset_sand=пісок
+tileset_desert=пустеля
+tileset_snow=сніг
+tileset_crystal=кристал
+tileset_dark_stone=темний камінь
+
+# Описи Тайлів
+tile_with_material={0} з {1}
+
+# Повідомлення Інвентаря
+inventory_opened=Інвентар відкрито
+inventory_closed=Інвентар закрито
+character_window_opened=Вікно персонажа відкрито
+character_window_closed=Вікно персонажа закрито
+# Повідомлення Системи Сповіщень
+item_picked_single=Підібрано: {0}
+item_picked_multiple=Підібрано: {0} x{1}
+level_up=Ви підвищили рівень до {0}!
+skill_up={0} підвищено до рівня {1}
+
+# Повідомлення Автонаведення
+enemy_in_range={0} в радіусі дії
+enemy_out_of_range={0} поза радіусом дії
+enemy_at_distance={0} {1}, {2} тайлів
+enemy_unknown=Невідомий ворог
+enemy_generic=Ворог
+
+# Напрямки
+dir_east=на сході
+dir_northeast=на північному сході
+dir_north=на півночі
+dir_northwest=на північному заході
+dir_west=на заході
+dir_southwest=на південному заході
+dir_south=на півдні
+dir_southeast=на південному сході
+
+# Назви Ворогів
+enemy_slime=Слиз
+enemy_spider=Павук
+enemy_skeleton=Скелет
+enemy_goblin=Гоблін
+enemy_orc=Орк
+enemy_zombie=Зомбі
+enemy_demon=Демон
+enemy_beast=Звір
+enemy_larva=Личинка
+enemy_grub=Черв'як
+enemy_worm=Хробак
+enemy_fly=Муха
+enemy_bat=Кажан
+enemy_rat=Щур
+enemy_boss=Бос
+
+# Повідомлення Системи Сповіщень
+no_notifications=Немає сповіщень
+first_notification=Перше сповіщення
+last_notification=Останнє сповіщення
+
+# Описи Категорій Об'єктів
+category_core=Ядро
+category_chest=Скриня
+category_workstation=Робоча станція
+category_enemy=Ворог
+category_pickup=Предмет для підбирання
+category_plant=Рослина
+category_resource=Ресурс
+category_decoration=Декорація
+category_furniture=Меблі
+category_animal=Тварина
+category_critter=Істота
+category_structure=Структура
+category_door=Двері
+category_statue=Статуя
+category_unknown=Невідомий об'єкт
+
+# Префікси Типів Сутностей
+prefix_animal=Тварина
+prefix_creature=Істота
+prefix_statue=Статуя
+prefix_furniture=Меблі
+prefix_structure=Структура
+
+# Додаткові Назви Наборів Тайлів
+tileset_extras=додаткові
+tileset_base_building_wood=дерев'яна будівля
+tileset_larva_hive=личинковий вулик
+tileset_base_building_stone=кам'яна будівля
+tileset_clay=глина
+tileset_turf=дерн
+tileset_base_building_unpainted=нефарбована будівля
+tileset_base_building_yellow=жовта будівля
+tileset_base_building_green=зелена будівля
+tileset_base_building_red=червона будівля
+tileset_base_building_purple=фіолетова будівля
+tileset_base_building_blue=синя будівля
+tileset_base_building_brown=коричнева будівля
+tileset_base_building_white=біла будівля
+tileset_base_building_black=чорна будівля
+tileset_base_building_scarlet=червонувата будівля
+tileset_base_building_coral=коралова будівля
+tileset_base_building_galaxite=галакситова будівля
+tileset_base_building_metal=металева будівля
+tileset_base_building_valentine=будівля на День святого Валентина
+tileset_base_building_easter=будівля на Великдень
+tileset_city=місто
+tileset_desert_temple=пустельний храм
+tileset_desert_temple2=стародавній пустельний храм
+tileset_glass=скло
+tileset_meadow=луг
+tileset_explosive=вибуховий
+tileset_alien=інопланетний
+tileset_oasis=оазис
+tileset_explosive_forest=вибуховий ліс
+tileset_explosive_desert=вибухова пустеля

@@ -1,0 +1,11 @@
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\ckAccess.csproj.AssemblyReference.cache
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\MyPluginInfo.cs
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\ckAccess.GeneratedMSBuildEditorConfig.editorconfig
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\ckAccess.AssemblyInfoInputs.cache
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\ckAccess.AssemblyInfo.cs
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\ckAccess.csproj.CoreCompileInputs.cache
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\ckAccess.sourcelink.json
+D:\code\unity and such\Core Keeper Access\ckAccess\bin\Release\net472\ckAccess.dll
+D:\code\unity and such\Core Keeper Access\ckAccess\bin\Release\net472\ckAccess.pdb
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\ckAccess.dll
+D:\code\unity and such\Core Keeper Access\ckAccess\obj\Release\net472\ckAccess.pdb

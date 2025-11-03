@@ -3,6 +3,7 @@ extern alias Core;
 extern alias PugComps;
 using HarmonyLib;
 using ckAccess.Patches.UI;
+using ckAccess.Helpers;
 using PugTilemap;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,7 @@ namespace ckAccess.Patches.Player
 
         /// <summary>
         /// Parche en PlayerController.ManagedUpdate para detectar enemigos cercanos
+        /// MULTIPLAYER-SAFE: Solo procesa el jugador local
         /// </summary>
         [HarmonyPatch(typeof(PugOther.PlayerController), "ManagedUpdate")]
         [HarmonyPostfix]
@@ -76,6 +78,10 @@ namespace ckAccess.Patches.Player
             try
             {
                 if (!_systemEnabled || _enemyProximityClip == null) return;
+
+                // MULTIPLAYER: Solo procesar si este es el jugador local
+                if (!LocalPlayerHelper.IsLocalPlayer(__instance))
+                    return;
 
                 _frameCounter++;
                 if (_frameCounter < FRAMES_BETWEEN_UPDATES) return;
@@ -366,13 +372,14 @@ namespace ckAccess.Patches.Player
         /// <summary>
         /// Reproduce sonido de proximidad para un enemigo
         /// REDISEÑADO: Paneo estéreo manual 2D para juegos top-down
+        /// MULTIPLAYER-SAFE: Usa el jugador local para cálculos
         /// </summary>
         private static void PlayProximitySound(Vector3 position, float distance, string enemyType)
         {
             if (_enemyProximityClip == null) return;
 
-            // Obtener posición del jugador
-            var player = PugOther.Manager.main?.player;
+            // Obtener posición del jugador LOCAL
+            var player = LocalPlayerHelper.GetLocalPlayer();
             if (player == null) return;
 
             if (!TryGetPlayerPosition(player, out Vector3 playerPos))
@@ -431,13 +438,14 @@ namespace ckAccess.Patches.Player
         /// <summary>
         /// Reproduce sonido de movimiento de enemigo
         /// REDISEÑADO: Paneo estéreo manual 2D para juegos top-down
+        /// MULTIPLAYER-SAFE: Usa el jugador local para cálculos
         /// </summary>
         private static void PlayEnemyMovementSound(Vector3 position, float distance, string enemyType)
         {
             if (_enemyMovementClip == null) return;
 
-            // Obtener posición del jugador
-            var player = PugOther.Manager.main?.player;
+            // Obtener posición del jugador LOCAL
+            var player = LocalPlayerHelper.GetLocalPlayer();
             if (player == null) return;
 
             if (!TryGetPlayerPosition(player, out Vector3 playerPos))

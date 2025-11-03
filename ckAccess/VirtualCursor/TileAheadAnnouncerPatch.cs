@@ -4,6 +4,7 @@ extern alias Core;
 using HarmonyLib;
 using DavyKager;
 using ckAccess.MapReader;
+using ckAccess.Helpers;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -33,6 +34,7 @@ namespace ckAccess.VirtualCursor
 
         /// <summary>
         /// Parche en PlayerController.ManagedUpdate para detectar movimiento
+        /// MULTIPLAYER-SAFE: Solo procesa el jugador local
         /// </summary>
         [HarmonyPatch(typeof(PugOther.PlayerController), "ManagedUpdate")]
         [HarmonyPostfix]
@@ -40,6 +42,10 @@ namespace ckAccess.VirtualCursor
         {
             try
             {
+                // MULTIPLAYER: Solo procesar si este es el jugador local
+                if (!LocalPlayerHelper.IsLocalPlayer(__instance))
+                    return;
+
                 // NO anunciar tiles si hay algún menú/UI abierto
                 if (IsAnyMenuOpen())
                     return;
@@ -48,7 +54,7 @@ namespace ckAccess.VirtualCursor
                 if (Time.time - _lastAnnounceTime < MIN_ANNOUNCE_INTERVAL)
                     return;
 
-                // Obtener posición actual del jugador
+                // Obtener posición actual del jugador local
                 if (!TryGetPlayerPosition(__instance, out Vector3 playerPos))
                     return;
 

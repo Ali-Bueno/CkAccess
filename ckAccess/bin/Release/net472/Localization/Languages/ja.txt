@@ -1,0 +1,368 @@
+# Core Keeper Accessibility Modの日本語ローカライズファイル
+# フォーマット: キー=値
+# #で始まる行はコメントです
+
+# 仮想カーソルのメッセージ
+virtual_cursor_initialized=仮想カーソルが初期化されました
+cursor_initialization_error=カーソル初期化エラー
+cursor_reset=カーソルをリセット: x={0}, z={1}
+cursor_reset_error=カーソルリセットエラー
+limit_reached=上限に達しました
+cursor_limit_reached=Cursor limit reached
+primary_action_error=主アクション エラー: {0}
+placing_at_position=位置 x={0}, z={1} に配置中
+item_placed_at_position={0} を位置 x={1}, z={2} に配置しました
+secondary_action_error=副アクション エラー: {0}
+interaction_error=相互作用エラー: {0}
+cursor_not_initialized=カーソルが初期化されていません
+current_position=現在位置: x={0}, z={1}
+position_reading_error=プレイヤー位置の読み込みエラー
+
+# UI ナビゲーションのメッセージ
+no_tabs_available=利用可能なタブがありません
+no_more_tabs=利用可能なタブがこれ以上ありません
+tab_equipment=タブ: 装備
+tab_skills=タブ: スキル
+tab_souls=タブ: ソウル
+tab_number=タブ {0}
+navigation_error=タブナビゲーション エラー: {0}
+selection_error=オブジェクト選択エラー: {0}
+empty_slot=空きスロット
+slot_selection_error=スロット選択エラー: {0}
+skill_error=スキルを開くエラー: {0}
+click_simulation_error=クリックシミュレーション エラー: {0}
+no_element_selected=要素が選択されていません
+no_element_selected_secondary=副アクション用に要素が選択されていません
+secondary_action_error_ui=副アクション エラー: {0}
+empty_slot_no_action=空きスロット、利用可能なアクションはありません
+secondary_action_performed=副アクションが実行されました
+secondary_slot_error=スロット副アクション エラー: {0}
+right_click_simulation_error=右クリックシミュレーション エラー: {0}
+talent_action=タレント アクション: {0}
+talent_selected=タレントが選択されました
+talent_selection_error=タレント選択エラー: {0}
+skills=スキル
+preset_selection_error=プリセット選択エラー: {0}
+preset_selected=プリセットが選択されました: {0}
+equipment_preset_selected=装備プリセットが選択されました
+equipment_preset_selected_generic=装備プリセット {0} が選択されました
+equipment_preset_error=装備プリセット エラー: {0}
+equipment_preset_not_found=装備プリセットが見つかりません
+stats_window_toggled=統計情報ウィンドウが切り替えられました
+stats=統計情報
+stats_button_activated=統計情報ボタンが有効化されました
+stats_error=統計情報を開くエラー: {0}
+selected_item=選択済み: {0}
+
+# スキルとタレントのメッセージ
+talent_tree_opened=タレントツリーが開かれました: {0}
+talent_tree_opened_generic=タレントツリーが開かれました
+talent_tree_closed=タレントツリーが閉じられました
+talent=タレント
+
+# スキル名
+skill_mining=採掘
+skill_running=走行
+skill_melee=近距離格闘
+skill_vitality=生命力
+skill_crafting=クラフティング
+skill_range=遠距離格闘
+skill_gardening=園芸
+skill_fishing=釣り
+skill_cooking=料理
+skill_magic=魔法
+skill_summoning=召喚
+skill_explosives=爆発物
+
+# ワールドリーダーのメッセージ
+empty=空
+reading_error=読み込みエラー
+the_core=ザ・コア (相互作用可能)
+work_station={0} (作業ステーション)
+enemy={0} (敵)
+object={0} (オブジェクト)
+plant={0} (植物)
+resource={0} (リソース)
+entity={0} (エンティティ)
+destructible_tool={0} 破壊可能 ({1}を使用)
+destructible_material_tool={0}の{1} 破壊可能 ({2}を使用)
+blocking={0} (ブロック中)
+blocking_material={0}の{1} (ブロック中)
+dangerous={0} (危険)
+dangerous_material={0}の{1} (危険)
+area_not_available=エリアは利用できません
+unknown_position=位置不明
+unknown=不明
+player_position_error=プレイヤー位置を取得できませんでした
+cannot_read_player_position=プレイヤー位置が読み込めません
+position_reading_error_generic=位置読み込みエラー
+empty_area_around=周囲は空です
+area_scan_error=エリアスキャン エラー
+
+# クラフティング (作業台) のメッセージ
+recipe=レシピ: {0}
+recipe_with_amount=レシピ: {0} x{1}
+can_craft=作成できます
+cannot_craft=作成できません
+required_materials=必要な材料
+missing_material={0}: 不足 {1}
+available_material={0}: 所持 {1}
+and_more_materials=その他の材料
+invalid_recipe=無効なレシピ
+cannot_craft_materials=作成できません: 材料が不足しています
+inventory_full=インベントリが満杯です
+crafted_item={0} を作成しました
+crafting_error=クラフティング エラー
+
+# 直接アクションのメッセージ
+empty_slot_cannot_equip=空きスロット、装備できません
+item_not_equippable={0} は装備できません
+equipment_window_not_open=装備ウィンドウが開いていません
+item_equipped={0} が装備されました
+item_cannot_equip={0} を装備できません
+equip_error=装備エラー
+empty_slot_cannot_use=空きスロット、使用できません
+item_not_usable={0} は使用できません
+item_used={0} を使用しました
+item_cannot_use={0} を使用できません
+item_placed={0} を配置しました
+item_action_performed={0} でアクションが実行されました
+use_error=使用エラー
+no_crafting_available=利用可能なクラフティングはありません
+crafting_station_available=クラフティングステーションが利用可能です。インベントリのレシピを使用してください
+select_recipe_item=レシピアイテムを選択してください
+recipe_item_detected=レシピが検出されました: {0}
+not_a_recipe=このアイテムはレシピではありません
+craft_error=クラフティング エラー
+
+# ホットバーのメッセージ
+hotbar_changed=ホットバー {0} が選択されました
+no_weapon_equipped=装備された武器がありません
+empty_hotbar_slot=ホットバースロットが空です
+unknown=不明
+current_hotbar_item=ホットバー {0}、スロット {1}: {2}
+hotbar_error=ホットバー エラー
+durability_critical=耐久度は危機的 {0}%
+durability_low=耐久度は低い {0}%
+durability_normal=耐久度 {0}%
+durability_full=耐久度は完全です
+hotbar_info_available=ホットバー情報が利用可能です
+hotbar_slot_selected=スロット {0} が選択されました
+
+# オブジェクトの状態
+equipped=, 装備済み
+
+# UI要素
+stats_button=統計情報ボタン: {0}
+equipment_preset=装備プリセット: {0}
+crafting_button=クラフティングボタン: {0}
+organize_button=整理ボタン: {0}
+quick_action_button=クイックアクションボタン: {0}
+button=ボタン: {0}
+tab=タブ: {0}
+preset=プリセット: {0}
+statistics=統計情報: {0}
+bag=バッグ: {0}
+shortcut=ショートカット: {0}
+element=要素: {0}
+
+# ポップアップメッセージ
+hold_to_confirm=確認するには押し続けてください
+
+# メニューオプション
+more_options=その他のオプション
+
+# タイルの種類
+tile_none=空
+tile_ground=地面
+tile_wall=壁
+tile_water=水
+tile_pit=穴
+tile_bridge=橋
+tile_floor=構築された床
+tile_roof_hole=屋根の穴
+tile_thin_wall=薄い壁
+tile_dug_up_ground=掘り起こされた地面
+tile_watered_ground=水が注がれた地面
+tile_circuit_plate=回路プレート
+tile_ancient_circuit_plate=古い回路プレート
+tile_fence=フェンス
+tile_rug=ラグ
+tile_small_stones=小さな石
+tile_small_grass=小さな草
+tile_wall_grass=壁の草
+tile_debris=瓦礫
+tile_floor_crack=床の亀裂
+tile_rail=レール
+tile_great_wall=大きな壁
+tile_lit_floor=照らされた床
+tile_debris2=瓦礫
+tile_loose_flooring=ぐらぐらした床
+tile_immune=免疫ゾーン
+tile_wall_crack=壁の亀裂
+tile_ore=鉱石鉱脈
+tile_big_root=大きな根
+tile_ground_slime=スライムの跡
+tile_ancient_crystal=古い結晶
+tile_chrysalis=蛹
+
+# タイルのカテゴリー
+category_construction=建設
+category_liquid=液体
+category_mineral=鉱物
+category_organic=有機物
+category_stone=石
+category_crystal=結晶
+category_unknown=不明
+
+# タイルの材料カテゴリー
+material_earth=土
+material_stone=石
+material_mineral=鉱物
+material_liquid=液体
+material_construction=建設
+material_crystal=結晶
+material_organic=有機物
+material_unknown=不明
+
+# 足音
+sound_earth=土
+sound_stone=石
+sound_metal=金属
+sound_splash=水しぶき
+sound_wood=木
+sound_gravel=砂利
+sound_textile=布地
+sound_neutral=ニュートラル
+
+# ツール
+tool_pickaxe=つるはし
+tool_high_quality_pickaxe=高品質つるはし
+tool_axe=斧
+tool_shovel=シャベル
+tool_pickaxe_or_shovel=つるはしまたはシャベル
+tool_none=なし
+
+# タイルセットの材料
+tileset_dirt=土
+tileset_stone=石
+tileset_obsidian=黒曜石
+tileset_lava=溶岩
+tileset_nature=自然
+tileset_mold=カビ
+tileset_sea=海
+tileset_sand=砂
+tileset_desert=砂漠
+tileset_snow=雪
+tileset_crystal=結晶
+tileset_dark_stone=暗い石
+
+# タイルの説明
+tile_with_material={1}の{0}
+
+# インベントリのメッセージ
+inventory_opened=インベントリが開かれました
+inventory_closed=インベントリが閉じられました
+character_window_opened=キャラクターウィンドウが開かれました
+character_window_closed=キャラクターウィンドウが閉じられました
+# 通知システムのメッセージ
+item_picked_single=回収: {0}
+item_picked_multiple=回収: {0} x{1}
+level_up=レベル {0} に上がりました!
+skill_up={0} はレベル {1} に上がりました
+
+# オートターゲティングのメッセージ
+enemy_in_range={0} は範囲内です
+enemy_out_of_range={0} は範囲外です
+enemy_at_distance={0} {1}、{2} タイル
+enemy_unknown=不明な敵
+enemy_generic=敵
+
+# 方向
+dir_east=東
+dir_northeast=北東
+dir_north=北
+dir_northwest=北西
+dir_west=西
+dir_southwest=南西
+dir_south=南
+dir_southeast=南東
+
+# 敵の名前
+enemy_slime=スライム
+enemy_spider=クモ
+enemy_skeleton=スケルトン
+enemy_goblin=ゴブリン
+enemy_orc=オーク
+enemy_zombie=ゾンビ
+enemy_demon=デーモン
+enemy_beast=獣
+enemy_larva=幼虫
+enemy_grub=幼虫
+enemy_worm=ワーム
+enemy_fly=ハエ
+enemy_bat=コウモリ
+enemy_rat=ラット
+enemy_boss=ボス
+
+# 通知システムのメッセージ
+no_notifications=通知はありません
+first_notification=最初の通知
+last_notification=最後の通知
+
+# オブジェクトカテゴリー説明
+category_core=コア
+category_chest=チェスト
+category_workstation=作業ステーション
+category_enemy=敵
+category_pickup=回収可能なオブジェクト
+category_plant=植物
+category_resource=リソース
+category_decoration=装飾
+category_furniture=家具
+category_animal=動物
+category_critter=生物
+category_structure=構造
+category_door=ドア
+category_statue=像
+category_unknown=不明なオブジェクト
+
+# エンティティタイプのプリフィックス
+prefix_animal=動物
+prefix_creature=生物
+prefix_statue=像
+prefix_furniture=家具
+prefix_structure=構造
+
+# 追加のタイルセット名
+tileset_extras=エクストラ
+tileset_base_building_wood=木製建設
+tileset_larva_hive=幼虫の巣
+tileset_base_building_stone=石造建設
+tileset_clay=粘土
+tileset_turf=芝生
+tileset_base_building_unpainted=未塗装建設
+tileset_base_building_yellow=黄色建設
+tileset_base_building_green=緑色建設
+tileset_base_building_red=赤色建設
+tileset_base_building_purple=紫色建設
+tileset_base_building_blue=青色建設
+tileset_base_building_brown=茶色建設
+tileset_base_building_white=白色建設
+tileset_base_building_black=黒色建設
+tileset_base_building_scarlet=深紅色建設
+tileset_base_building_coral=サンゴ色建設
+tileset_base_building_galaxite=銀河石建設
+tileset_base_building_metal=金属建設
+tileset_base_building_valentine=バレンタイン建設
+tileset_base_building_easter=イースター建設
+tileset_city=都市
+tileset_desert_temple=砂漠の寺院
+tileset_desert_temple2=古い砂漠の寺院
+tileset_glass=ガラス
+tileset_meadow=牧草地
+tileset_explosive=爆発物
+tileset_alien=エイリアン
+tileset_oasis=オアシス
+tileset_explosive_forest=爆発的な森
+tileset_explosive_desert=爆発的な砂漠

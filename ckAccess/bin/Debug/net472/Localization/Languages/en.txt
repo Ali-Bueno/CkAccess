@@ -379,3 +379,36 @@ intro_skip_message=Hold space to skip the intro
 
 # Tutorial Buffer
 no_tutorials=No tutorials in buffer
+session_id=Session ID
+
+# Drop/Throw system
+cannot_drop_this=Cannot drop this element
+drop_error=Drop error: {0}
+player_not_found=Player not found
+cannot_drop_from_this_inventory=Cannot drop from this inventory
+dropped_all=Dropped {0} x{1}
+dropped_one=Dropped {0}
+drop_item_error=Error dropping item: {0}
+
+# Improved inventory accessibility
+slot_selected={0} selected
+slot_selected_with_amount={0} x{1} selected
+empty_slot_with_held_item=Empty slot. Holding {0}
+actions_with_held_item=Press U to place, O to place half
+actions_transfer_or_drop=Shift+U to transfer to {0}, Q to drop
+actions_take_or_move=U to take, Shift+U to move to inventory
+actions_normal=U to grab, O to grab half, Q to drop
+chest=chest
+crafting_station=crafting station
+item_transferred_to=Transferred to {0}
+item_taken_from=Taken from {0}
+item_placed={0} placed
+item_grabbed={0} grabbed
+
+# Inventory Section Names
+section_player_inventory=Player inventory
+section_chest_inventory=Chest inventory
+section_crafting_inventory=Crafting inventory
+section_equipment=Equipment
+section_pouch=Pouch
+section_unknown=Unknown section

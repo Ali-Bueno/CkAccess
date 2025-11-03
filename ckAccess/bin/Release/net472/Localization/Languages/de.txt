@@ -1,0 +1,369 @@
+# Deutsche Lokalisierungsdatei für Core Keeper Accessibility Mod
+# Format: schlüssel=wert
+# Zeilen, die mit # beginnen, sind Kommentare
+
+# Virtuelle Cursor-Nachrichten
+virtual_cursor_initialized=Virtueller Cursor initialisiert
+cursor_initialization_error=Fehler beim Initialisieren des Cursors
+cursor_reset=Cursor zurückgesetzt: x={0}, z={1}
+cursor_reset_error=Fehler beim Zurücksetzen des Cursors
+limit_reached=Grenze erreicht
+cursor_limit_reached=Cursor limit reached
+primary_action_error=Fehler bei primärer Aktion: {0}
+placing_at_position=Platzierung an Position x={0}, z={1}
+item_placed_at_position={0} platziert an Position x={1}, z={2}
+secondary_action_error=Fehler bei sekundärer Aktion: {0}
+interaction_error=Fehler bei Interaktion: {0}
+cursor_not_initialized=Cursor nicht initialisiert
+current_position=Aktuelle Position: x={0}, z={1}
+position_reading_error=Fehler beim Lesen der Spielerposition
+
+# UI-Navigationsnachrichten
+no_tabs_available=Keine Tabs verfügbar
+no_more_tabs=Keine weiteren Tabs verfügbar
+tab_equipment=Tab: Ausrüstung
+tab_skills=Tab: Fähigkeiten
+tab_souls=Tab: Seelen
+tab_number=Tab {0}
+navigation_error=Fehler beim Navigieren der Tabs: {0}
+selection_error=Fehler beim Auswählen des Objekts: {0}
+empty_slot=Leerer Slot
+slot_selection_error=Fehler bei Slot-Auswahl: {0}
+skill_error=Fehler beim Öffnen der Fähigkeit: {0}
+click_simulation_error=Fehler beim Simulieren des Klicks: {0}
+no_element_selected=Kein Element ausgewählt
+no_element_selected_secondary=Kein Element für sekundäre Aktion ausgewählt
+secondary_action_error_ui=Fehler bei sekundärer Aktion: {0}
+empty_slot_no_action=Leerer Slot, keine Aktion verfügbar
+secondary_action_performed=Sekundäre Aktion ausgeführt
+secondary_slot_error=Fehler bei sekundärer Slot-Aktion: {0}
+right_click_simulation_error=Fehler beim Simulieren des Rechtsklicks: {0}
+talent_action=Aktion bei Talent: {0}
+talent_selected=Talent ausgewählt
+talent_selection_error=Fehler beim Auswählen des Talents: {0}
+skills=Fähigkeiten
+preset_selection_error=Fehler beim Auswählen der Voreinstellung: {0}
+preset_selected=Voreinstellung ausgewählt: {0}
+equipment_preset_selected=Ausrüstungsvoreinstellung ausgewählt
+equipment_preset_selected_generic=Ausrüstungsvoreinstellung {0} ausgewählt
+equipment_preset_error=Fehler mit Ausrüstungsvoreinstellung: {0}
+equipment_preset_not_found=Ausrüstungsvoreinstellung nicht gefunden
+stats_window_toggled=Statistikfenster umgeschaltet
+stats=Statistiken
+stats_button_activated=Statistik-Button aktiviert
+stats_error=Fehler beim Öffnen der Statistiken: {0}
+selected_item=Ausgewählt: {0}
+
+# Fähigkeiten- und Talent-Nachrichten
+talent_tree_opened=Talentbaum geöffnet: {0}
+talent_tree_opened_generic=Talentbaum geöffnet
+talent_tree_closed=Talentbaum geschlossen
+talent=Talent
+
+# Fähigkeitsnamen
+skill_mining=Bergbau
+skill_running=Laufen
+skill_melee=Nahkampf
+skill_vitality=Vitalität
+skill_crafting=Handwerk
+skill_range=Fernkampf
+skill_gardening=Gartenbau
+skill_fishing=Angeln
+skill_cooking=Kochen
+skill_magic=Magie
+skill_summoning=Beschwörung
+skill_explosives=Sprengstoff
+
+# Weltleser-Nachrichten
+empty=Leer
+reading_error=Lesefehler
+the_core=Der Kern (interagierbar)
+work_station={0} (Werkbank)
+enemy={0} (Feind)
+object={0} (Objekt)
+plant={0} (Pflanze)
+resource={0} (Ressource)
+entity={0} (Entität)
+destructible_tool={0} zerstörbar (verwende {1})
+destructible_material_tool={0} aus {1} zerstörbar (verwende {2})
+blocking={0} (blockierend)
+blocking_material={0} aus {1} (blockierend)
+dangerous={0} (gefährlich)
+dangerous_material={0} aus {1} (gefährlich)
+area_not_available=Bereich nicht verfügbar
+unknown_position=Unbekannte Position
+unknown=Unbekannt
+player_position_error=Spielerposition konnte nicht ermittelt werden
+cannot_read_player_position=Spielerposition kann nicht gelesen werden
+position_reading_error_generic=Fehler beim Lesen der Position
+empty_area_around=Leerer Bereich rundherum
+area_scan_error=Fehler beim Scannen des Bereichs
+
+# Crafting-Nachrichten (Werkbank)
+recipe=Rezept: {0}
+recipe_with_amount=Rezept: {0} x{1}
+can_craft=Kann hergestellt werden
+cannot_craft=Kann nicht hergestellt werden
+required_materials=Benötigte Materialien
+missing_material={0}: fehlen {1}
+available_material={0}: vorhanden {1}
+and_more_materials=und weitere Materialien
+invalid_recipe=Ungültiges Rezept
+cannot_craft_materials=Kann nicht hergestellt werden: Materialien fehlen
+inventory_full=Inventar voll
+crafted_item={0} hergestellt
+crafting_error=Fehler beim Herstellen
+
+# Direkte Aktionen-Nachrichten
+empty_slot_cannot_equip=Leerer Slot, kann nicht ausgerüstet werden
+item_not_equippable={0} kann nicht ausgerüstet werden
+equipment_window_not_open=Ausrüstungsfenster ist nicht geöffnet
+item_equipped={0} ausgerüstet
+item_cannot_equip=Kann {0} nicht ausrüsten
+equip_error=Fehler beim Ausrüsten
+empty_slot_cannot_use=Leerer Slot, kann nicht verwendet werden
+item_not_usable={0} kann nicht verwendet werden
+item_used={0} verwendet
+item_cannot_use=Kann {0} nicht verwenden
+item_placed={0} platziert
+item_action_performed=Aktion ausgeführt bei {0}
+use_error=Fehler beim Verwenden
+no_crafting_available=Kein Crafting verfügbar
+crafting_station_available=Crafting-Station verfügbar, verwende Inventarrezepte
+select_recipe_item=Wähle ein Rezept-Item
+recipe_item_detected=Rezept erkannt: {0}
+not_a_recipe=Dieses Item ist kein Rezept
+craft_error=Fehler beim Craften
+
+# Hotbar-Nachrichten
+hotbar_changed=Hotbar {0} ausgewählt
+no_weapon_equipped=Keine Waffe ausgerüstet
+empty_hotbar_slot=Leerer Hotbar-Slot
+unknown=Unbekannt
+current_hotbar_item=Hotbar {0}, Slot {1}: {2}
+hotbar_error=Hotbar-Fehler
+durability_critical=kritische Haltbarkeit {0}%
+durability_low=niedrige Haltbarkeit {0}%
+durability_normal=Haltbarkeit {0}%
+durability_full=volle Haltbarkeit
+hotbar_info_available=Hotbar-Information verfügbar
+hotbar_slot_selected=Slot {0} ausgewählt
+
+# Objektstatus
+equipped=, ausgerüstet
+
+# UI-Elemente
+stats_button=Statistik-Button: {0}
+equipment_preset=Ausrüstungsvoreinstellung: {0}
+crafting_button=Crafting-Button: {0}
+organize_button=Organisieren-Button: {0}
+quick_action_button=Schnellaktion-Button: {0}
+button=Button: {0}
+tab=Tab: {0}
+preset=Voreinstellung: {0}
+statistics=Statistiken: {0}
+bag=Tasche: {0}
+shortcut=Tastenkürzel: {0}
+element=Element: {0}
+
+# Pop-up-Nachrichten
+hold_to_confirm=halten zum Bestätigen
+
+# Menüoptionen
+more_options=Weitere Optionen
+
+# Kacheltypen
+tile_none=Leer
+tile_ground=Boden
+tile_wall=Wand
+tile_water=Wasser
+tile_pit=Grube
+tile_bridge=Brücke
+tile_floor=Gebauter Boden
+tile_roof_hole=Dachloch
+tile_thin_wall=Dünne Wand
+tile_dug_up_ground=Aufgegrabener Boden
+tile_watered_ground=Bewässerter Boden
+tile_circuit_plate=Schaltungsplatte
+tile_ancient_circuit_plate=Alte Schaltungsplatte
+tile_fence=Zaun
+tile_rug=Teppich
+tile_small_stones=Kleine Steine
+tile_small_grass=Kleines Gras
+tile_wall_grass=Wandgras
+tile_debris=Schutt
+tile_floor_crack=Bodenriss
+tile_rail=Schiene
+tile_great_wall=Große Mauer
+tile_lit_floor=Beleuchteter Boden
+tile_debris2=Schutt
+tile_loose_flooring=Lockerer Bodenbelag
+tile_immune=Immune Zone
+tile_wall_crack=Wandriss
+tile_ore=Erzader
+tile_big_root=Große Wurzel
+tile_ground_slime=Schleimspur
+tile_ancient_crystal=Alter Kristall
+tile_chrysalis=Chrysalis
+
+# Kachelkategorien
+category_construction=Konstruktion
+category_liquid=Flüssigkeit
+category_mineral=Mineral
+category_organic=Organisch
+category_stone=Stein
+category_crystal=Kristall
+category_unknown=Unbekannt
+
+# Kachelmaterialkategorien
+material_earth=Erde
+material_stone=Stein
+material_mineral=Mineral
+material_liquid=Flüssigkeit
+material_construction=Konstruktion
+material_crystal=Kristall
+material_organic=Organisch
+material_unknown=Unbekannt
+
+# Schrittgeräusche
+sound_earth=Erde
+sound_stone=Stein
+sound_metal=Metall
+sound_splash=Platschen
+sound_wood=Holz
+sound_gravel=Kies
+sound_textile=Textil
+sound_neutral=Neutral
+
+# Werkzeuge
+tool_pickaxe=Spitzhacke
+tool_high_quality_pickaxe=Hochwertige Spitzhacke
+tool_axe=Axt
+tool_shovel=Schaufel
+tool_pickaxe_or_shovel=Spitzhacke oder Schaufel
+tool_none=Keine
+
+# Tileset-Materialien
+tileset_dirt=Erde
+tileset_stone=Stein
+tileset_obsidian=Obsidian
+tileset_lava=Lava
+tileset_nature=Natur
+tileset_mold=Schimmel
+tileset_sea=Meer
+tileset_sand=Sand
+tileset_desert=Wüste
+tileset_snow=Schnee
+tileset_crystal=Kristall
+tileset_dark_stone=Dunkler Stein
+
+# Kachelbeschreibungen
+tile_with_material={0} aus {1}
+
+# Inventar-Nachrichten
+inventory_opened=Inventar geöffnet
+inventory_closed=Inventar geschlossen
+character_window_opened=Charakterfenster geöffnet
+character_window_closed=Charakterfenster geschlossen
+
+# Benachrichtigungssystem-Nachrichten
+item_picked_single=Aufgehoben: {0}
+item_picked_multiple=Aufgehoben: {0} x{1}
+level_up=Aufgestiegen auf Level {0}!
+skill_up={0} auf Level {1} erhöht
+
+# Auto-Targeting-Nachrichten
+enemy_in_range={0} in Reichweite
+enemy_out_of_range={0} außer Reichweite
+enemy_at_distance={0} {1}, {2} Kacheln
+enemy_unknown=Unbekannter Feind
+enemy_generic=Feind
+
+# Richtungen
+dir_east=nach Osten
+dir_northeast=nach Nordosten
+dir_north=nach Norden
+dir_northwest=nach Nordwesten
+dir_west=nach Westen
+dir_southwest=nach Südwesten
+dir_south=nach Süden
+dir_southeast=nach Südosten
+
+# Feindenamen
+enemy_slime=Schleim
+enemy_spider=Spinne
+enemy_skeleton=Skelett
+enemy_goblin=Goblin
+enemy_orc=Ork
+enemy_zombie=Zombie
+enemy_demon=Dämon
+enemy_beast=Bestie
+enemy_larva=Larve
+enemy_grub=Made
+enemy_worm=Wurm
+enemy_fly=Fliege
+enemy_bat=Fledermaus
+enemy_rat=Ratte
+enemy_boss=Boss
+
+# Benachrichtigungssystem-Nachrichten
+no_notifications=Keine Benachrichtigungen
+first_notification=Erste Benachrichtigung
+last_notification=Letzte Benachrichtigung
+
+# Objektkategorie-Beschreibungen
+category_core=Kern
+category_chest=Truhe
+category_workstation=Werkbank
+category_enemy=Feind
+category_pickup=Sammelbares Objekt
+category_plant=Pflanze
+category_resource=Ressource
+category_decoration=Dekoration
+category_furniture=Möbel
+category_animal=Tier
+category_critter=Kreatur
+category_structure=Struktur
+category_door=Tür
+category_statue=Statue
+category_unknown=Unbekanntes Objekt
+
+# Entitätstyp-Präfixe
+prefix_animal=Tier
+prefix_creature=Kreatur
+prefix_statue=Statue
+prefix_furniture=Möbel
+prefix_structure=Struktur
+
+# Zusätzliche Tileset-Namen
+tileset_extras=Extras
+tileset_base_building_wood=Holzgebäude
+tileset_larva_hive=Larvenstock
+tileset_base_building_stone=Steingebäude
+tileset_clay=Lehm
+tileset_turf=Rasen
+tileset_base_building_unpainted=Ungestrichenes Gebäude
+tileset_base_building_yellow=Gelbes Gebäude
+tileset_base_building_green=Grünes Gebäude
+tileset_base_building_red=Rotes Gebäude
+tileset_base_building_purple=Lila Gebäude
+tileset_base_building_blue=Blaues Gebäude
+tileset_base_building_brown=Braunes Gebäude
+tileset_base_building_white=Weißes Gebäude
+tileset_base_building_black=Schwarzes Gebäude
+tileset_base_building_scarlet=Scharlachrotes Gebäude
+tileset_base_building_coral=Korallengebäude
+tileset_base_building_galaxite=Galaxit-Gebäude
+tileset_base_building_metal=Metallgebäude
+tileset_base_building_valentine=Valentinstag-Gebäude
+tileset_base_building_easter=Oster-Gebäude
+tileset_city=Stadt
+tileset_desert_temple=Wüstentempel
+tileset_desert_temple2=Alter Wüstentempel
+tileset_glass=Glas
+tileset_meadow=Wiese
+tileset_explosive=Explosiv
+tileset_alien=Außerirdisch
+tileset_oasis=Oase
+tileset_explosive_forest=Explosiver Wald
+tileset_explosive_desert=Explosive Wüste

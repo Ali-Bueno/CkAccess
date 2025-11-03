@@ -1,0 +1,368 @@
+# ملف الترجمة العربية لـ Core Keeper Accessibility Mod
+# التنسيق: مفتاح=قيمة
+# الأسطر التي تبدأ بـ # هي تعليقات
+
+# رسائل المؤشر الافتراضي
+virtual_cursor_initialized=تم تهيئة المؤشر الافتراضي
+cursor_initialization_error=خطأ في تهيئة المؤشر
+cursor_reset=تمت إعادة تعيين المؤشر: x={0}, z={1}
+cursor_reset_error=خطأ في إعادة تعيين المؤشر
+limit_reached=تم الوصول إلى الحد
+cursor_limit_reached=Cursor limit reached
+primary_action_error=خطأ في الإجراء الأساسي: {0}
+placing_at_position=الوضع في الموضع x={0}, z={1}
+item_placed_at_position={0} تم وضعه في الموضع x={1}, z={2}
+secondary_action_error=خطأ في الإجراء الثانوي: {0}
+interaction_error=خطأ في التفاعل: {0}
+cursor_not_initialized=المؤشر غير مهيأ
+current_position=الموضع الحالي: x={0}, z={1}
+position_reading_error=خطأ في قراءة موضع اللاعب
+
+# رسائل التنقل في واجهة المستخدم
+no_tabs_available=لا توجد علامات تبويب متاحة
+no_more_tabs=لا توجد المزيد من علامات التبويب المتاحة
+tab_equipment=علامة التبويب: المعدات
+tab_skills=علامة التبويب: المهارات
+tab_souls=علامة التبويب: الأرواح
+tab_number=علامة التبويب {0}
+navigation_error=خطأ في التنقل بين علامات التبويب: {0}
+selection_error=خطأ في اختيار الكائن: {0}
+empty_slot=فتحة فارغة
+slot_selection_error=خطأ في اختيار الفتحة: {0}
+skill_error=خطأ في فتح المهارة: {0}
+click_simulation_error=خطأ في محاكاة النقر: {0}
+no_element_selected=لم يتم تحديد أي عنصر
+no_element_selected_secondary=لم يتم تحديد أي عنصر للإجراء الثانوي
+secondary_action_error_ui=خطأ في الإجراء الثانوي: {0}
+empty_slot_no_action=فتحة فارغة، لا يوجد إجراء متاح
+secondary_action_performed=تم تنفيذ الإجراء الثانوي
+secondary_slot_error=خطأ في الإجراء الثانوي للفتحة: {0}
+right_click_simulation_error=خطأ في محاكاة النقر بالزر الأيمن: {0}
+talent_action=إجراء على الموهبة: {0}
+talent_selected=تم تحديد الموهبة
+talent_selection_error=خطأ في تحديد الموهبة: {0}
+skills=المهارات
+preset_selection_error=خطأ في تحديد الإعداد المسبق: {0}
+preset_selected=تم تحديد الإعداد المسبق: {0}
+equipment_preset_selected=تم تحديد إعداد المعدات المسبق
+equipment_preset_selected_generic=تم تحديد إعداد المعدات المسبق {0}
+equipment_preset_error=خطأ في إعداد المعدات المسبق: {0}
+equipment_preset_not_found=لم يتم العثور على إعداد المعدات المسبق
+stats_window_toggled=تم تبديل نافذة الإحصائيات
+stats=الإحصائيات
+stats_button_activated=تم تفعيل زر الإحصائيات
+stats_error=خطأ في فتح الإحصائيات: {0}
+selected_item=محدد: {0}
+
+# رسائل المهارات والمواهب
+talent_tree_opened=تم فتح شجرة المواهب: {0}
+talent_tree_opened_generic=تم فتح شجرة المواهب
+talent_tree_closed=تم إغلاق شجرة المواهب
+talent=الموهبة
+
+# أسماء المهارات
+skill_mining=التعدين
+skill_running=الجري
+skill_melee=القتال المتلاحم
+skill_vitality=الحيوية
+skill_crafting=التصنيع
+skill_range=القتال عن بعد
+skill_gardening=البستنة
+skill_fishing=صيد السمك
+skill_cooking=الطبخ
+skill_magic=السحر
+skill_summoning=الاستدعاء
+skill_explosives=المتفجرات
+
+# رسائل قارئ العالم
+empty=فارغ
+reading_error=خطأ في القراءة
+the_core=النواة (قابل للتفاعل)
+work_station={0} (محطة عمل)
+enemy={0} (عدو)
+object={0} (كائن)
+plant={0} (نبات)
+resource={0} (مورد)
+entity={0} (كيان)
+destructible_tool={0} قابل للتدمير (استخدم {1})
+destructible_material_tool={0} من {1} قابل للتدمير (استخدم {2})
+blocking={0} (حاجز)
+blocking_material={0} من {1} (حاجز)
+dangerous={0} (خطر)
+dangerous_material={0} من {1} (خطر)
+area_not_available=المنطقة غير متاحة
+unknown_position=موضع غير معروف
+unknown=غير معروف
+player_position_error=تعذر الحصول على موضع اللاعب
+cannot_read_player_position=لا يمكن قراءة موضع اللاعب
+position_reading_error_generic=خطأ في قراءة الموضع
+empty_area_around=منطقة فارغة حولك
+area_scan_error=خطأ في مسح المنطقة
+
+# رسائل التصنيع (طاولة العمل)
+recipe=وصفة: {0}
+recipe_with_amount=وصفة: {0} x{1}
+can_craft=يمكن التصنيع
+cannot_craft=لا يمكن التصنيع
+required_materials=المواد المطلوبة
+missing_material={0}: ينقص {1}
+available_material={0}: لديك {1}
+and_more_materials=ومواد أخرى
+invalid_recipe=وصفة غير صالحة
+cannot_craft_materials=لا يمكن التصنيع: المواد مفقودة
+inventory_full=المخزون ممتلئ
+crafted_item=تم تصنيع {0}
+crafting_error=خطأ في التصنيع
+
+# رسائل الإجراءات المباشرة
+empty_slot_cannot_equip=فتحة فارغة، لا يمكن التجهيز
+item_not_equippable={0} لا يمكن تجهيزه
+equipment_window_not_open=نافذة المعدات غير مفتوحة
+item_equipped={0} تم تجهيزه
+item_cannot_equip=لا يمكن تجهيز {0}
+equip_error=خطأ في التجهيز
+empty_slot_cannot_use=فتحة فارغة، لا يمكن الاستخدام
+item_not_usable={0} لا يمكن استخدامه
+item_used={0} تم استخدامه
+item_cannot_use=لا يمكن استخدام {0}
+item_placed={0} تم وضعه
+item_action_performed=تم تنفيذ إجراء على {0}
+use_error=خطأ في الاستخدام
+no_crafting_available=لا يوجد تصنيع متاح
+crafting_station_available=محطة تصنيع متاحة، استخدم الوصفات من المخزون
+select_recipe_item=حدد عنصر وصفة
+recipe_item_detected=تم اكتشاف وصفة: {0}
+not_a_recipe=هذا العنصر ليس وصفة
+craft_error=خطأ في التصنيع
+
+# رسائل شريط الاختصارات
+hotbar_changed=تم تحديد شريط الاختصارات {0}
+no_weapon_equipped=لا يوجد سلاح مجهز
+empty_hotbar_slot=فتحة شريط اختصارات فارغة
+unknown=غير معروف
+current_hotbar_item=شريط الاختصارات {0}، الفتحة {1}: {2}
+hotbar_error=خطأ في شريط الاختصارات
+durability_critical=متانة حرجة {0}%
+durability_low=متانة منخفضة {0}%
+durability_normal=متانة {0}%
+durability_full=متانة كاملة
+hotbar_info_available=معلومات شريط الاختصارات متاحة
+hotbar_slot_selected=تم تحديد الفتحة {0}
+
+# حالة الأشياء
+equipped=، مجهز
+
+# عناصر واجهة المستخدم
+stats_button=زر الإحصائيات: {0}
+equipment_preset=إعداد المعدات المسبق: {0}
+crafting_button=زر التصنيع: {0}
+organize_button=زر التنظيم: {0}
+quick_action_button=زر الإجراء السريع: {0}
+button=زر: {0}
+tab=علامة التبويب: {0}
+preset=إعداد مسبق: {0}
+statistics=إحصائيات: {0}
+bag=حقيبة: {0}
+shortcut=اختصار: {0}
+element=عنصر: {0}
+
+# رسائل منبثقة
+hold_to_confirm=اضغط مع الاستمرار للتأكيد
+
+# خيارات القائمة
+more_options=المزيد من الخيارات
+
+# أنواع البلاط
+tile_none=فارغ
+tile_ground=أرض
+tile_wall=جدار
+tile_water=ماء
+tile_pit=حفرة
+tile_bridge=جسر
+tile_floor=أرضية مبنية
+tile_roof_hole=ثقب في السقف
+tile_thin_wall=جدار رقيق
+tile_dug_up_ground=أرض محفورة
+tile_watered_ground=أرض مروية
+tile_circuit_plate=لوحة دوائر
+tile_ancient_circuit_plate=لوحة دوائر قديمة
+tile_fence=سياج
+tile_rug=سجادة
+tile_small_stones=حجارة صغيرة
+tile_small_grass=عشب صغير
+tile_wall_grass=عشب الجدار
+tile_debris=حطام
+tile_floor_crack=شق في الأرضية
+tile_rail=سكة حديدية
+tile_great_wall=الجدار العظيم
+tile_lit_floor=أرضية مضاءة
+tile_debris2=حطام
+tile_loose_flooring=أرضية فضفاضة
+tile_immune=منطقة محصنة
+tile_wall_crack=شق في الجدار
+tile_ore=عرق معدني
+tile_big_root=جذر كبير
+tile_ground_slime=أثر سلايم
+tile_ancient_crystal=بلورة قديمة
+tile_chrysalis=شرنقة
+
+# فئات البلاط
+category_construction=بناء
+category_liquid=سائل
+category_mineral=معدن
+category_organic=عضوي
+category_stone=حجر
+category_crystal=بلورة
+category_unknown=غير معروف
+
+# فئات مواد البلاط
+material_earth=تراب
+material_stone=حجر
+material_mineral=معدن
+material_liquid=سائل
+material_construction=بناء
+material_crystal=بلورة
+material_organic=عضوي
+material_unknown=غير معروف
+
+# أصوات الخطوات
+sound_earth=تراب
+sound_stone=حجر
+sound_metal=معدن
+sound_splash=رذاذ
+sound_wood=خشب
+sound_gravel=حصى
+sound_textile=نسيج
+sound_neutral=محايد
+
+# الأدوات
+tool_pickaxe=معول
+tool_high_quality_pickaxe=معول عالي الجودة
+tool_axe=فأس
+tool_shovel=مجرفة
+tool_pickaxe_or_shovel=معول أو مجرفة
+tool_none=لا شيء
+
+# مواد مجموعة البلاط
+tileset_dirt=تراب
+tileset_stone=حجر
+tileset_obsidian=سبج
+tileset_lava=حمم بركانية
+tileset_nature=طبيعة
+tileset_mold=عفن
+tileset_sea=بحر
+tileset_sand=رمل
+tileset_desert=صحراء
+tileset_snow=ثلج
+tileset_crystal=بلورة
+tileset_dark_stone=حجر داكن
+
+# أوصاف البلاط
+tile_with_material={0} من {1}
+
+# رسائل المخزون
+inventory_opened=تم فتح المخزون
+inventory_closed=تم إغلاق المخزون
+character_window_opened=تم فتح نافذة الشخصية
+character_window_closed=تم إغلاق نافذة الشخصية
+# رسائل نظام الإشعارات
+item_picked_single=تم التقاط: {0}
+item_picked_multiple=تم التقاط: {0} x{1}
+level_up=ارتقيت إلى المستوى {0}!
+skill_up={0} ارتفع إلى المستوى {1}
+
+# رسائل الاستهداف التلقائي
+enemy_in_range={0} في النطاق
+enemy_out_of_range={0} خارج النطاق
+enemy_at_distance={0} {1}، {2} بلاطات
+enemy_unknown=عدو غير معروف
+enemy_generic=عدو
+
+# الاتجاهات
+dir_east=إلى الشرق
+dir_northeast=إلى الشمال الشرقي
+dir_north=إلى الشمال
+dir_northwest=إلى الشمال الغربي
+dir_west=إلى الغرب
+dir_southwest=إلى الجنوب الغربي
+dir_south=إلى الجنوب
+dir_southeast=إلى الجنوب الشرقي
+
+# أسماء الأعداء
+enemy_slime=سلايم
+enemy_spider=عنكبوت
+enemy_skeleton=هيكل عظمي
+enemy_goblin=غوبلن
+enemy_orc=أورك
+enemy_zombie=زومبي
+enemy_demon=شيطان
+enemy_beast=وحش
+enemy_larva=يرقة
+enemy_grub=دودة
+enemy_worm=دودة أرضية
+enemy_fly=ذبابة
+enemy_bat=خفاش
+enemy_rat=جرذ
+enemy_boss=زعيم
+
+# رسائل نظام الإشعارات
+no_notifications=لا توجد إشعارات
+first_notification=الإشعار الأول
+last_notification=الإشعار الأخير
+
+# أوصاف فئات الكائنات
+category_core=النواة
+category_chest=صندوق
+category_workstation=محطة عمل
+category_enemy=عدو
+category_pickup=كائن قابل للجمع
+category_plant=نبات
+category_resource=مورد
+category_decoration=زخرفة
+category_furniture=أثاث
+category_animal=حيوان
+category_critter=مخلوق
+category_structure=بنية
+category_door=باب
+category_statue=تمثال
+category_unknown=كائن غير معروف
+
+# بادئات أنواع الكيانات
+prefix_animal=حيوان
+prefix_creature=مخلوق
+prefix_statue=تمثال
+prefix_furniture=أثاث
+prefix_structure=بنية
+
+# أسماء إضافية لمجموعات البلاط
+tileset_extras=إضافات
+tileset_base_building_wood=بناء خشبي
+tileset_larva_hive=خلية يرقات
+tileset_base_building_stone=بناء حجري
+tileset_clay=طين
+tileset_turf=عشب
+tileset_base_building_unpainted=بناء غير مطلي
+tileset_base_building_yellow=بناء أصفر
+tileset_base_building_green=بناء أخضر
+tileset_base_building_red=بناء أحمر
+tileset_base_building_purple=بناء أرجواني
+tileset_base_building_blue=بناء أزرق
+tileset_base_building_brown=بناء بني
+tileset_base_building_white=بناء أبيض
+tileset_base_building_black=بناء أسود
+tileset_base_building_scarlet=بناء قرمزي
+tileset_base_building_coral=بناء مرجاني
+tileset_base_building_galaxite=بناء غالكسيتي
+tileset_base_building_metal=بناء معدني
+tileset_base_building_valentine=بناء عيد الحب
+tileset_base_building_easter=بناء عيد الفصح
+tileset_city=مدينة
+tileset_desert_temple=معبد الصحراء
+tileset_desert_temple2=معبد الصحراء القديم
+tileset_glass=زجاج
+tileset_meadow=مرج
+tileset_explosive=متفجر
+tileset_alien=كائن فضائي
+tileset_oasis=واحة
+tileset_explosive_forest=غابة متفجرة
+tileset_explosive_desert=صحراء متفجرة

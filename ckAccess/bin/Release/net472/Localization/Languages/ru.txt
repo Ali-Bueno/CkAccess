@@ -1,0 +1,368 @@
+# Файл локализации на русском языке для Core Keeper Accessibility Mod
+# Формат: ключ=значение
+# Строки, начинающиеся с #, являются комментариями
+
+# Сообщения виртуального курсора
+virtual_cursor_initialized=Виртуальный курсор инициализирован
+cursor_initialization_error=Ошибка инициализации курсора
+cursor_reset=Курсор сброшен: x={0}, z={1}
+cursor_reset_error=Ошибка сброса курсора
+limit_reached=Достигнут предел
+cursor_limit_reached=Cursor limit reached
+primary_action_error=Ошибка основного действия: {0}
+placing_at_position=Размещение в позиции x={0}, z={1}
+item_placed_at_position={0} размещен в позиции x={1}, z={2}
+secondary_action_error=Ошибка дополнительного действия: {0}
+interaction_error=Ошибка взаимодействия: {0}
+cursor_not_initialized=Курсор не инициализирован
+current_position=Текущая позиция: x={0}, z={1}
+position_reading_error=Ошибка чтения позиции игрока
+
+# Сообщения навигации по интерфейсу
+no_tabs_available=Нет доступных вкладок
+no_more_tabs=Больше нет доступных вкладок
+tab_equipment=Вкладка: Снаряжение
+tab_skills=Вкладка: Навыки
+tab_souls=Вкладка: Души
+tab_number=Вкладка {0}
+navigation_error=Ошибка навигации по вкладкам: {0}
+selection_error=Ошибка выбора объекта: {0}
+empty_slot=Пустой слот
+slot_selection_error=Ошибка выбора слота: {0}
+skill_error=Ошибка открытия навыка: {0}
+click_simulation_error=Ошибка симуляции клика: {0}
+no_element_selected=Не выбран ни один элемент
+no_element_selected_secondary=Не выбран ни один элемент для дополнительного действия
+secondary_action_error_ui=Ошибка дополнительного действия: {0}
+empty_slot_no_action=Пустой слот, действие недоступно
+secondary_action_performed=Дополнительное действие выполнено
+secondary_slot_error=Ошибка дополнительного действия со слотом: {0}
+right_click_simulation_error=Ошибка симуляции правого клика: {0}
+talent_action=Действие с талантом: {0}
+talent_selected=Талант выбран
+talent_selection_error=Ошибка выбора таланта: {0}
+skills=Навыки
+preset_selection_error=Ошибка выбора пресета: {0}
+preset_selected=Пресет выбран: {0}
+equipment_preset_selected=Пресет снаряжения выбран
+equipment_preset_selected_generic=Пресет снаряжения {0} выбран
+equipment_preset_error=Ошибка с пресетом снаряжения: {0}
+equipment_preset_not_found=Пресет снаряжения не найден
+stats_window_toggled=Окно статистики переключено
+stats=Статистика
+stats_button_activated=Кнопка статистики активирована
+stats_error=Ошибка открытия статистики: {0}
+selected_item=Выбрано: {0}
+
+# Сообщения навыков и талантов
+talent_tree_opened=Дерево талантов открыто: {0}
+talent_tree_opened_generic=Дерево талантов открыто
+talent_tree_closed=Дерево талантов закрыто
+talent=Талант
+
+# Названия навыков
+skill_mining=Горное дело
+skill_running=Бег
+skill_melee=Ближний бой
+skill_vitality=Выносливость
+skill_crafting=Ремесло
+skill_range=Дальний бой
+skill_gardening=Садоводство
+skill_fishing=Рыбалка
+skill_cooking=Кулинария
+skill_magic=Магия
+skill_summoning=Призыв
+skill_explosives=Взрывчатка
+
+# Сообщения чтения мира
+empty=Пусто
+reading_error=Ошибка чтения
+the_core=Ядро (взаимодействие)
+work_station={0} (рабочая станция)
+enemy={0} (враг)
+object={0} (объект)
+plant={0} (растение)
+resource={0} (ресурс)
+entity={0} (сущность)
+destructible_tool={0} разрушаемое (использовать {1})
+destructible_material_tool={0} из {1} разрушаемое (использовать {2})
+blocking={0} (блокирует)
+blocking_material={0} из {1} (блокирует)
+dangerous={0} (опасно)
+dangerous_material={0} из {1} (опасно)
+area_not_available=Область недоступна
+unknown_position=Неизвестная позиция
+unknown=Неизвестно
+player_position_error=Не удалось получить позицию игрока
+cannot_read_player_position=Невозможно прочитать позицию игрока
+position_reading_error_generic=Ошибка чтения позиции
+empty_area_around=Пустая область вокруг
+area_scan_error=Ошибка сканирования области
+
+# Сообщения крафта (верстак)
+recipe=Рецепт: {0}
+recipe_with_amount=Рецепт: {0} x{1}
+can_craft=Можно создать
+cannot_craft=Невозможно создать
+required_materials=Необходимые материалы
+missing_material={0}: не хватает {1}
+available_material={0}: у вас {1}
+and_more_materials=и другие материалы
+invalid_recipe=Неверный рецепт
+cannot_craft_materials=Невозможно создать: не хватает материалов
+inventory_full=Инвентарь полон
+crafted_item=Создано {0}
+crafting_error=Ошибка создания
+
+# Сообщения прямых действий
+empty_slot_cannot_equip=Пустой слот, невозможно экипировать
+item_not_equippable={0} нельзя экипировать
+equipment_window_not_open=Окно снаряжения не открыто
+item_equipped={0} экипировано
+item_cannot_equip=Невозможно экипировать {0}
+equip_error=Ошибка экипировки
+empty_slot_cannot_use=Пустой слот, невозможно использовать
+item_not_usable={0} нельзя использовать
+item_used={0} использовано
+item_cannot_use=Невозможно использовать {0}
+item_placed={0} размещен
+item_action_performed=Действие выполнено с {0}
+use_error=Ошибка использования
+no_crafting_available=Крафт недоступен
+crafting_station_available=Станция крафта доступна, используйте рецепты из инвентаря
+select_recipe_item=Выберите предмет рецепта
+recipe_item_detected=Рецепт обнаружен: {0}
+not_a_recipe=Этот предмет не является рецептом
+craft_error=Ошибка крафта
+
+# Сообщения панели быстрого доступа
+hotbar_changed=Панель {0} выбрана
+no_weapon_equipped=Оружие не экипировано
+empty_hotbar_slot=Пустой слот панели быстрого доступа
+unknown=Неизвестно
+current_hotbar_item=Панель {0}, слот {1}: {2}
+hotbar_error=Ошибка панели быстрого доступа
+durability_critical=критическая прочность {0}%
+durability_low=низкая прочность {0}%
+durability_normal=прочность {0}%
+durability_full=полная прочность
+hotbar_info_available=Информация панели быстрого доступа доступна
+hotbar_slot_selected=Слот {0} выбран
+
+# Состояние объектов
+equipped=, экипировано
+
+# Элементы интерфейса
+stats_button=Кнопка статистики: {0}
+equipment_preset=Пресет снаряжения: {0}
+crafting_button=Кнопка крафта: {0}
+organize_button=Кнопка сортировки: {0}
+quick_action_button=Кнопка быстрого действия: {0}
+button=Кнопка: {0}
+tab=Вкладка: {0}
+preset=Пресет: {0}
+statistics=Статистика: {0}
+bag=Сумка: {0}
+shortcut=Ярлык: {0}
+element=Элемент: {0}
+
+# Всплывающие сообщения
+hold_to_confirm=удерживайте для подтверждения
+
+# Параметры меню
+more_options=Дополнительные параметры
+
+# Типы тайлов
+tile_none=Пусто
+tile_ground=Земля
+tile_wall=Стена
+tile_water=Вода
+tile_pit=Яма
+tile_bridge=Мост
+tile_floor=Построенный пол
+tile_roof_hole=Дыра в крыше
+tile_thin_wall=Тонкая стена
+tile_dug_up_ground=Вскопанная земля
+tile_watered_ground=Политая земля
+tile_circuit_plate=Схемная плата
+tile_ancient_circuit_plate=Древняя схемная плата
+tile_fence=Забор
+tile_rug=Ковер
+tile_small_stones=Мелкие камни
+tile_small_grass=Мелкая трава
+tile_wall_grass=Настенная трава
+tile_debris=Обломки
+tile_floor_crack=Трещина в полу
+tile_rail=Рельс
+tile_great_wall=Великая стена
+tile_lit_floor=Освещенный пол
+tile_debris2=Обломки
+tile_loose_flooring=Незакрепленный пол
+tile_immune=Иммунная зона
+tile_wall_crack=Трещина в стене
+tile_ore=Рудная жила
+tile_big_root=Большой корень
+tile_ground_slime=След слизи
+tile_ancient_crystal=Древний кристалл
+tile_chrysalis=Кокон
+
+# Категории тайлов
+category_construction=Постройка
+category_liquid=Жидкость
+category_mineral=Минерал
+category_organic=Органическое
+category_stone=Камень
+category_crystal=Кристалл
+category_unknown=Неизвестно
+
+# Категории материалов тайлов
+material_earth=Земля
+material_stone=Камень
+material_mineral=Минерал
+material_liquid=Жидкость
+material_construction=Постройка
+material_crystal=Кристалл
+material_organic=Органическое
+material_unknown=Неизвестно
+
+# Звуки шагов
+sound_earth=Земля
+sound_stone=Камень
+sound_metal=Металл
+sound_splash=Всплеск
+sound_wood=Дерево
+sound_gravel=Гравий
+sound_textile=Ткань
+sound_neutral=Нейтральное
+
+# Инструменты
+tool_pickaxe=Кирка
+tool_high_quality_pickaxe=Кирка высокого качества
+tool_axe=Топор
+tool_shovel=Лопата
+tool_pickaxe_or_shovel=Кирка или лопата
+tool_none=Нет
+
+# Материалы тайлсетов
+tileset_dirt=земля
+tileset_stone=камень
+tileset_obsidian=обсидиан
+tileset_lava=лава
+tileset_nature=природа
+tileset_mold=плесень
+tileset_sea=море
+tileset_sand=песок
+tileset_desert=пустыня
+tileset_snow=снег
+tileset_crystal=кристалл
+tileset_dark_stone=темный камень
+
+# Описания тайлов
+tile_with_material={0} из {1}
+
+# Сообщения инвентаря
+inventory_opened=Инвентарь открыт
+inventory_closed=Инвентарь закрыт
+character_window_opened=Окно персонажа открыто
+character_window_closed=Окно персонажа закрыто
+# Сообщения системы уведомлений
+item_picked_single=Подобрано: {0}
+item_picked_multiple=Подобрано: {0} x{1}
+level_up=Вы достигли уровня {0}!
+skill_up={0} повышен до уровня {1}
+
+# Сообщения автоприцеливания
+enemy_in_range={0} в радиусе действия
+enemy_out_of_range={0} вне радиуса действия
+enemy_at_distance={0} {1}, {2} тайлов
+enemy_unknown=Неизвестный враг
+enemy_generic=Враг
+
+# Направления
+dir_east=на востоке
+dir_northeast=на северо-востоке
+dir_north=на севере
+dir_northwest=на северо-западе
+dir_west=на западе
+dir_southwest=на юго-западе
+dir_south=на юге
+dir_southeast=на юго-востоке
+
+# Названия врагов
+enemy_slime=Слизь
+enemy_spider=Паук
+enemy_skeleton=Скелет
+enemy_goblin=Гоблин
+enemy_orc=Орк
+enemy_zombie=Зомби
+enemy_demon=Демон
+enemy_beast=Зверь
+enemy_larva=Личинка
+enemy_grub=Червь
+enemy_worm=Червяк
+enemy_fly=Муха
+enemy_bat=Летучая мышь
+enemy_rat=Крыса
+enemy_boss=Босс
+
+# Сообщения системы уведомлений
+no_notifications=Нет уведомлений
+first_notification=Первое уведомление
+last_notification=Последнее уведомление
+
+# Описания категорий объектов
+category_core=Ядро
+category_chest=Сундук
+category_workstation=Рабочая станция
+category_enemy=Враг
+category_pickup=Подбираемый объект
+category_plant=Растение
+category_resource=Ресурс
+category_decoration=Декорация
+category_furniture=Мебель
+category_animal=Животное
+category_critter=Существо
+category_structure=Структура
+category_door=Дверь
+category_statue=Статуя
+category_unknown=Неизвестный объект
+
+# Префиксы типов сущностей
+prefix_animal=Животное
+prefix_creature=Существо
+prefix_statue=Статуя
+prefix_furniture=Мебель
+prefix_structure=Структура
+
+# Дополнительные названия тайлсетов
+tileset_extras=дополнительно
+tileset_base_building_wood=деревянная постройка
+tileset_larva_hive=улей личинок
+tileset_base_building_stone=каменная постройка
+tileset_clay=глина
+tileset_turf=дёрн
+tileset_base_building_unpainted=некрашеная постройка
+tileset_base_building_yellow=желтая постройка
+tileset_base_building_green=зеленая постройка
+tileset_base_building_red=красная постройка
+tileset_base_building_purple=фиолетовая постройка
+tileset_base_building_blue=синяя постройка
+tileset_base_building_brown=коричневая постройка
+tileset_base_building_white=белая постройка
+tileset_base_building_black=черная постройка
+tileset_base_building_scarlet=алая постройка
+tileset_base_building_coral=коралловая постройка
+tileset_base_building_galaxite=галакситовая постройка
+tileset_base_building_metal=металлическая постройка
+tileset_base_building_valentine=постройка ко Дню святого Валентина
+tileset_base_building_easter=пасхальная постройка
+tileset_city=город
+tileset_desert_temple=храм пустыни
+tileset_desert_temple2=древний храм пустыни
+tileset_glass=стекло
+tileset_meadow=луг
+tileset_explosive=взрывчатое
+tileset_alien=чужеродное
+tileset_oasis=оазис
+tileset_explosive_forest=взрывной лес
+tileset_explosive_desert=взрывная пустыня

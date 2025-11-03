@@ -1,0 +1,368 @@
+# Core Keeper 접근성 모드를 위한 한국어 현지화 파일
+# 형식: 키=값
+# #로 시작하는 줄은 주석입니다
+
+# 가상 커서 메시지
+virtual_cursor_initialized=가상 커서가 초기화되었습니다
+cursor_initialization_error=커서 초기화 중 오류 발생
+cursor_reset=커서 초기화됨: x={0}, z={1}
+cursor_reset_error=커서 초기화 중 오류 발생
+limit_reached=한계에 도달했습니다
+cursor_limit_reached=Cursor limit reached
+primary_action_error=주 동작 오류: {0}
+placing_at_position=위치에 배치 중 x={0}, z={1}
+item_placed_at_position={0}을(를) 위치 x={1}, z={2}에 배치했습니다
+secondary_action_error=보조 동작 오류: {0}
+interaction_error=상호작용 오류: {0}
+cursor_not_initialized=커서가 초기화되지 않았습니다
+current_position=현재 위치: x={0}, z={1}
+position_reading_error=플레이어 위치 읽기 오류
+
+# UI 내비게이션 메시지
+no_tabs_available=사용 가능한 탭이 없습니다
+no_more_tabs=더 이상 사용 가능한 탭이 없습니다
+tab_equipment=탭: 장비
+tab_skills=탭: 스킬
+tab_souls=탭: 영혼
+tab_number=탭 {0}
+navigation_error=탭 이동 오류: {0}
+selection_error=객체 선택 오류: {0}
+empty_slot=빈 슬롯
+slot_selection_error=슬롯 선택 오류: {0}
+skill_error=스킬 열기 오류: {0}
+click_simulation_error=클릭 시뮬레이션 오류: {0}
+no_element_selected=선택된 요소가 없습니다
+no_element_selected_secondary=보조 동작을 위해 선택된 요소가 없습니다
+secondary_action_error_ui=보조 동작 오류: {0}
+empty_slot_no_action=빈 슬롯, 사용 가능한 동작이 없습니다
+secondary_action_performed=보조 동작이 수행되었습니다
+secondary_slot_error=슬롯 보조 동작 오류: {0}
+right_click_simulation_error=우클릭 시뮬레이션 오류: {0}
+talent_action=특성 동작: {0}
+talent_selected=특성이 선택되었습니다
+talent_selection_error=특성 선택 오류: {0}
+skills=스킬
+preset_selection_error=프리셋 선택 오류: {0}
+preset_selected=프리셋 선택됨: {0}
+equipment_preset_selected=장비 프리셋이 선택되었습니다
+equipment_preset_selected_generic=장비 프리셋 {0}이(가) 선택되었습니다
+equipment_preset_error=장비 프리셋 오류: {0}
+equipment_preset_not_found=장비 프리셋을 찾을 수 없습니다
+stats_window_toggled=스탯 창이 전환되었습니다
+stats=스탯
+stats_button_activated=스탯 버튼이 활성화되었습니다
+stats_error=스탯 열기 오류: {0}
+selected_item=선택됨: {0}
+
+# 스킬 및 특성 메시지
+talent_tree_opened=특성 트리 열림: {0}
+talent_tree_opened_generic=특성 트리가 열렸습니다
+talent_tree_closed=특성 트리가 닫혔습니다
+talent=특성
+
+# 스킬 이름
+skill_mining=채광
+skill_running=달리기
+skill_melee=근접 전투
+skill_vitality=생명력
+skill_crafting=제작
+skill_range=원거리 전투
+skill_gardening=원예
+skill_fishing=낚시
+skill_cooking=요리
+skill_magic=마법
+skill_summoning=소환
+skill_explosives=폭발물
+
+# 월드 리더 메시지
+empty=비어있음
+reading_error=읽기 오류
+the_core=코어 (상호작용 가능)
+work_station={0} (작업대)
+enemy={0} (적)
+object={0} (객체)
+plant={0} (식물)
+resource={0} (자원)
+entity={0} (엔티티)
+destructible_tool={0} 파괴 가능 ({1} 사용)
+destructible_material_tool={1}(으)로 된 {0} 파괴 가능 ({2} 사용)
+blocking={0} (차단)
+blocking_material={1}(으)로 된 {0} (차단)
+dangerous={0} (위험)
+dangerous_material={1}(으)로 된 {0} (위험)
+area_not_available=사용할 수 없는 영역
+unknown_position=알 수 없는 위치
+unknown=알 수 없음
+player_position_error=플레이어 위치를 가져올 수 없습니다
+cannot_read_player_position=플레이어 위치를 읽을 수 없습니다
+position_reading_error_generic=위치 읽기 오류
+empty_area_around=주변 영역이 비어있습니다
+area_scan_error=영역 스캔 오류
+
+# 제작 메시지 (작업대)
+recipe=레시피: {0}
+recipe_with_amount=레시피: {0} x{1}
+can_craft=제작 가능
+cannot_craft=제작 불가능
+required_materials=필요한 재료
+missing_material={0}: {1}개 부족
+available_material={0}: {1}개 보유
+and_more_materials=및 추가 재료
+invalid_recipe=유효하지 않은 레시피
+cannot_craft_materials=제작 불가능: 재료 부족
+inventory_full=인벤토리가 가득 찼습니다
+crafted_item={0}을(를) 제작했습니다
+crafting_error=제작 오류
+
+# 직접 동작 메시지
+empty_slot_cannot_equip=빈 슬롯, 장착할 수 없습니다
+item_not_equippable={0}은(는) 장착할 수 없습니다
+equipment_window_not_open=장비 창이 열려있지 않습니다
+item_equipped={0}을(를) 장착했습니다
+item_cannot_equip={0}을(를) 장착할 수 없습니다
+equip_error=장착 오류
+empty_slot_cannot_use=빈 슬롯, 사용할 수 없습니다
+item_not_usable={0}은(는) 사용할 수 없습니다
+item_used={0}을(를) 사용했습니다
+item_cannot_use={0}을(를) 사용할 수 없습니다
+item_placed={0}을(를) 배치했습니다
+item_action_performed={0}에 동작이 수행되었습니다
+use_error=사용 오류
+no_crafting_available=사용 가능한 제작이 없습니다
+crafting_station_available=제작대 사용 가능, 인벤토리의 레시피를 사용하세요
+select_recipe_item=레시피 아이템을 선택하세요
+recipe_item_detected=레시피 감지됨: {0}
+not_a_recipe=이 아이템은 레시피가 아닙니다
+craft_error=제작 오류
+
+# 단축키 메시지
+hotbar_changed=단축키 {0}번이 선택되었습니다
+no_weapon_equipped=무기가 장착되지 않았습니다
+empty_hotbar_slot=단축키 슬롯이 비어있습니다
+unknown=알 수 없음
+current_hotbar_item=단축키 {0}번, 슬롯 {1}: {2}
+hotbar_error=단축키 오류
+durability_critical=내구도 위험 {0}%
+durability_low=내구도 낮음 {0}%
+durability_normal=내구도 {0}%
+durability_full=내구도 가득 찬 상태
+hotbar_info_available=단축키 정보 사용 가능
+hotbar_slot_selected=슬롯 {0}번이 선택되었습니다
+
+# 아이템 상태
+equipped=, 장착됨
+
+# UI 요소
+stats_button=스탯 버튼: {0}
+equipment_preset=장비 프리셋: {0}
+crafting_button=제작 버튼: {0}
+organize_button=정리 버튼: {0}
+quick_action_button=빠른 동작 버튼: {0}
+button=버튼: {0}
+tab=탭: {0}
+preset=프리셋: {0}
+statistics=통계: {0}
+bag=가방: {0}
+shortcut=단축키: {0}
+element=요소: {0}
+
+# 팝업 메시지
+hold_to_confirm=확인하려면 길게 누르세요
+
+# 메뉴 옵션
+more_options=추가 옵션
+
+# 타일 종류
+tile_none=비어있음
+tile_ground=지면
+tile_wall=벽
+tile_water=물
+tile_pit=구덩이
+tile_bridge=다리
+tile_floor=건설된 바닥
+tile_roof_hole=지붕 구멍
+tile_thin_wall=얇은 벽
+tile_dug_up_ground=파낸 땅
+tile_watered_ground=물을 준 땅
+tile_circuit_plate=회로 판
+tile_ancient_circuit_plate=고대 회로 판
+tile_fence=울타리
+tile_rug=깔개
+tile_small_stones=작은 돌
+tile_small_grass=작은 풀
+tile_wall_grass=벽의 풀
+tile_debris=잔해
+tile_floor_crack=바닥 균열
+tile_rail=레일
+tile_great_wall=거대한 벽
+tile_lit_floor=빛나는 바닥
+tile_debris2=잔해
+tile_loose_flooring=느슨한 바닥
+tile_immune=면역 구역
+tile_wall_crack=벽 균열
+tile_ore=광맥
+tile_big_root=큰 뿌리
+tile_ground_slime=슬라임 흔적
+tile_ancient_crystal=고대 수정
+tile_chrysalis=번데기
+
+# 타일 카테고리
+category_construction=건설
+category_liquid=액체
+category_mineral=광물
+category_organic=유기물
+category_stone=석재
+category_crystal=수정
+category_unknown=알 수 없음
+
+# 타일 재료 카테고리
+material_earth=흙
+material_stone=돌
+material_mineral=광물
+material_liquid=액체
+material_construction=건설
+material_crystal=수정
+material_organic=유기물
+material_unknown=알 수 없음
+
+# 발소리
+sound_earth=흙
+sound_stone=돌
+sound_metal=금속
+sound_splash=물튀김
+sound_wood=나무
+sound_gravel=자갈
+sound_textile=직물
+sound_neutral=중립
+
+# 도구
+tool_pickaxe=곡괭이
+tool_high_quality_pickaxe=고급 곡괭이
+tool_axe=도끼
+tool_shovel=삽
+tool_pickaxe_or_shovel=곡괭이 또는 삽
+tool_none=없음
+
+# 타일셋 재료
+tileset_dirt=흙
+tileset_stone=돌
+tileset_obsidian=흑요석
+tileset_lava=용암
+tileset_nature=자연
+tileset_mold=곰팡이
+tileset_sea=바다
+tileset_sand=모래
+tileset_desert=사막
+tileset_snow=눈
+tileset_crystal=수정
+tileset_dark_stone=어두운 돌
+
+# 타일 설명
+tile_with_material={1}(으)로 된 {0}
+
+# 인벤토리 메시지
+inventory_opened=인벤토리가 열렸습니다
+inventory_closed=인벤토리가 닫혔습니다
+character_window_opened=캐릭터 창이 열렸습니다
+character_window_closed=캐릭터 창이 닫혔습니다
+# 알림 시스템 메시지
+item_picked_single=획득: {0}
+item_picked_multiple=획득: {0} x{1}
+level_up=레벨 {0}(으)로 상승했습니다!
+skill_up={0} 스킬이 레벨 {1}(으)로 상승했습니다
+
+# 자동 타게팅 메시지
+enemy_in_range={0} 사거리 안에 있음
+enemy_out_of_range={0} 사거리 밖으로 나감
+enemy_at_distance={0} {1}, {2} 타일
+enemy_unknown=알 수 없는 적
+enemy_generic=적
+
+# 방향
+dir_east=동쪽으로
+dir_northeast=북동쪽으로
+dir_north=북쪽으로
+dir_northwest=북서쪽으로
+dir_west=서쪽으로
+dir_southwest=남서쪽으로
+dir_south=남쪽으로
+dir_southeast=남동쪽으로
+
+# 적 이름
+enemy_slime=슬라임
+enemy_spider=거미
+enemy_skeleton=스켈레톤
+enemy_goblin=고블린
+enemy_orc=오크
+enemy_zombie=좀비
+enemy_demon=악마
+enemy_beast=야수
+enemy_larva=유충
+enemy_grub=구더기
+enemy_worm=지렁이
+enemy_fly=파리
+enemy_bat=박쥐
+enemy_rat=쥐
+enemy_boss=보스
+
+# 알림 시스템 메시지
+no_notifications=알림이 없습니다
+first_notification=첫 번째 알림
+last_notification=마지막 알림
+
+# 객체 카테고리 설명
+category_core=코어
+category_chest=상자
+category_workstation=작업대
+category_enemy=적
+category_pickup=수집 가능한 객체
+category_plant=식물
+category_resource=자원
+category_decoration=장식
+category_furniture=가구
+category_animal=동물
+category_critter=작은 생물
+category_structure=구조물
+category_door=문
+category_statue=조각상
+category_unknown=알 수 없는 객체
+
+# 엔티티 타입 접두사
+prefix_animal=동물
+prefix_creature=생물
+prefix_statue=조각상
+prefix_furniture=가구
+prefix_structure=구조물
+
+# 추가 타일셋 이름
+tileset_extras=추가 요소
+tileset_base_building_wood=목재 건물
+tileset_larva_hive=유충 벌집
+tileset_base_building_stone=석재 건물
+tileset_clay=점토
+tileset_turf=잔디
+tileset_base_building_unpainted=무도색 건물
+tileset_base_building_yellow=노란색 건물
+tileset_base_building_green=초록색 건물
+tileset_base_building_red=빨간색 건물
+tileset_base_building_purple=보라색 건물
+tileset_base_building_blue=파란색 건물
+tileset_base_building_brown=갈색 건물
+tileset_base_building_white=흰색 건물
+tileset_base_building_black=검은색 건물
+tileset_base_building_scarlet=주홍색 건물
+tileset_base_building_coral=산호색 건물
+tileset_base_building_galaxite=은하석 건물
+tileset_base_building_metal=금속 건물
+tileset_base_building_valentine=발렌타인 건물
+tileset_base_building_easter=부활절 건물
+tileset_city=도시
+tileset_desert_temple=사막 신전
+tileset_desert_temple2=고대 사막 신전
+tileset_glass=유리
+tileset_meadow=초원
+tileset_explosive=폭발물
+tileset_alien=외계
+tileset_oasis=오아시스
+tileset_explosive_forest=폭발 숲
+tileset_explosive_desert=폭발 사막

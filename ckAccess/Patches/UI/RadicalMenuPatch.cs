@@ -107,6 +107,11 @@ namespace ckAccess.Patches.UI
             {
                 return joinMethodDropdown.textResult.ProcessText();
             }
+            // PAUSE MENU: Añadir el ID de sesión cuando se selecciona "Invite Players"
+            if (option is PugOther.RadicalPauseMenu_InvitePlayers invitePlayers)
+            {
+                return HandleInvitePlayersOption(option, valueOnly);
+            }
 
             // --- General Handler ---
             try
@@ -171,6 +176,140 @@ namespace ckAccess.Patches.UI
         private static string GetMoreOptionsTranslation()
         {
             return LocalizationManager.GetText("more_options");
+        }
+
+        /// <summary>
+        /// Maneja la opción "Invite Players" del menú de pausa, incluyendo el ID de sesión
+        /// </summary>
+        private static string HandleInvitePlayersOption(PugOther.RadicalMenuOption option, bool valueOnly)
+        {
+            try
+            {
+                // Obtener el texto base de la opción
+                var pugTexts = option.GetComponentsInChildren<PugOther.PugText>(true);
+                string baseText = "";
+                if (pugTexts != null && pugTexts.Length > 0)
+                {
+                    baseText = pugTexts[0].ProcessText();
+                }
+
+                // Obtener el ID de sesión del NetworkingManager
+                string sessionId = GetSessionId();
+
+                if (!string.IsNullOrEmpty(sessionId))
+                {
+                    // Formatear el ID de sesión para que se lea letra por letra
+                    string formattedSessionId = FormatSessionIdForTTS(sessionId);
+
+                    if (valueOnly)
+                    {
+                        return formattedSessionId;
+                    }
+                    else
+                    {
+                        string sessionIdLabel = LocalizationManager.GetText("session_id");
+                        return $"{baseText}, {sessionIdLabel}: {formattedSessionId}";
+                    }
+                }
+                else
+                {
+                    // Si no hay ID de sesión (no estamos en una sesión online), solo devolver el texto base
+                    return baseText;
+                }
+            }
+            catch (System.Exception e)
+            {
+                Logger.LogError($"Error en HandleInvitePlayersOption: {e}");
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el ID de sesión actual del NetworkingManager usando reflexión
+        /// </summary>
+        private static string GetSessionId()
+        {
+            try
+            {
+                var networking = PugOther.Manager.networking;
+                Logger.LogInfo($"[DEBUG] networking is null: {networking == null}");
+
+                if (networking == null)
+                {
+                    Logger.LogWarning("NetworkingManager es null");
+                    return null;
+                }
+
+                // Verificar si estamos en una sesión offline
+                Logger.LogInfo($"[DEBUG] OfflineSession: {networking.OfflineSession}");
+                if (networking.OfflineSession)
+                {
+                    Logger.LogInfo("Sesión offline detectada, no hay session ID");
+                    return null;
+                }
+
+                // Intentar obtener todos los campos para debug
+                var allFields = networking.GetType().GetFields(
+                    System.Reflection.BindingFlags.NonPublic |
+                    System.Reflection.BindingFlags.Public |
+                    System.Reflection.BindingFlags.Instance);
+
+                Logger.LogInfo($"[DEBUG] Total campos encontrados: {allFields.Length}");
+                foreach (var field in allFields)
+                {
+                    if (field.Name.ToLower().Contains("session") || field.Name.ToLower().Contains("join"))
+                    {
+                        var value = field.GetValue(networking);
+                        Logger.LogInfo($"[DEBUG] Campo: {field.Name}, Tipo: {field.FieldType.Name}, Valor: {value}");
+                    }
+                }
+
+                // Usar reflexión para acceder al campo privado currentSessionId
+                var fieldInfo = networking.GetType().GetField("currentSessionId",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+                Logger.LogInfo($"[DEBUG] fieldInfo is null: {fieldInfo == null}");
+
+                if (fieldInfo != null)
+                {
+                    string sessionId = fieldInfo.GetValue(networking) as string;
+                    Logger.LogInfo($"[DEBUG] Session ID obtenido: '{sessionId}'");
+                    return sessionId;
+                }
+                else
+                {
+                    Logger.LogWarning("Campo 'currentSessionId' no encontrado");
+                }
+
+                return null;
+            }
+            catch (System.Exception e)
+            {
+                Logger.LogError($"Error obteniendo session ID: {e}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Formatea el ID de sesión para que el TTS lo lea letra por letra con espacios
+        /// Ejemplo: "ABC123" -> "A B C 1 2 3"
+        /// </summary>
+        private static string FormatSessionIdForTTS(string sessionId)
+        {
+            if (string.IsNullOrEmpty(sessionId)) return "";
+
+            // Añadir espacios entre cada carácter para que el TTS los lea individualmente
+            var formatted = new System.Text.StringBuilder();
+            for (int i = 0; i < sessionId.Length; i++)
+            {
+                formatted.Append(sessionId[i]);
+                if (i < sessionId.Length - 1)
+                {
+                    formatted.Append(" ");
+                }
+            }
+
+            return formatted.ToString();
         }
     }
 

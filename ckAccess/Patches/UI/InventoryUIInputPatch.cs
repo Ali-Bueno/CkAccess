@@ -1,8 +1,12 @@
 extern alias PugOther;
+extern alias Core;
+extern alias PugComps;
 using HarmonyLib;
 using UnityEngine;
 using Rewired;
 using ckAccess.Localization;
+using Vector3 = Core::UnityEngine.Vector3;
+using ObjectDataCD = PugComps::ObjectDataCD;
 
 namespace ckAccess.Patches.UI
 {
@@ -32,6 +36,7 @@ namespace ckAccess.Patches.UI
         {
             HandleOInput(uiManager);
         }
+
 
         /// <summary>
         /// Maneja la tecla U: cambiar pestañas o seleccionar objetos
@@ -295,49 +300,24 @@ namespace ckAccess.Patches.UI
 
         /// <summary>
         /// Maneja la selección específica de slots de inventario
+        /// SIMPLIFICADO: Solo emula click izquierdo sin añadir atajos custom
         /// </summary>
         private static void HandleInventorySlotSelection(PugOther.InventorySlotUI slot)
         {
             try
             {
-                var containedObject = slot.GetContainedObjectData();
-
-                if (containedObject.objectID == ObjectID.None)
-                {
-                    UIManager.Speak(LocalizationManager.GetText("empty_slot"));
-                    return;
-                }
-
-                // Simular click izquierdo en el slot usando reflection
-                var clickEvent = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current)
-                {
-                    button = UnityEngine.EventSystems.PointerEventData.InputButton.Left,
-                    position = slot.transform.position
-                };
-
-                var pointerClickMethod = typeof(PugOther.InventorySlotUI).GetMethod("OnPointerClick",
-                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-                if (pointerClickMethod != null)
-                {
-                    pointerClickMethod.Invoke(slot, new object[] { clickEvent });
-                }
-                else
-                {
-                    // Fallback: intentar como IPointerClickHandler
-                    var clickHandler = slot as UnityEngine.EventSystems.IPointerClickHandler;
-                    clickHandler?.OnPointerClick(clickEvent);
-                }
-
-                // Anunciar la acción
-                var objectName = PugOther.PlayerController.GetObjectName(containedObject, true);
-                UIManager.Speak(LocalizationManager.GetText("selected_item", objectName.text));
+                // Simplemente hacer click izquierdo en el slot
+                // El juego manejará automáticamente todos los comportamientos nativos
+                // (agarrar, colocar, transferir si Shift está presionado, etc.)
+                slot.OnLeftClicked(false, false);
             }
             catch (System.Exception ex)
             {
                 UIManager.Speak(LocalizationManager.GetText("slot_selection_error", ex.Message));
+                UnityEngine.Debug.LogError($"Exception in HandleInventorySlotSelection: {ex}");
             }
         }
+
 
         /// <summary>
         /// Maneja la selección específica de habilidades (skills)
@@ -672,6 +652,7 @@ namespace ckAccess.Patches.UI
                 UIManager.Speak(LocalizationManager.GetText("equipment_preset_error", ex.Message));
             }
         }
+
 
         /// <summary>
         /// Verifica si el elemento es un botón de estadísticas

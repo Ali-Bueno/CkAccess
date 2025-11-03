@@ -73,8 +73,10 @@ namespace ckAccess.Patches.UI
                 // Detectar input de navegación (teclado y D-Pad)
                 var navigationDirection = DetectNavigationInput();
 
-                // Detectar input de acciones (U/O)
-                bool hasActionInput = Input.GetKeyDown(KeyCode.U) || Input.GetKeyDown(KeyCode.O);
+                // Detectar input de acciones (U/O y gamepad)
+                bool uInput = Input.GetKeyDown(KeyCode.U) || IsGamepadButtonPressed("R2");
+                bool oInput = Input.GetKeyDown(KeyCode.O) || IsGamepadButtonPressed("L2");
+                bool hasActionInput = uInput || oInput;
 
                 // Si no hay ningún input relevante, no hacer nada
                 if (navigationDirection == PugUnExt.Pug.UnityExtensions.Direction.Id.zero && !hasActionInput)
@@ -85,11 +87,11 @@ namespace ckAccess.Patches.UI
                 // Manejar acciones U/O (tienen prioridad sobre navegación)
                 if (hasActionInput)
                 {
-                    if (Input.GetKeyDown(KeyCode.U))
+                    if (uInput)
                     {
                         InventoryUIInputPatch.HandleUInputPublic(uiManager);
                     }
-                    else if (Input.GetKeyDown(KeyCode.O))
+                    else if (oInput)
                     {
                         InventoryUIInputPatch.HandleOInputPublic(uiManager);
                     }
@@ -181,6 +183,9 @@ namespace ckAccess.Patches.UI
             }
         }
 
+        // Variable estática para rastrear la última sección anunciada
+        private static string _lastAnnouncedSection = "";
+
         /// <summary>
         /// Anuncia elementos que no tienen parches específicos
         /// SIMPLIFICADO: Solo anuncia lo esencial
@@ -190,6 +195,14 @@ namespace ckAccess.Patches.UI
             try
             {
                 if (element == null) return;
+
+                // Verificar si es un slot de inventario y anunciar cambio de sección
+                var slot = element.GetComponent<PugOther.InventorySlotUI>();
+                if (slot != null)
+                {
+                    AnnounceInventorySectionIfChanged(slot);
+                    return; // Los slots ya tienen su propio sistema de anuncios
+                }
 
                 // Verificar si es un botón
                 var button = element.GetComponent<PugOther.ButtonUIElement>();
@@ -231,6 +244,61 @@ namespace ckAccess.Patches.UI
         }
 
         /// <summary>
+        /// Anuncia cuando el usuario cambia entre secciones (cofre/inventario)
+        /// </summary>
+        private static void AnnounceInventorySectionIfChanged(PugOther.InventorySlotUI slot)
+        {
+            try
+            {
+                // Acceder al contenedor del slot mediante reflexión
+                var containerField = typeof(PugOther.SlotUIBase).GetField("slotsUIContainer",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+                if (containerField != null)
+                {
+                    var container = containerField.GetValue(slot) as PugOther.ItemSlotsUIContainer;
+                    if (container != null)
+                    {
+                        string sectionName = GetSectionName(container.containerType);
+
+                        // Solo anunciar si cambió de sección
+                        if (sectionName != _lastAnnouncedSection)
+                        {
+                            _lastAnnouncedSection = sectionName;
+                            UIManager.Speak(LocalizationManager.GetText(sectionName));
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error in AnnounceInventorySectionIfChanged: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el nombre de la sección según el tipo de contenedor
+        /// </summary>
+        private static string GetSectionName(PugOther.ItemSlotsUIContainerType containerType)
+        {
+            switch (containerType)
+            {
+                case PugOther.ItemSlotsUIContainerType.PlayerInventory:
+                    return "section_player_inventory";
+                case PugOther.ItemSlotsUIContainerType.ChestInventory:
+                    return "section_chest_inventory";
+                case PugOther.ItemSlotsUIContainerType.CraftingInventory:
+                    return "section_crafting_inventory";
+                case PugOther.ItemSlotsUIContainerType.PlayerEquipment:
+                    return "section_equipment";
+                case PugOther.ItemSlotsUIContainerType.PouchInventory:
+                    return "section_pouch";
+                default:
+                    return "section_unknown";
+            }
+        }
+
+        /// <summary>
         /// Verifica si hay un árbol de talentos de skill abierto
         /// </summary>
         private static bool IsSkillTalentTreeOpen(PugOther.UIManager uiManager)
@@ -245,6 +313,72 @@ namespace ckAccess.Patches.UI
                 }
 
                 return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Verifica si un botón del gamepad está presionado usando Rewired
+        /// </summary>
+        private static bool IsGamepadButtonPressed(string buttonName)
+        {
+            try
+            {
+                var player = ReInput.players.GetPlayer(0);
+                if (player == null) return false;
+
+                // R2 y L2 son triggers, no botones directos
+                // Necesitamos verificar usando el sistema de acciones
+                if (buttonName == "R2")
+                {
+                    // R2 trigger - verificar axis
+                    return player.GetAxis("RightTrigger") > 0.5f && !WasR2PressedLastFrame();
+                }
+                else if (buttonName == "L2")
+                {
+                    // L2 trigger - verificar axis
+                    return player.GetAxis("LeftTrigger") > 0.5f && !WasL2PressedLastFrame();
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool _wasR2PressedLastFrame = false;
+        private static bool _wasL2PressedLastFrame = false;
+
+        private static bool WasR2PressedLastFrame()
+        {
+            try
+            {
+                var player = ReInput.players.GetPlayer(0);
+                bool isPressed = player.GetAxis("RightTrigger") > 0.5f;
+                bool wasPressed = _wasR2PressedLastFrame;
+                _wasR2PressedLastFrame = isPressed;
+                return wasPressed;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool WasL2PressedLastFrame()
+        {
+            try
+            {
+                var player = ReInput.players.GetPlayer(0);
+                bool isPressed = player.GetAxis("LeftTrigger") > 0.5f;
+                bool wasPressed = _wasL2PressedLastFrame;
+                _wasL2PressedLastFrame = isPressed;
+                return wasPressed;
             }
             catch
             {

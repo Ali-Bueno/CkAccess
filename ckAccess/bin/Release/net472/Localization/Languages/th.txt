@@ -1,0 +1,368 @@
+# ไฟล์การแปลภาษาไทยสำหรับ Core Keeper Accessibility Mod
+# รูปแบบ: key=value
+# บรรทัดที่ขึ้นต้นด้วย # เป็นความเห็น
+
+# ข้อความของเคอร์เซอร์เสมือน
+virtual_cursor_initialized=เคอร์เซอร์เสมือนเริ่มใช้งานแล้ว
+cursor_initialization_error=เกิดข้อผิดพลาดในการเริ่มต้นเคอร์เซอร์
+cursor_reset=เคอร์เซอร์ถูกรีเซ็ต: x={0}, z={1}
+cursor_reset_error=เกิดข้อผิดพลาดในการรีเซ็ตเคอร์เซอร์
+limit_reached=ถึงขีดจำกัด
+cursor_limit_reached=Cursor limit reached
+primary_action_error=เกิดข้อผิดพลาดในการกระทำหลัก: {0}
+placing_at_position=กำลังวางที่ตำแหน่ง x={0}, z={1}
+item_placed_at_position={0} ถูกวางที่ตำแหน่ง x={1}, z={2}
+secondary_action_error=เกิดข้อผิดพลาดในการกระทำรอง: {0}
+interaction_error=เกิดข้อผิดพลาดในการโต้ตอบ: {0}
+cursor_not_initialized=เคอร์เซอร์ไม่ได้เริ่มต้นเพียงพอ
+current_position=ตำแหน่งปัจจุบัน: x={0}, z={1}
+position_reading_error=เกิดข้อผิดพลาดในการอ่านตำแหน่งของผู้เล่น
+
+# ข้อความการนำทาง UI
+no_tabs_available=ไม่มีแท็บที่พร้อมใช้งาน
+no_more_tabs=ไม่มีแท็บเพิ่มเติม
+tab_equipment=แท็บ: อุปกรณ์
+tab_skills=แท็บ: ทักษะ
+tab_souls=แท็บ: วิญญาณ
+tab_number=แท็บ {0}
+navigation_error=เกิดข้อผิดพลาดในการนำทางแท็บ: {0}
+selection_error=เกิดข้อผิดพลาดในการเลือกวัตถุ: {0}
+empty_slot=ช่องว่าง
+slot_selection_error=เกิดข้อผิดพลาดในการเลือกช่อง: {0}
+skill_error=เกิดข้อผิดพลาดในการเปิดทักษะ: {0}
+click_simulation_error=เกิดข้อผิดพลาดในการจำลองคลิก: {0}
+no_element_selected=ไม่มีองค์ประกอบที่เลือก
+no_element_selected_secondary=ไม่มีองค์ประกอบที่เลือกสำหรับการกระทำรอง
+secondary_action_error_ui=เกิดข้อผิดพลาดในการกระทำรอง: {0}
+empty_slot_no_action=ช่องว่าง ไม่มีการกระทำที่พร้อมใช้งาน
+secondary_action_performed=ทำการกระทำรอง
+secondary_slot_error=เกิดข้อผิดพลาดในการกระทำรองของช่อง: {0}
+right_click_simulation_error=เกิดข้อผิดพลาดในการจำลองการคลิกขวา: {0}
+talent_action=การกระทำบนพรสวรรค์: {0}
+talent_selected=เลือกพรสวรรค์แล้ว
+talent_selection_error=เกิดข้อผิดพลาดในการเลือกพรสวรรค์: {0}
+skills=ทักษะ
+preset_selection_error=เกิดข้อผิดพลาดในการเลือกการตั้งค่าล่วงหน้า: {0}
+preset_selected=เลือกการตั้งค่าล่วงหน้า: {0}
+equipment_preset_selected=เลือกการตั้งค่าล่วงหน้าของอุปกรณ์แล้ว
+equipment_preset_selected_generic=เลือกการตั้งค่าล่วงหน้าของอุปกรณ์ {0} แล้ว
+equipment_preset_error=เกิดข้อผิดพลาดกับการตั้งค่าล่วงหน้าของอุปกรณ์: {0}
+equipment_preset_not_found=ไม่พบการตั้งค่าล่วงหน้าของอุปกรณ์
+stats_window_toggled=เปิด/ปิดหน้าต่างสถิติ
+stats=สถิติ
+stats_button_activated=ปุ่มสถิติถูกเปิดใช้งาน
+stats_error=เกิดข้อผิดพลาดในการเปิดสถิติ: {0}
+selected_item=เลือก: {0}
+
+# ข้อความของทักษะและพรสวรรค์
+talent_tree_opened=เปิดต้นไม้พรสวรรค์: {0}
+talent_tree_opened_generic=เปิดต้นไม้พรสวรรค์
+talent_tree_closed=ปิดต้นไม้พรสวรรค์
+talent=พรสวรรค์
+
+# ชื่อทักษะ
+skill_mining=การขุด
+skill_running=การวิ่ง
+skill_melee=การต่อสู้แบบประชิด
+skill_vitality=ความมีชีวิต
+skill_crafting=การสร้างสรรค์
+skill_range=การต่อสู้ระยะไกล
+skill_gardening=การจัดสวน
+skill_fishing=การตกปลา
+skill_cooking=การปรุงอาหาร
+skill_magic=เวทมนตร์
+skill_summoning=การเรียกใช้
+skill_explosives=วัตถุระเบิด
+
+# ข้อความของเครื่องอ่านโลก
+empty=ว่าง
+reading_error=ข้อผิดพลาดในการอ่าน
+the_core=แกน (โต้ตอบได้)
+work_station={0} (สถานีการทำงาน)
+enemy={0} (ศัตรู)
+object={0} (วัตถุ)
+plant={0} (พืช)
+resource={0} (ทรัพยากร)
+entity={0} (เอนทิตี)
+destructible_tool={0} ที่ทำลายได้ (ใช้ {1})
+destructible_material_tool={0} จากวัสดุ {1} ที่ทำลายได้ (ใช้ {2})
+blocking={0} (ขวาง)
+blocking_material={0} จากวัสดุ {1} (ขวาง)
+dangerous={0} (อันตราย)
+dangerous_material={0} จากวัสดุ {1} (อันตราย)
+area_not_available=พื้นที่ไม่พร้อมใช้งาน
+unknown_position=ตำแหน่งที่ไม่รู้จัก
+unknown=ไม่รู้จัก
+player_position_error=ไม่สามารถรับตำแหน่งของผู้เล่น
+cannot_read_player_position=ไม่สามารถอ่านตำแหน่งของผู้เล่น
+position_reading_error_generic=เกิดข้อผิดพลาดในการอ่านตำแหน่ง
+empty_area_around=พื้นที่ว่างรอบ ๆ
+area_scan_error=เกิดข้อผิดพลาดในการสแกนพื้นที่
+
+# ข้อความสำหรับ Crafting (โต๊ะการทำงาน)
+recipe=สูตร: {0}
+recipe_with_amount=สูตร: {0} x{1}
+can_craft=สามารถสร้างได้
+cannot_craft=ไม่สามารถสร้างได้
+required_materials=วัสดุที่จำเป็น
+missing_material={0}: ขาดไป {1}
+available_material={0}: คุณมี {1}
+and_more_materials=และวัสดุเพิ่มเติม
+invalid_recipe=สูตรไม่ถูกต้อง
+cannot_craft_materials=ไม่สามารถสร้างได้: วัสดุไม่เพียงพอ
+inventory_full=ลังเก็บของเต็ม
+crafted_item=สร้าง {0} แล้ว
+crafting_error=เกิดข้อผิดพลาดในการสร้าง
+
+# ข้อความของการกระทำโดยตรง
+empty_slot_cannot_equip=ช่องว่าง ไม่สามารถสวมใส่ได้
+item_not_equippable={0} ไม่สามารถสวมใส่ได้
+equipment_window_not_open=หน้าต่างอุปกรณ์ไม่เปิด
+item_equipped={0} สวมใส่แล้ว
+item_cannot_equip=ไม่สามารถสวมใส่ {0}
+equip_error=เกิดข้อผิดพลาดในการสวมใส่
+empty_slot_cannot_use=ช่องว่าง ไม่สามารถใช้ได้
+item_not_usable={0} ไม่สามารถใช้ได้
+item_used={0} ถูกใช้
+item_cannot_use=ไม่สามารถใช้ {0}
+item_placed={0} ถูกวาง
+item_action_performed=ทำการกระทำบน {0}
+use_error=เกิดข้อผิดพลาดในการใช้
+no_crafting_available=ไม่มีการสร้างสรรค์ที่พร้อมใช้งาน
+crafting_station_available=สถานีการสร้างสรรค์พร้อมใช้งาน ใช้สูตรจากลังเก็บของของคุณ
+select_recipe_item=เลือกรายการสูตร
+recipe_item_detected=พบสูตร: {0}
+not_a_recipe=รายการนี้ไม่ใช่สูตร
+craft_error=เกิดข้อผิดพลาดในการสร้าง
+
+# ข้อความของโฮทบาร์
+hotbar_changed=เลือกโฮทบาร์ {0}
+no_weapon_equipped=ไม่มีอาวุธสวมใส่
+empty_hotbar_slot=ช่องโฮทบาร์ว่าง
+unknown=ไม่รู้จัก
+current_hotbar_item=โฮทบาร์ {0} ช่อง {1}: {2}
+hotbar_error=เกิดข้อผิดพลาดในโฮทบาร์
+durability_critical=ความทนทานวิกฤต {0}%
+durability_low=ความทนทานต่ำ {0}%
+durability_normal=ความทนทาน {0}%
+durability_full=ความทนทานเต็ม
+hotbar_info_available=ข้อมูลโฮทบาร์พร้อมใช้งาน
+hotbar_slot_selected=เลือกช่อง {0}
+
+# สถานะของวัตถุ
+equipped=, สวมใส่แล้ว
+
+# องค์ประกอบ UI
+stats_button=ปุ่มสถิติ: {0}
+equipment_preset=การตั้งค่าล่วงหน้าของอุปกรณ์: {0}
+crafting_button=ปุ่มการสร้าง: {0}
+organize_button=ปุ่มจัดระเบียบ: {0}
+quick_action_button=ปุ่มการกระทำด่วน: {0}
+button=ปุ่ม: {0}
+tab=แท็บ: {0}
+preset=การตั้งค่าล่วงหน้า: {0}
+statistics=สถิติ: {0}
+bag=ถุง: {0}
+shortcut=ทางลัด: {0}
+element=องค์ประกอบ: {0}
+
+# ข้อความป๊อปอัป
+hold_to_confirm=กด ค้างไว้เพื่อยืนยัน
+
+# ตัวเลือกเมนู
+more_options=ตัวเลือกเพิ่มเติม
+
+# ประเภทของไทล์
+tile_none=ว่าง
+tile_ground=พื้นดิน
+tile_wall=ผนัง
+tile_water=น้ำ
+tile_pit=หลุม
+tile_bridge=สะพาน
+tile_floor=พื้นที่สร้าง
+tile_roof_hole=รูในหลังคา
+tile_thin_wall=ผนังบาง
+tile_dug_up_ground=ดินที่ขุดแล้ว
+tile_watered_ground=ดินที่ชำระแล้ว
+tile_circuit_plate=แผ่นวงจร
+tile_ancient_circuit_plate=แผ่นวงจรโบราณ
+tile_fence=รั้ว
+tile_rug=พรม
+tile_small_stones=หินเล็ก
+tile_small_grass=หญ้าเล็ก
+tile_wall_grass=หญ้ากำแพง
+tile_debris=ซากปรักหักพัง
+tile_floor_crack=รอยแตกพื้น
+tile_rail=ราง
+tile_great_wall=ผนังใหญ่
+tile_lit_floor=พื้นส่องแสง
+tile_debris2=ซากปรักหักพัง
+tile_loose_flooring=พื้นที่หลวม
+tile_immune=โซนภูมิคุ้มกัน
+tile_wall_crack=รอยแตกผนัง
+tile_ore=เหล็กแร่
+tile_big_root=รากใหญ่
+tile_ground_slime=ร่องรอยสไลม์
+tile_ancient_crystal=คริสตัลโบราณ
+tile_chrysalis=ตุ่มดักแด้
+
+# หมวดหมู่ของไทล์
+category_construction=การก่อสร้าง
+category_liquid=ของเหลว
+category_mineral=แร่ธาตุ
+category_organic=อินทรีย์
+category_stone=หิน
+category_crystal=คริสตัล
+category_unknown=ไม่รู้จัก
+
+# หมวดหมู่วัสดุของไทล์
+material_earth=ดิน
+material_stone=หิน
+material_mineral=แร่ธาตุ
+material_liquid=ของเหลว
+material_construction=การก่อสร้าง
+material_crystal=คริสตัล
+material_organic=อินทรีย์
+material_unknown=ไม่รู้จัก
+
+# เสียงขั้นตอน
+sound_earth=ดิน
+sound_stone=หิน
+sound_metal=โลหะ
+sound_splash=ไออย่าง
+sound_wood=ไม้
+sound_gravel=กรวด
+sound_textile=สิ่งทอ
+sound_neutral=เป็นกลาง
+
+# เครื่องมือ
+tool_pickaxe=จอก
+tool_high_quality_pickaxe=จอกคุณภาพสูง
+tool_axe=ขวาน
+tool_shovel=พลั่ว
+tool_pickaxe_or_shovel=จอกหรือพลั่ว
+tool_none=ไม่มี
+
+# วัสดุ Tileset
+tileset_dirt=ดิน
+tileset_stone=หิน
+tileset_obsidian=อับซิเดียน
+tileset_lava=ลาวา
+tileset_nature=ธรรมชาติ
+tileset_mold=เศษ
+tileset_sea=ทะเล
+tileset_sand=ทราย
+tileset_desert=ทะเลทราย
+tileset_snow=หิมะ
+tileset_crystal=คริสตัล
+tileset_dark_stone=หินเข้ม
+
+# คำอธิบายไทล์
+tile_with_material={1} {0}
+
+# ข้อความลังเก็บของ
+inventory_opened=เปิดลังเก็บของแล้ว
+inventory_closed=ปิดลังเก็บของแล้ว
+character_window_opened=เปิดหน้าต่างตัวละครแล้ว
+character_window_closed=ปิดหน้าต่างตัวละครแล้ว
+# ข้อความจากระบบการแจ้งเตือน
+item_picked_single=เก็บไป: {0}
+item_picked_multiple=เก็บไป: {0} x{1}
+level_up=ขึ้นระดับเป็น {0} แล้ว!
+skill_up={0} ขึ้นระดับเป็น {1}
+
+# ข้อความ Auto-Targeting
+enemy_in_range={0} ในพิสัย
+enemy_out_of_range={0} นอกพิสัย
+enemy_at_distance={0} {1}, {2} ช่อง
+enemy_unknown=ศัตรูที่ไม่รู้จัก
+enemy_generic=ศัตรู
+
+# ทิศทาง
+dir_east=ทางทิศตะวันออก
+dir_northeast=ทางทิศตะวันออกเฉียงเหนือ
+dir_north=ทางทิศเหนือ
+dir_northwest=ทางทิศตะวันตกเฉียงเหนือ
+dir_west=ทางทิศตะวันตก
+dir_southwest=ทางทิศตะวันตกเฉียงใต้
+dir_south=ทางทิศใต้
+dir_southeast=ทางทิศตะวันออกเฉียงใต้
+
+# ชื่อศัตรู
+enemy_slime=สไลม์
+enemy_spider=แมงมุม
+enemy_skeleton=กระโหลก
+enemy_goblin=โกบลิน
+enemy_orc=โอร์ก
+enemy_zombie=ซอมบี้
+enemy_demon=ปีศาจ
+enemy_beast=สัตว์ร้าย
+enemy_larva=หนอน
+enemy_grub=ตัวหนอน
+enemy_worm=เพลา
+enemy_fly=แมลง
+enemy_bat=ค้างคาว
+enemy_rat=หนู
+enemy_boss=บอส
+
+# ข้อความระบบการแจ้งเตือน
+no_notifications=ไม่มีการแจ้งเตือน
+first_notification=การแจ้งเตือนแรก
+last_notification=การแจ้งเตือนสุดท้าย
+
+# คำอธิบายหมวดหมู่วัตถุ
+category_core=แกน
+category_chest=กล่องเก็บของ
+category_workstation=สถานีการทำงาน
+category_enemy=ศัตรู
+category_pickup=วัตถุเก็บรวบรวมได้
+category_plant=พืช
+category_resource=ทรัพยากร
+category_decoration=การตกแต่ง
+category_furniture=เฟอร์นิเจอร์
+category_animal=สัตว์
+category_critter=สัตว์เล็ก
+category_structure=โครงสร้าง
+category_door=ประตู
+category_statue=รูปปั้น
+category_unknown=วัตถุที่ไม่รู้จัก
+
+# คำนำหน้าประเภทเอนทิตี
+prefix_animal=สัตว์
+prefix_creature=สัตว์เลี้ยง
+prefix_statue=รูปปั้น
+prefix_furniture=เฟอร์นิเจอร์
+prefix_structure=โครงสร้าง
+
+# ชื่อ Tileset เพิ่มเติม
+tileset_extras=พิเศษ
+tileset_base_building_wood=การสร้างไม้
+tileset_larva_hive=รังหนอน
+tileset_base_building_stone=การสร้างหิน
+tileset_clay=ดินเหนียว
+tileset_turf=หญ้า
+tileset_base_building_unpainted=การสร้างไม่ทาสี
+tileset_base_building_yellow=การสร้างสีเหลือง
+tileset_base_building_green=การสร้างสีเขียว
+tileset_base_building_red=การสร้างสีแดง
+tileset_base_building_purple=การสร้างสีม่วง
+tileset_base_building_blue=การสร้างสีน้ำเงิน
+tileset_base_building_brown=การสร้างสีน้ำตาล
+tileset_base_building_white=การสร้างสีขาว
+tileset_base_building_black=การสร้างสีดำ
+tileset_base_building_scarlet=การสร้างสีแดงเข้ม
+tileset_base_building_coral=การสร้างสีปะการัง
+tileset_base_building_galaxite=การสร้างกาแลคไซท์
+tileset_base_building_metal=การสร้างโลหะ
+tileset_base_building_valentine=การสร้างวันวาเลนไทน์
+tileset_base_building_easter=การสร้างเทศกาลอีสเตอร์
+tileset_city=เมือง
+tileset_desert_temple=วัดทะเลทราย
+tileset_desert_temple2=วัดทะเลทรายโบราณ
+tileset_glass=กระจก
+tileset_meadow=ทุ่งหญ้า
+tileset_explosive=ระเบิด
+tileset_alien=เอเลี่ยน
+tileset_oasis=โอเอซิส
+tileset_explosive_forest=ป่าระเบิด
+tileset_explosive_desert=ทะเลทรายระเบิด

@@ -3,6 +3,7 @@ extern alias Core;
 using HarmonyLib;
 using ckAccess.Patches.UI;
 using ckAccess.MapReader;
+using ckAccess.Helpers;
 using PugTilemap;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,7 @@ namespace ckAccess.Patches.Player
         /// <summary>
         /// Parche en AE_FootStep para activar los sonidos de proximidad
         /// SINCRONIZADO con detección de colisiones - no suena si el jugador está bloqueado
+        /// MULTIPLAYER-SAFE: Solo procesa el jugador local
         /// </summary>
         [HarmonyPatch("AE_FootStep")]
         [HarmonyPostfix]
@@ -75,6 +77,10 @@ namespace ckAccess.Patches.Player
             try
             {
                 if (!_systemEnabled || _proximityAudioClip == null) return;
+
+                // MULTIPLAYER: Solo procesar si este es el jugador local
+                if (!LocalPlayerHelper.IsLocalPlayer(__instance))
+                    return;
 
                 // SINCRONIZADO: No reproducir sonido si el jugador está bloqueado por colisión
                 if (MovementCollisionDetectionPatch.IsCollisionDetected)

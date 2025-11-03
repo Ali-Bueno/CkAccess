@@ -1,0 +1,368 @@
+# Arquivo de localização em português brasileiro para Core Keeper Accessibility Mod
+# Formato: chave=valor
+# As linhas que começam com # são comentários
+
+# Mensagens do Cursor Virtual
+virtual_cursor_initialized=Cursor virtual inicializado
+cursor_initialization_error=Erro ao inicializar cursor
+cursor_reset=Cursor resetado: x={0}, z={1}
+cursor_reset_error=Erro ao resetar cursor
+limit_reached=Limite alcançado
+cursor_limit_reached=Cursor limit reached
+primary_action_error=Erro na ação primária: {0}
+placing_at_position=Colocando na posição x={0}, z={1}
+item_placed_at_position={0} colocado na posição x={1}, z={2}
+secondary_action_error=Erro na ação secundária: {0}
+interaction_error=Erro na interação: {0}
+cursor_not_initialized=Cursor não inicializado
+current_position=Posição atual: x={0}, z={1}
+position_reading_error=Erro ao ler posição do jogador
+
+# Mensagens de Navegação UI
+no_tabs_available=Não há abas disponíveis
+no_more_tabs=Não há mais abas disponíveis
+tab_equipment=Aba: Equipamento
+tab_skills=Aba: Habilidades
+tab_souls=Aba: Almas
+tab_number=Aba {0}
+navigation_error=Erro ao navegar nas abas: {0}
+selection_error=Erro ao selecionar objeto: {0}
+empty_slot=Slot vazio
+slot_selection_error=Erro na seleção de slot: {0}
+skill_error=Erro ao abrir habilidade: {0}
+click_simulation_error=Erro ao simular clique: {0}
+no_element_selected=Nenhum elemento selecionado
+no_element_selected_secondary=Nenhum elemento selecionado para ação secundária
+secondary_action_error_ui=Erro na ação secundária: {0}
+empty_slot_no_action=Slot vazio, nenhuma ação disponível
+secondary_action_performed=Ação secundária realizada
+secondary_slot_error=Erro na ação secundária do slot: {0}
+right_click_simulation_error=Erro ao simular clique direito: {0}
+talent_action=Ação no talento: {0}
+talent_selected=Talento selecionado
+talent_selection_error=Erro ao selecionar talento: {0}
+skills=Habilidades
+preset_selection_error=Erro ao selecionar preset: {0}
+preset_selected=Preset selecionado: {0}
+equipment_preset_selected=Preset de equipamento selecionado
+equipment_preset_selected_generic=Preset de equipamento {0} selecionado
+equipment_preset_error=Erro com preset de equipamento: {0}
+equipment_preset_not_found=Preset de equipamento não encontrado
+stats_window_toggled=Janela de estatísticas alternada
+stats=Estatísticas
+stats_button_activated=Botão de estatísticas ativado
+stats_error=Erro ao abrir estatísticas: {0}
+selected_item=Selecionado: {0}
+
+# Mensagens de Habilidades e Talentos
+talent_tree_opened=Árvore de talentos aberta: {0}
+talent_tree_opened_generic=Árvore de talentos aberta
+talent_tree_closed=Árvore de talentos fechada
+talent=Talento
+
+# Nomes de Habilidades
+skill_mining=Mineração
+skill_running=Corrida
+skill_melee=Combate Corpo a Corpo
+skill_vitality=Vitalidade
+skill_crafting=Fabricação
+skill_range=Combate à Distância
+skill_gardening=Jardinagem
+skill_fishing=Pesca
+skill_cooking=Culinária
+skill_magic=Magia
+skill_summoning=Invocação
+skill_explosives=Explosivos
+
+# Mensagens do Leitor de Mundo
+empty=Vazio
+reading_error=Erro de leitura
+the_core=O Núcleo (interagível)
+work_station={0} (estação de trabalho)
+enemy={0} (inimigo)
+object={0} (objeto)
+plant={0} (planta)
+resource={0} (recurso)
+entity={0} (entidade)
+destructible_tool={0} destrutível (usar {1})
+destructible_material_tool={0} de {1} destrutível (usar {2})
+blocking={0} (bloqueante)
+blocking_material={0} de {1} (bloqueante)
+dangerous={0} (perigoso)
+dangerous_material={0} de {1} (perigoso)
+area_not_available=Área não disponível
+unknown_position=Posição desconhecida
+unknown=Desconhecido
+player_position_error=Não foi possível obter a posição do jogador
+cannot_read_player_position=Não é possível ler a posição do jogador
+position_reading_error_generic=Erro ao ler posição
+empty_area_around=Área vazia ao redor
+area_scan_error=Erro ao escanear área
+
+# Mensagens de Crafting (Mesa de Trabalho)
+recipe=Receita: {0}
+recipe_with_amount=Receita: {0} x{1}
+can_craft=Pode criar
+cannot_craft=Não pode criar
+required_materials=Materiais necessários
+missing_material={0}: faltam {1}
+available_material={0}: você tem {1}
+and_more_materials=e mais materiais
+invalid_recipe=Receita inválida
+cannot_craft_materials=Não é possível criar: faltam materiais
+inventory_full=Inventário cheio
+crafted_item=Criado {0}
+crafting_error=Erro ao criar
+
+# Mensagens de Ações Diretas
+empty_slot_cannot_equip=Slot vazio, não pode equipar
+item_not_equippable={0} não pode ser equipado
+equipment_window_not_open=Janela de equipamento não está aberta
+item_equipped={0} equipado
+item_cannot_equip=Não é possível equipar {0}
+equip_error=Erro ao equipar
+empty_slot_cannot_use=Slot vazio, não pode usar
+item_not_usable={0} não pode ser usado
+item_used={0} usado
+item_cannot_use=Não é possível usar {0}
+item_placed={0} colocado
+item_action_performed=Ação realizada em {0}
+use_error=Erro ao usar
+no_crafting_available=Não há crafting disponível
+crafting_station_available=Estação de crafting disponível, use as receitas do inventário
+select_recipe_item=Selecione um item de receita
+recipe_item_detected=Receita detectada: {0}
+not_a_recipe=Este item não é uma receita
+craft_error=Erro ao criar
+
+# Mensagens do Hotbar
+hotbar_changed=Hotbar {0} selecionado
+no_weapon_equipped=Sem arma equipada
+empty_hotbar_slot=Slot de hotbar vazio
+unknown=Desconhecido
+current_hotbar_item=Hotbar {0}, slot {1}: {2}
+hotbar_error=Erro no hotbar
+durability_critical=durabilidade crítica {0}%
+durability_low=durabilidade baixa {0}%
+durability_normal=durabilidade {0}%
+durability_full=durabilidade completa
+hotbar_info_available=Informação do hotbar disponível
+hotbar_slot_selected=Slot {0} selecionado
+
+# Estado de Objetos
+equipped=, equipado
+
+# Elementos UI
+stats_button=Botão de estatísticas: {0}
+equipment_preset=Preset de equipamento: {0}
+crafting_button=Botão de criação: {0}
+organize_button=Botão de organizar: {0}
+quick_action_button=Botão de ação rápida: {0}
+button=Botão: {0}
+tab=Aba: {0}
+preset=Preset: {0}
+statistics=Estatísticas: {0}
+bag=Bolsa: {0}
+shortcut=Atalho: {0}
+element=Elemento: {0}
+
+# Mensagens Pop-up
+hold_to_confirm=mantenha pressionado para confirmar
+
+# Opções de Menu
+more_options=Mais opções
+
+# Tipos de Tiles
+tile_none=Vazio
+tile_ground=Solo
+tile_wall=Parede
+tile_water=Água
+tile_pit=Buraco
+tile_bridge=Ponte
+tile_floor=Solo construído
+tile_roof_hole=Buraco no teto
+tile_thin_wall=Parede fina
+tile_dug_up_ground=Terra escavada
+tile_watered_ground=Terra irrigada
+tile_circuit_plate=Placa de circuito
+tile_ancient_circuit_plate=Placa de circuito antiga
+tile_fence=Cerca
+tile_rug=Tapete
+tile_small_stones=Pedras pequenas
+tile_small_grass=Grama pequena
+tile_wall_grass=Grama de parede
+tile_debris=Escombros
+tile_floor_crack=Rachadura no chão
+tile_rail=Trilho
+tile_great_wall=Grande muralha
+tile_lit_floor=Chão iluminado
+tile_debris2=Escombros
+tile_loose_flooring=Piso solto
+tile_immune=Zona imune
+tile_wall_crack=Rachadura na parede
+tile_ore=Veia de minério
+tile_big_root=Raiz grande
+tile_ground_slime=Rastro de slime
+tile_ancient_crystal=Cristal antigo
+tile_chrysalis=Crisálida
+
+# Categorias de Tiles
+category_construction=Construção
+category_liquid=Líquido
+category_mineral=Mineral
+category_organic=Orgânico
+category_stone=Pedra
+category_crystal=Cristal
+category_unknown=Desconhecido
+
+# Categorias de Materiais de Tiles
+material_earth=Terra
+material_stone=Pedra
+material_mineral=Mineral
+material_liquid=Líquido
+material_construction=Construção
+material_crystal=Cristal
+material_organic=Orgânico
+material_unknown=Desconhecido
+
+# Sons de Passos
+sound_earth=Terra
+sound_stone=Pedra
+sound_metal=Metal
+sound_splash=Respingo
+sound_wood=Madeira
+sound_gravel=Cascalho
+sound_textile=Têxtil
+sound_neutral=Neutro
+
+# Ferramentas
+tool_pickaxe=Picareta
+tool_high_quality_pickaxe=Picareta de alta qualidade
+tool_axe=Machado
+tool_shovel=Pá
+tool_pickaxe_or_shovel=Picareta ou Pá
+tool_none=Nenhuma
+
+# Materiais de Tileset
+tileset_dirt=terra
+tileset_stone=pedra
+tileset_obsidian=obsidiana
+tileset_lava=lava
+tileset_nature=natureza
+tileset_mold=mofo
+tileset_sea=mar
+tileset_sand=areia
+tileset_desert=deserto
+tileset_snow=neve
+tileset_crystal=cristal
+tileset_dark_stone=pedra escura
+
+# Descrições de Tiles
+tile_with_material={0} de {1}
+
+# Mensagens de Inventário
+inventory_opened=Inventário aberto
+inventory_closed=Inventário fechado
+character_window_opened=Janela de personagem aberta
+character_window_closed=Janela de personagem fechada
+# Mensagens do Sistema de Notificações
+item_picked_single=Coletado: {0}
+item_picked_multiple=Coletado: {0} x{1}
+level_up=Você subiu para o nível {0}!
+skill_up={0} subiu para o nível {1}
+
+# Mensagens de Auto-Targeting
+enemy_in_range={0} ao alcance
+enemy_out_of_range={0} fora de alcance
+enemy_at_distance={0} {1}, {2} tiles
+enemy_unknown=Inimigo desconhecido
+enemy_generic=Inimigo
+
+# Direções
+dir_east=ao leste
+dir_northeast=ao nordeste
+dir_north=ao norte
+dir_northwest=ao noroeste
+dir_west=ao oeste
+dir_southwest=ao sudoeste
+dir_south=ao sul
+dir_southeast=ao sudeste
+
+# Nomes de Inimigos
+enemy_slime=Slime
+enemy_spider=Aranha
+enemy_skeleton=Esqueleto
+enemy_goblin=Goblin
+enemy_orc=Orc
+enemy_zombie=Zumbi
+enemy_demon=Demônio
+enemy_beast=Besta
+enemy_larva=Larva
+enemy_grub=Verme
+enemy_worm=Minhoca
+enemy_fly=Mosca
+enemy_bat=Morcego
+enemy_rat=Rato
+enemy_boss=Chefe
+
+# Notification System Messages
+no_notifications=Não há notificações
+first_notification=Primeira notificação
+last_notification=Última notificação
+
+# Object Category Descriptions
+category_core=Núcleo
+category_chest=Baú
+category_workstation=Estação de trabalho
+category_enemy=Inimigo
+category_pickup=Objeto coletável
+category_plant=Planta
+category_resource=Recurso
+category_decoration=Decoração
+category_furniture=Móvel
+category_animal=Animal
+category_critter=Criatura
+category_structure=Estrutura
+category_door=Porta
+category_statue=Estátua
+category_unknown=Objeto desconhecido
+
+# Entity Type Prefixes
+prefix_animal=Animal
+prefix_creature=Criatura
+prefix_statue=Estátua
+prefix_furniture=Móvel
+prefix_structure=Estrutura
+
+# Additional Tileset Names
+tileset_extras=extras
+tileset_base_building_wood=construção de madeira
+tileset_larva_hive=colmeia de larvas
+tileset_base_building_stone=construção de pedra
+tileset_clay=argila
+tileset_turf=grama
+tileset_base_building_unpainted=construção sem pintura
+tileset_base_building_yellow=construção amarela
+tileset_base_building_green=construção verde
+tileset_base_building_red=construção vermelha
+tileset_base_building_purple=construção roxa
+tileset_base_building_blue=construção azul
+tileset_base_building_brown=construção marrom
+tileset_base_building_white=construção branca
+tileset_base_building_black=construção preta
+tileset_base_building_scarlet=construção escarlate
+tileset_base_building_coral=construção coral
+tileset_base_building_galaxite=construção galaxita
+tileset_base_building_metal=construção metálica
+tileset_base_building_valentine=construção Dia dos Namorados
+tileset_base_building_easter=construção Páscoa
+tileset_city=cidade
+tileset_desert_temple=templo do deserto
+tileset_desert_temple2=templo antigo do deserto
+tileset_glass=vidro
+tileset_meadow=campina
+tileset_explosive=explosivo
+tileset_alien=alienígena
+tileset_oasis=oásis
+tileset_explosive_forest=floresta explosiva
+tileset_explosive_desert=deserto explosivo

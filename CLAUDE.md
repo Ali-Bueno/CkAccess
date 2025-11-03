@@ -444,6 +444,84 @@ El mod soporta **19 idiomas**:
 
 **Sistema de Fallback**: Si falta una traducción, se usa inglés automáticamente.
 
+### Compatibilidad Multijugador (2025) ✅ **COMPLETADO**
+
+#### Problema Identificado
+En multijugador, todos los sistemas de accesibilidad (cursor virtual, tile ahead announcer, auto-targeting, proximidad de audio) procesaban TODOS los jugadores, no solo el local. Esto causaba:
+- El lector de pantalla anunciaba acciones de otros jugadores
+- Los sistemas de proximidad detectaban enemigos cerca de otros jugadores
+- El cursor virtual se confundía entre jugadores
+
+#### Solución Implementada
+Creado un sistema centralizado de identificación del jugador local:
+
+**Archivo:** `LocalPlayerHelper.cs`
+- **Método principal:** `GetLocalPlayer()` - Devuelve el PlayerController del jugador local
+- **Verificación:** `IsLocalPlayer(PlayerController)` - Compara si un jugador es el local
+- **Cache inteligente:** Cachea el jugador local por frame para optimizar rendimiento
+- **Fallback robusto:** Si falla la detección directa, busca entre todos los PlayerControllers activos
+
+#### Sistemas Actualizados para Multijugador
+Todos estos sistemas ahora verifican `LocalPlayerHelper.IsLocalPlayer()` antes de procesar:
+
+1. **`VirtualCursor.cs`**: Solo mueve el cursor del jugador local
+2. **`TileAheadAnnouncerPatch.cs`**: Solo anuncia tiles del jugador local
+3. **`AutoTargetingPatch.cs`**: Solo detecta enemigos para el jugador local
+4. **`EnemyProximityAudioPatch.cs`**: Solo emite sonidos de proximidad del jugador local
+5. **`ProximityAudioPatch.cs`**: Solo detecta interactuables cerca del jugador local
+
+#### Resultado
+✅ Cada cliente ejecuta su propia instancia del mod de forma independiente
+✅ No hay interferencia entre jugadores
+✅ Cada jugador tiene su propia experiencia de accesibilidad
+
+---
+
+### Sistema de Inventario Simplificado (2025) ✅ **COMPLETADO**
+
+#### Filosofía de Diseño
+El mod **NO añade atajos nuevos**. Solo emula clicks del mouse para que funcione con teclado/gamepad. El usuario utiliza todas las teclas nativas del juego.
+
+#### Implementación Actual
+
+**Teclas del Mod:**
+- **U / R2 (mando)**: Click izquierdo puro - agarrar/colocar objetos
+- **O / L2 (mando)**: Click derecho puro - acciones secundarias
+- **WASD/Flechas/D-Pad**: Navegación entre slots
+
+**Teclas Nativas del Juego (el usuario las usa directamente):**
+- **Shift + Click**: Transferencia rápida entre inventarios (el juego maneja esto)
+- **Teclas de Drop**: El usuario usa las teclas configuradas en su juego
+- **Teclas de Quick Stack**: El usuario usa las teclas configuradas en su juego
+
+#### Detección de Secciones de Inventario
+
+El mod detecta automáticamente en qué sección del inventario estás y lo anuncia:
+
+**Archivo:** `UIMouseInputPatch.cs`
+- **Función:** `AnnounceInventorySectionIfChanged()`
+- **Detección:** Usa reflexión para leer `slotsUIContainer.containerType`
+- **Tipos detectados:**
+  - `PlayerInventory` → "Inventario del jugador"
+  - `ChestInventory` → "Inventario del cofre"
+  - `CraftingInventory` → "Inventario de crafteo"
+  - `PlayerEquipment` → "Equipamiento"
+  - `PouchInventory` → "Bolsa"
+- **Cache:** Solo anuncia cuando cambias de sección, no en cada navegación
+
+#### Archivos del Sistema
+- **`UIMouseInputPatch.cs`**: Detección de input y anuncios de sección
+- **`InventoryUIInputPatch.cs`**: Simplificado a clicks puros, sin atajos custom
+- **Localization:** Claves `section_player_inventory`, `section_chest_inventory`, etc.
+
+#### Beneficios
+✅ 100% compatible con controles nativos del juego
+✅ Sin conflictos con atajos del usuario
+✅ Más simple y mantenible
+✅ Funciona con cualquier configuración de teclas del juego
+
+---
+
 ### Próximos Pasos
 
 1.  **Accesibilizar la mesa de crafteo y otros menús de crafting.**

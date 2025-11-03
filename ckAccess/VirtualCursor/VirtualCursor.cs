@@ -4,6 +4,7 @@ extern alias PugUnExt;
 using ckAccess.Patches.UI;
 using ckAccess.MapReader;
 using ckAccess.Localization;
+using ckAccess.Helpers;
 using Unity.Mathematics;
 using Vector3 = Core::UnityEngine.Vector3;
 using Mathf = Core::UnityEngine.Mathf;
@@ -308,51 +309,12 @@ namespace ckAccess.VirtualCursor
         #region Private Core Methods
 
         /// <summary>
-        /// Obtiene la posición del jugador de forma optimizada.
+        /// Obtiene la posición del jugador local de forma optimizada.
+        /// MULTIPLAYER-SAFE: Usa LocalPlayerHelper para obtener el jugador correcto.
         /// </summary>
         private static bool TryGetPlayerPosition(out Vector3 position)
         {
-            position = Vector3.zero;
-
-            try
-            {
-                var player = PugOther.Manager.main?.player;
-                if (player == null) return false;
-
-                // Método optimizado: probar WorldPosition primero
-                try
-                {
-                    var worldPos = player.WorldPosition;
-                    position = new Vector3(worldPos.x, worldPos.y, worldPos.z);
-                    return true;
-                }
-                catch
-                {
-                    // Fallback a RenderPosition
-                    try
-                    {
-                        var renderPos = player.RenderPosition;
-                        position = new Vector3(renderPos.x, renderPos.y, renderPos.z);
-                        return true;
-                    }
-                    catch
-                    {
-                        // Último fallback: transform
-                        var transform = player.transform;
-                        if (transform != null)
-                        {
-                            position = transform.position;
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                // Fallback silencioso
-            }
-
-            return false;
+            return LocalPlayerHelper.TryGetLocalPlayerPosition(out position);
         }
 
         /// <summary>
@@ -455,13 +417,14 @@ namespace ckAccess.VirtualCursor
         }
 
         /// <summary>
-        /// Asegura que el jugador tenga un slot válido equipado para las acciones del cursor virtual
+        /// Asegura que el jugador local tenga un slot válido equipado para las acciones del cursor virtual.
+        /// MULTIPLAYER-SAFE: Solo afecta al jugador local.
         /// </summary>
         private static void EnsureValidSlotEquipped()
         {
             try
             {
-                var player = PugOther.Manager.main.player;
+                var player = LocalPlayerHelper.GetLocalPlayer();
                 if (player == null) return;
 
                 // Verificación simplificada: si no tiene slot equipado, intentar equipar slot 0

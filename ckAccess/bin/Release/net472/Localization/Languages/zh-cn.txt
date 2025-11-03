@@ -1,0 +1,368 @@
+# Core Keeper 无障碍模组中文(简体)本地化文件
+# 格式: 键=值
+# 以#开头的行为注释
+
+# 虚拟光标消息
+virtual_cursor_initialized=虚拟光标已初始化
+cursor_initialization_error=初始化光标出错
+cursor_reset=光标已重置: x={0}, z={1}
+cursor_reset_error=重置光标出错
+limit_reached=已达到限制
+cursor_limit_reached=Cursor limit reached
+primary_action_error=主要操作出错: {0}
+placing_at_position=正在放置于位置 x={0}, z={1}
+item_placed_at_position={0} 已放置于位置 x={1}, z={2}
+secondary_action_error=次要操作出错: {0}
+interaction_error=交互出错: {0}
+cursor_not_initialized=光标未初始化
+current_position=当前位置: x={0}, z={1}
+position_reading_error=读取玩家位置出错
+
+# UI导航消息
+no_tabs_available=没有可用标签页
+no_more_tabs=没有更多标签页
+tab_equipment=标签页: 装备
+tab_skills=标签页: 技能
+tab_souls=标签页: 灵魂
+tab_number=标签页 {0}
+navigation_error=导航标签页出错: {0}
+selection_error=选择对象出错: {0}
+empty_slot=空槽位
+slot_selection_error=槽位选择出错: {0}
+skill_error=打开技能出错: {0}
+click_simulation_error=模拟点击出错: {0}
+no_element_selected=未选择任何元素
+no_element_selected_secondary=未选择任何元素进行次要操作
+secondary_action_error_ui=次要操作出错: {0}
+empty_slot_no_action=空槽位，无可用操作
+secondary_action_performed=次要操作已执行
+secondary_slot_error=槽位次要操作出错: {0}
+right_click_simulation_error=模拟右键点击出错: {0}
+talent_action=天赋操作: {0}
+talent_selected=天赋已选择
+talent_selection_error=天赋选择出错: {0}
+skills=技能
+preset_selection_error=预设选择出错: {0}
+preset_selected=已选择预设: {0}
+equipment_preset_selected=装备预设已选择
+equipment_preset_selected_generic=已选择装备预设 {0}
+equipment_preset_error=装备预设出错: {0}
+equipment_preset_not_found=未找到装备预设
+stats_window_toggled=统计数据窗口已切换
+stats=统计数据
+stats_button_activated=统计数据按钮已激活
+stats_error=打开统计数据出错: {0}
+selected_item=已选择: {0}
+
+# 技能和天赋消息
+talent_tree_opened=天赋树已打开: {0}
+talent_tree_opened_generic=天赋树已打开
+talent_tree_closed=天赋树已关闭
+talent=天赋
+
+# 技能名称
+skill_mining=采矿
+skill_running=跑步
+skill_melee=近战
+skill_vitality=生命力
+skill_crafting=制作
+skill_range=远程
+skill_gardening=园艺
+skill_fishing=钓鱼
+skill_cooking=烹饪
+skill_magic=魔法
+skill_summoning=召唤
+skill_explosives=爆炸物
+
+# 世界阅读器消息
+empty=空的
+reading_error=读取出错
+the_core=核心(可交互)
+work_station={0}(工作站)
+enemy={0}(敌人)
+object={0}(物体)
+plant={0}(植物)
+resource={0}(资源)
+entity={0}(实体)
+destructible_tool={0} 可破坏(使用 {1})
+destructible_material_tool={0} 的 {1} 可破坏(使用 {2})
+blocking={0}(阻挡)
+blocking_material={0} 的 {1}(阻挡)
+dangerous={0}(危险)
+dangerous_material={0} 的 {1}(危险)
+area_not_available=区域不可用
+unknown_position=位置未知
+unknown=未知
+player_position_error=无法获取玩家位置
+cannot_read_player_position=无法读取玩家位置
+position_reading_error_generic=读取位置出错
+empty_area_around=周围区域为空
+area_scan_error=扫描区域出错
+
+# 制作消息(工作台)
+recipe=配方: {0}
+recipe_with_amount=配方: {0} x{1}
+can_craft=可以制作
+cannot_craft=无法制作
+required_materials=所需材料
+missing_material={0}: 缺少 {1}
+available_material={0}: 你有 {1}
+and_more_materials=以及更多材料
+invalid_recipe=无效配方
+cannot_craft_materials=无法制作: 缺少材料
+inventory_full=背包已满
+crafted_item=已制作 {0}
+crafting_error=制作出错
+
+# 直接操作消息
+empty_slot_cannot_equip=空槽位，无法装备
+item_not_equippable={0} 无法装备
+equipment_window_not_open=装备窗口未打开
+item_equipped={0} 已装备
+item_cannot_equip=无法装备 {0}
+equip_error=装备出错
+empty_slot_cannot_use=空槽位，无法使用
+item_not_usable={0} 无法使用
+item_used={0} 已使用
+item_cannot_use=无法使用 {0}
+item_placed={0} 已放置
+item_action_performed=已对 {0} 执行操作
+use_error=使用出错
+no_crafting_available=没有可用制作
+crafting_station_available=制作站可用，使用库存中的配方
+select_recipe_item=选择一个配方物品
+recipe_item_detected=检测到配方: {0}
+not_a_recipe=此物品不是配方
+craft_error=制作出错
+
+# 快捷栏消息
+hotbar_changed=已选择快捷栏 {0}
+no_weapon_equipped=未装备武器
+empty_hotbar_slot=快捷栏槽位为空
+unknown=未知
+current_hotbar_item=快捷栏 {0}，槽位 {1}: {2}
+hotbar_error=快捷栏出错
+durability_critical=耐久度严重不足 {0}%
+durability_low=耐久度较低 {0}%
+durability_normal=耐久度 {0}%
+durability_full=耐久度满
+hotbar_info_available=快捷栏信息可用
+hotbar_slot_selected=已选择槽位 {0}
+
+# 物体状态
+equipped=，已装备
+
+# UI元素
+stats_button=统计数据按钮: {0}
+equipment_preset=装备预设: {0}
+crafting_button=制作按钮: {0}
+organize_button=整理按钮: {0}
+quick_action_button=快速操作按钮: {0}
+button=按钮: {0}
+tab=标签页: {0}
+preset=预设: {0}
+statistics=统计数据: {0}
+bag=背包: {0}
+shortcut=快捷键: {0}
+element=元素: {0}
+
+# 弹出消息
+hold_to_confirm=按住以确认
+
+# 菜单选项
+more_options=更多选项
+
+# 瓷砖类型
+tile_none=空的
+tile_ground=地面
+tile_wall=墙
+tile_water=水
+tile_pit=深坑
+tile_bridge=桥
+tile_floor=建造地面
+tile_roof_hole=屋顶洞口
+tile_thin_wall=薄墙
+tile_dug_up_ground=挖掘的土地
+tile_watered_ground=浇水的土地
+tile_circuit_plate=电路板
+tile_ancient_circuit_plate=古代电路板
+tile_fence=栅栏
+tile_rug=地毯
+tile_small_stones=小石头
+tile_small_grass=小草
+tile_wall_grass=墙上的草
+tile_debris=碎片
+tile_floor_crack=地面裂缝
+tile_rail=铁轨
+tile_great_wall=大墙
+tile_lit_floor=发光地面
+tile_debris2=碎片
+tile_loose_flooring=松散地面
+tile_immune=免疫区域
+tile_wall_crack=墙壁裂缝
+tile_ore=矿脉
+tile_big_root=大根
+tile_ground_slime=鼻涕虫痕迹
+tile_ancient_crystal=古代水晶
+tile_chrysalis=蛹
+
+# 瓷砖分类
+category_construction=建造
+category_liquid=液体
+category_mineral=矿物
+category_organic=有机
+category_stone=石头
+category_crystal=水晶
+category_unknown=未知
+
+# 瓷砖材料分类
+material_earth=土壤
+material_stone=石头
+material_mineral=矿物
+material_liquid=液体
+material_construction=建造
+material_crystal=水晶
+material_organic=有机
+material_unknown=未知
+
+# 脚步声
+sound_earth=土壤
+sound_stone=石头
+sound_metal=金属
+sound_splash=溅水
+sound_wood=木头
+sound_gravel=碎石
+sound_textile=纺织品
+sound_neutral=中性
+
+# 工具
+tool_pickaxe=镐
+tool_high_quality_pickaxe=高品质镐
+tool_axe=斧
+tool_shovel=铲
+tool_pickaxe_or_shovel=镐或铲
+tool_none=无
+
+# 瓷砖集合材料
+tileset_dirt=土壤
+tileset_stone=石头
+tileset_obsidian=黑曜石
+tileset_lava=熔岩
+tileset_nature=自然
+tileset_mold=霉菌
+tileset_sea=海洋
+tileset_sand=沙子
+tileset_desert=沙漠
+tileset_snow=雪
+tileset_crystal=水晶
+tileset_dark_stone=暗石
+
+# 瓷砖描述
+tile_with_material={0} 的 {1}
+
+# 库存消息
+inventory_opened=库存已打开
+inventory_closed=库存已关闭
+character_window_opened=角色窗口已打开
+character_window_closed=角色窗口已关闭
+# 通知系统消息
+item_picked_single=已拾起: {0}
+item_picked_multiple=已拾起: {0} x{1}
+level_up=升级到 {0} 级！
+skill_up={0} 升级到 {1} 级
+
+# 自动锁定目标消息
+enemy_in_range={0} 在范围内
+enemy_out_of_range={0} 超出范围
+enemy_at_distance={0} {1}，{2} 格距离
+enemy_unknown=未知敌人
+enemy_generic=敌人
+
+# 方向
+dir_east=向东
+dir_northeast=向东北
+dir_north=向北
+dir_northwest=向西北
+dir_west=向西
+dir_southwest=向西南
+dir_south=向南
+dir_southeast=向东南
+
+# 敌人名称
+enemy_slime=鼻涕虫
+enemy_spider=蜘蛛
+enemy_skeleton=骷髅
+enemy_goblin=地精
+enemy_orc=兽人
+enemy_zombie=僵尸
+enemy_demon=恶魔
+enemy_beast=野兽
+enemy_larva=幼虫
+enemy_grub=蛴螬
+enemy_worm=蠕虫
+enemy_fly=苍蝇
+enemy_bat=蝙蝠
+enemy_rat=老鼠
+enemy_boss=首领
+
+# 通知系统消息
+no_notifications=没有通知
+first_notification=第一个通知
+last_notification=最后一个通知
+
+# 物体分类描述
+category_core=核心
+category_chest=宝箱
+category_workstation=工作站
+category_enemy=敌人
+category_pickup=可收集物体
+category_plant=植物
+category_resource=资源
+category_decoration=装饰
+category_furniture=家具
+category_animal=动物
+category_critter=生物
+category_structure=结构
+category_door=门
+category_statue=雕像
+category_unknown=未知物体
+
+# 实体类型前缀
+prefix_animal=动物
+prefix_creature=生物
+prefix_statue=雕像
+prefix_furniture=家具
+prefix_structure=结构
+
+# 额外的瓷砖集合名称
+tileset_extras=额外
+tileset_base_building_wood=木材建造
+tileset_larva_hive=幼虫蜂窝
+tileset_base_building_stone=石材建造
+tileset_clay=粘土
+tileset_turf=草皮
+tileset_base_building_unpainted=未涂漆建造
+tileset_base_building_yellow=黄色建造
+tileset_base_building_green=绿色建造
+tileset_base_building_red=红色建造
+tileset_base_building_purple=紫色建造
+tileset_base_building_blue=蓝色建造
+tileset_base_building_brown=棕色建造
+tileset_base_building_white=白色建造
+tileset_base_building_black=黑色建造
+tileset_base_building_scarlet=深红色建造
+tileset_base_building_coral=珊瑚色建造
+tileset_base_building_galaxite=银河石建造
+tileset_base_building_metal=金属建造
+tileset_base_building_valentine=情人节建造
+tileset_base_building_easter=复活节建造
+tileset_city=城市
+tileset_desert_temple=沙漠神庙
+tileset_desert_temple2=古代沙漠神庙
+tileset_glass=玻璃
+tileset_meadow=草甸
+tileset_explosive=爆炸
+tileset_alien=外星
+tileset_oasis=绿洲
+tileset_explosive_forest=爆炸森林
+tileset_explosive_desert=爆炸沙漠

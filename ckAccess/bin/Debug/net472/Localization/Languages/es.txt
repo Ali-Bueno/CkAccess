@@ -379,3 +379,36 @@ intro_skip_message=Mantén espacio para saltar la introducción
 
 # Tutorial Buffer
 no_tutorials=No hay tutoriales en el buffer
+session_id=ID de sesión
+
+# Sistema de Drop/Tirar objetos
+cannot_drop_this=No se puede tirar este elemento
+drop_error=Error al tirar: {0}
+player_not_found=Jugador no encontrado
+cannot_drop_from_this_inventory=No se puede tirar desde este inventario
+dropped_all=Tirado {0} x{1}
+dropped_one=Tirado {0}
+drop_item_error=Error tirando objeto: {0}
+
+# Accesibilidad mejorada de inventario
+slot_selected={0} seleccionado
+slot_selected_with_amount={0} x{1} seleccionado
+empty_slot_with_held_item=Slot vacío. Tienes {0} en la mano
+actions_with_held_item=Presiona U para colocar, O para colocar mitad
+actions_transfer_or_drop=Shift+U para transferir a {0}, Q para tirar
+actions_take_or_move=U para tomar, Shift+U para mover al inventario
+actions_normal=U para agarrar, O para agarrar mitad, Q para tirar
+chest=cofre
+crafting_station=estación de crafteo
+item_transferred_to=Transferido a {0}
+item_taken_from=Tomado de {0}
+item_placed={0} colocado
+item_grabbed={0} agarrado
+
+# Inventory Section Names
+section_player_inventory=Inventario del jugador
+section_chest_inventory=Inventario del cofre
+section_crafting_inventory=Inventario de crafteo
+section_equipment=Equipamiento
+section_pouch=Bolsa
+section_unknown=Sección desconocida

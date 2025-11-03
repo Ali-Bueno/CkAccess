@@ -4,6 +4,7 @@ extern alias PugComps;
 using HarmonyLib;
 using ckAccess.Localization;
 using ckAccess.Patches.UI;
+using ckAccess.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -50,6 +51,7 @@ namespace ckAccess.Patches.Player
 
         /// <summary>
         /// Parche en el sistema de ataque para redirigir automáticamente hacia el enemigo más cercano
+        /// MULTIPLAYER-SAFE: Solo procesa el jugador local
         /// </summary>
         [HarmonyPatch(typeof(PugOther.PlayerController), "ManagedUpdate")]
         [HarmonyPostfix]
@@ -58,6 +60,10 @@ namespace ckAccess.Patches.Player
             try
             {
                 if (!_systemEnabled) return;
+
+                // MULTIPLAYER: Solo procesar si este es el jugador local
+                if (!LocalPlayerHelper.IsLocalPlayer(__instance))
+                    return;
 
                 // Actualizar lista de enemigos cercanos
                 _frameCounter++;
@@ -754,6 +760,7 @@ namespace ckAccess.Patches.Player
 
         /// <summary>
         /// Anuncia cuando un enemigo entra o sale del rango
+        /// MULTIPLAYER-SAFE: Usa el jugador local para cálculos
         /// </summary>
         private static void AnnounceEnemyInRange(PugOther.EntityMonoBehaviour enemy, bool enteringRange)
         {
@@ -765,8 +772,8 @@ namespace ckAccess.Patches.Player
 
                 string enemyName = GetCleanEnemyName(enemy);
 
-                // Calcular distancia y dirección relativa al jugador
-                var player = PugOther.Manager.main?.player;
+                // Calcular distancia y dirección relativa al jugador LOCAL
+                var player = LocalPlayerHelper.GetLocalPlayer();
                 if (player != null && TryGetPlayerPosition(player, out Vector3 playerPos))
                 {
                     var enemyPos = enemy.WorldPosition;
@@ -913,6 +920,7 @@ namespace ckAccess.Patches.Player
         /// <summary>
         /// Parche en SendClientInputSystem para interceptar el cálculo de dirección
         /// Este es el punto correcto para aplicar auto-targeting universalmente
+        /// MULTIPLAYER-SAFE: Solo afecta al jugador local
         /// </summary>
         [HarmonyPatch(typeof(PugOther.SendClientInputSystem), "OnUpdate")]
         [HarmonyPrefix]
@@ -923,8 +931,8 @@ namespace ckAccess.Patches.Player
                 if (!_systemEnabled || _currentTarget == null || !IsValidTarget(_currentTarget))
                     return;
 
-                // Obtener el jugador actual
-                var player = PugOther.Manager.main?.player;
+                // Obtener el jugador LOCAL
+                var player = LocalPlayerHelper.GetLocalPlayer();
                 if (player == null) return;
 
                 // Aplicar el auto-targeting modificando la dirección de apuntado
