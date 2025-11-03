@@ -40,38 +40,6 @@ namespace ckAccess
             }
             Logger.LogInfo($"Total patched methods: {count}");
 
-            // Check specifically for PlayerInputMenuNavigationPatch
-            try
-            {
-                var playerInputType = typeof(PugOther.PlayerInput);
-                var wasButtonPressedMethod = playerInputType.GetMethod("WasButtonPressedDownThisFrame",
-                    BindingFlags.Public | BindingFlags.Instance,
-                    null,
-                    new Type[] { typeof(PugOther.PlayerInput.InputType), typeof(bool) },
-                    null);
-
-                if (wasButtonPressedMethod != null)
-                {
-                    var patches = Harmony.GetPatchInfo(wasButtonPressedMethod);
-                    if (patches != null && patches.Postfixes.Count > 0)
-                    {
-                        Logger.LogInfo($"PlayerInput.WasButtonPressedDownThisFrame has {patches.Postfixes.Count} postfix patches");
-                    }
-                    else
-                    {
-                        Logger.LogWarning("PlayerInput.WasButtonPressedDownThisFrame has NO patches!");
-                    }
-                }
-                else
-                {
-                    Logger.LogWarning("Could not find PlayerInput.WasButtonPressedDownThisFrame method!");
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"Error checking patches: {ex}");
-            }
-
             Tolk.Load();
             Logger.LogInfo($"Tolk loaded. Detected screen reader: {Tolk.DetectScreenReader()}");
             Tolk.Output("C K Access loaded");

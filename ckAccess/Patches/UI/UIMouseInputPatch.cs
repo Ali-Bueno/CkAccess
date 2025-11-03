@@ -54,8 +54,6 @@ namespace ckAccess.Patches.UI
         /// Parche PREFIX para interceptar navegación WASD/D-Pad Y acciones U/O
         /// ANTES de que el juego procese el mouse físico
         /// </summary>
-        private static bool _prefixLoggedOnce = false;
-
         [HarmonyPatch("UpdateMouseUIInput")]
         [HarmonyPrefix]
         public static void UpdateMouseUIInput_Prefix(PugOther.UIMouse __instance, out bool leftClickWasUsed, out bool rightClickWasUsed)
@@ -65,12 +63,6 @@ namespace ckAccess.Patches.UI
 
             try
             {
-                if (!_prefixLoggedOnce)
-                {
-                    UnityEngine.Debug.Log("[UIMouseInputPatch] PREFIX IS BEING CALLED!");
-                    _prefixLoggedOnce = true;
-                }
-
                 var uiManager = PugOther.Manager.ui;
 
                 // Solo procesar si hay un inventario, árbol de talentos o UI de crafting abierto
@@ -83,7 +75,6 @@ namespace ckAccess.Patches.UI
                 var direction = DetectNavigationInput();
                 if (direction != PugUnExt.Pug.UnityExtensions.Direction.Id.zero)
                 {
-                    Plugin.Log.LogInfo($"[UIMouseInputPatch] Navegación detectada: {direction}");
                     HandleKeyboardNavigation(__instance, uiManager, direction);
                 }
 
@@ -114,46 +105,6 @@ namespace ckAccess.Patches.UI
         }
 
         /// <summary>
-        /// Intenta obtener el primer slot del inventario del jugador
-        /// </summary>
-        private static PugOther.UIelement TryGetFirstInventorySlot(PugOther.UIManager uiManager)
-        {
-            try
-            {
-                // Intentar obtener el inventario del jugador
-                if (uiManager.playerInventoryUI != null)
-                {
-                    var containerField = typeof(PugOther.ItemSlotsUIContainer).GetField("itemSlots",
-                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-                    if (containerField != null)
-                    {
-                        var slots = containerField.GetValue(uiManager.playerInventoryUI) as System.Collections.Generic.List<PugOther.InventorySlotUI>;
-                        if (slots != null && slots.Count > 0)
-                        {
-                            // Devolver el primer slot que esté visible
-                            foreach (var slot in slots)
-                            {
-                                if (slot != null && slot.isShowing)
-                                {
-                                    return slot;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                UnityEngine.Debug.LogWarning("[TryGetFirstInventorySlot] Could not access player inventory slots");
-                return null;
-            }
-            catch (System.Exception ex)
-            {
-                UnityEngine.Debug.LogError($"[TryGetFirstInventorySlot] Error: {ex}");
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Detecta input de navegación de todas las fuentes (teclado + D-Pad)
         /// </summary>
         private static PugUnExt.Pug.UnityExtensions.Direction.Id DetectNavigationInput()
@@ -167,12 +118,6 @@ namespace ckAccess.Patches.UI
             bool downPressed = Input.GetKeyDown(KeyCode.DownArrow);
             bool leftPressed = Input.GetKeyDown(KeyCode.LeftArrow);
             bool rightPressed = Input.GetKeyDown(KeyCode.RightArrow);
-
-            if (wPressed || upPressed || sPressed || downPressed || aPressed || leftPressed || dPressed || rightPressed)
-            {
-                UnityEngine.Debug.Log($"[DetectNavigationInput] KEYBOARD: W={wPressed}, S={sPressed}, A={aPressed}, D={dPressed}, Up={upPressed}, Down={downPressed}, Left={leftPressed}, Right={rightPressed}");
-                // Debug TTS removido - demasiado spam
-            }
 
             if (upPressed || wPressed)
                 return PugUnExt.Pug.UnityExtensions.Direction.Id.forward;
@@ -209,21 +154,13 @@ namespace ckAccess.Patches.UI
             try
             {
                 var currentElement = uiManager.currentSelectedUIElement;
-                if (currentElement == null)
-                {
-                    UnityEngine.Debug.LogWarning("[UIMouseInputPatch] HandleKeyboardNavigation: currentElement is null!");
-                    return;
-                }
-
-                UnityEngine.Debug.Log($"[UIMouseInputPatch] HandleKeyboardNavigation: From {currentElement.name}, Direction: {direction}");
+                if (currentElement == null) return;
 
                 // Obtener el siguiente elemento usando el método nativo del juego
                 var nextElement = currentElement.GetAdjacentUIElement(direction, currentElement.transform.position);
 
                 if (nextElement != null && nextElement.isShowing)
                 {
-                    UnityEngine.Debug.Log($"[UIMouseInputPatch] Found next element: {nextElement.name}");
-
                     // Actualizar la posición del puntero del mouse al nuevo elemento
                     var pos = nextElement.transform.position;
                     uiMouse.pointer.position = new Vector3(pos.x, pos.y, pos.z);
@@ -235,19 +172,10 @@ namespace ckAccess.Patches.UI
                     if (method != null)
                     {
                         method.Invoke(uiMouse, new object[] { nextElement, false });
-                        UnityEngine.Debug.Log($"[UIMouseInputPatch] TrySelectNewElement called successfully");
-                    }
-                    else
-                    {
-                        UnityEngine.Debug.LogError("[UIMouseInputPatch] TrySelectNewElement method not found!");
                     }
 
                     // Anunciar el nuevo elemento si es necesario
                     AnnounceElementIfNeeded(nextElement);
-                }
-                else
-                {
-                    UnityEngine.Debug.LogWarning($"[UIMouseInputPatch] No next element found or not showing. NextElement: {nextElement?.name ?? "null"}");
                 }
             }
             catch (System.Exception ex)
