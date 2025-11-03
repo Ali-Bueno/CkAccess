@@ -11,7 +11,7 @@ namespace ckAccess.Patches.UI
     /// <summary>
     /// Parche para mejorar la accesibilidad de los slots del inventario con feedback contextual
     /// Anuncia qué objeto está seleccionado y qué acciones se pueden realizar según el contexto
-    /// TEMPORALMENTE DESHABILITADO - Necesita más trabajo
+    /// DESHABILITADO - InventorySlotUIPatch.cs ya hace esto mejor
     /// </summary>
     // [HarmonyPatch(typeof(PugOther.InventorySlotUI))]
     public static class InventorySlotAccessibilityPatch
@@ -67,17 +67,10 @@ namespace ckAccess.Patches.UI
                 string objectName = GetObjectName(objectData.objectID);
                 int amount = objectData.amount;
 
-                // Construir mensaje base
+                // Construir mensaje simple: solo nombre y cantidad
                 string message = amount > 1
-                    ? LocalizationManager.GetText("slot_selected_with_amount", objectName, amount)
-                    : LocalizationManager.GetText("slot_selected", objectName);
-
-                // Añadir contexto de acciones disponibles
-                string actions = GetAvailableActions(slot);
-                if (!string.IsNullOrEmpty(actions))
-                {
-                    message += ". " + actions;
-                }
+                    ? $"{objectName} x{amount}"
+                    : objectName;
 
                 UIManager.Speak(message);
             }
@@ -88,78 +81,17 @@ namespace ckAccess.Patches.UI
         }
 
         /// <summary>
-        /// Anuncia que el slot está vacío y qué se puede hacer
+        /// Anuncia que el slot está vacío
         /// </summary>
         private static void AnnounceEmptySlot(PugOther.InventorySlotUI slot)
         {
             try
             {
-                var uiManager = PugOther.Manager.ui;
-                var mouse = uiManager?.mouse;
-
-                // Verificar si tenemos algo en la mano (mouseInventory)
-                if (mouse != null && mouse.isHoldingAnyEntity)
-                {
-                    // Simplemente anunciar que hay algo en la mano
-                    UIManager.Speak(LocalizationManager.GetText("empty_slot_with_held_item", "objeto"));
-                }
-                else
-                {
-                    // Slot vacío normal
-                    UIManager.Speak(LocalizationManager.GetText("empty_slot"));
-                }
+                UIManager.Speak(LocalizationManager.GetText("empty_slot"));
             }
             catch (System.Exception ex)
             {
                 UnityEngine.Debug.LogError($"Error in AnnounceEmptySlot: {ex}");
-            }
-        }
-
-        /// <summary>
-        /// Obtiene las acciones disponibles según el contexto actual
-        /// </summary>
-        private static string GetAvailableActions(PugOther.InventorySlotUI slot)
-        {
-            try
-            {
-                var uiManager = PugOther.Manager.ui;
-                var mouse = uiManager?.mouse;
-
-                // Determinar contexto
-                bool hasChestOpen = uiManager.isChestInventoryUIShowing;
-                bool hasCraftingOpen = uiManager.isCraftingUIShowing;
-                bool isHoldingSomething = mouse != null && mouse.isHoldingAnyEntity;
-                bool isPlayerInventory = slot.isPlayerInventorySlot || slot.isPlayerPouchSlot;
-
-                // Si ya tenemos algo en la mano
-                if (isHoldingSomething)
-                {
-                    return LocalizationManager.GetText("actions_with_held_item");
-                }
-
-                // Si estamos en el inventario del jugador con cofre/crafteo abierto
-                if (isPlayerInventory && (hasChestOpen || hasCraftingOpen))
-                {
-                    string targetName = hasChestOpen
-                        ? LocalizationManager.GetText("chest")
-                        : LocalizationManager.GetText("crafting_station");
-
-                    return LocalizationManager.GetText("actions_transfer_or_drop", targetName);
-                }
-
-                // Si estamos en un cofre/crafteo
-                if (!isPlayerInventory && (hasChestOpen || hasCraftingOpen))
-                {
-                    return LocalizationManager.GetText("actions_take_or_move");
-                }
-
-                // Inventario normal sin contextos especiales
-                return LocalizationManager.GetText("actions_normal");
-            }
-            catch (System.Exception ex)
-            {
-                UnityEngine.Debug.LogError($"Error in GetAvailableActions: {ex}");
-                return "";
             }
         }
 

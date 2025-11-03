@@ -1,7 +1,9 @@
 extern alias PugOther;
+extern alias Core;
 
 using HarmonyLib;
 using ckAccess.Localization;
+using Vector3 = Core::UnityEngine.Vector3;
 
 namespace ckAccess.Patches.UI
 {
@@ -30,6 +32,9 @@ namespace ckAccess.Patches.UI
                     if (currentInventoryState)
                     {
                         UIManager.Speak(LocalizationManager.GetText("inventory_opened"));
+
+                        // CRÍTICO: Inicializar pointer y selección cuando se abre el inventario
+                        InitializeInventorySelection(__instance);
                     }
                     else
                     {
@@ -56,6 +61,67 @@ namespace ckAccess.Patches.UI
             catch
             {
                 // Error silencioso para evitar problemas en Update
+            }
+        }
+
+        /// <summary>
+        /// Inicializa el pointer y la selección cuando se abre el inventario
+        /// Esto permite que la navegación con D-Pad/WASD funcione inmediatamente
+        /// </summary>
+        private static void InitializeInventorySelection(PugOther.UIManager uiManager)
+        {
+            try
+            {
+                // Si ya hay algo seleccionado, asegurar que el pointer esté en esa posición
+                if (uiManager.currentSelectedUIElement != null && uiManager.currentSelectedUIElement.isShowing)
+                {
+                    var mouse = uiManager.mouse;
+                    if (mouse != null && mouse.pointer != null)
+                    {
+                        var pos = uiManager.currentSelectedUIElement.transform.position;
+                        mouse.pointer.position = new Vector3(pos.x, pos.y, pos.z);
+                        UnityEngine.Debug.Log($"[InventoryStatePatch] Pointer moved to current selected element");
+                    }
+                    return;
+                }
+
+                // Si no hay nada seleccionado, buscar el primer slot visible
+                var playerInventoryUI = uiManager.playerInventoryUI;
+                if (playerInventoryUI == null) return;
+
+                // Buscar todos los InventorySlotUI visibles en la jerarquía
+                var allSlots = playerInventoryUI.GetComponentsInChildren<PugOther.InventorySlotUI>(false);
+                if (allSlots == null || allSlots.Length == 0) return;
+
+                PugOther.InventorySlotUI firstSlot = null;
+                foreach (var slot in allSlots)
+                {
+                    if (slot != null && slot.isShowing)
+                    {
+                        firstSlot = slot;
+                        break;
+                    }
+                }
+
+                if (firstSlot != null)
+                {
+                    UnityEngine.Debug.Log($"[InventoryStatePatch] Initializing selection to first slot");
+
+                    // Mover el pointer a la posición del primer slot
+                    var mouse = uiManager.mouse;
+                    if (mouse != null && mouse.pointer != null)
+                    {
+                        var pos = firstSlot.transform.position;
+                        mouse.pointer.position = new Vector3(pos.x, pos.y, pos.z);
+                    }
+
+                    // Seleccionar el primer slot
+                    firstSlot.Select();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"[InventoryStatePatch] Error initializing selection: {ex}");
             }
         }
     }

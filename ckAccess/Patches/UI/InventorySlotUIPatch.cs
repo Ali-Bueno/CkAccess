@@ -204,7 +204,15 @@ namespace ckAccess.Patches
         [HarmonyPostfix]
         public static void Postfix_OnSelected(PugOther.InventorySlotUI __instance)
         {
-            AnnounceSlot(__instance);
+            try
+            {
+                UnityEngine.Debug.Log($"[InventorySlotUIPatch] OnSelected called for slot {__instance.inventorySlotIndex}");
+                AnnounceSlot(__instance);
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"[InventorySlotUIPatch] Error in OnSelected: {ex}");
+            }
         }
 
         [HarmonyPatch("OnDeselected")]

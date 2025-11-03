@@ -300,16 +300,36 @@ namespace ckAccess.Patches.UI
 
         /// <summary>
         /// Maneja la selección específica de slots de inventario
-        /// SIMPLIFICADO: Solo emula click izquierdo sin añadir atajos custom
+        /// Emula click izquierdo y anuncia la acción realizada
         /// </summary>
         private static void HandleInventorySlotSelection(PugOther.InventorySlotUI slot)
         {
             try
             {
-                // Simplemente hacer click izquierdo en el slot
+                var uiManager = PugOther.Manager.ui;
+                var mouse = uiManager?.mouse;
+
+                // Verificar si tenemos algo en la mano ANTES del click
+                bool wasHoldingSomething = mouse != null && mouse.isHoldingAnyEntity;
+
+                // Hacer click izquierdo en el slot
                 // El juego manejará automáticamente todos los comportamientos nativos
-                // (agarrar, colocar, transferir si Shift está presionado, etc.)
                 slot.OnLeftClicked(false, false);
+
+                // Verificar si tenemos algo en la mano DESPUÉS del click
+                bool isHoldingSomething = mouse != null && mouse.isHoldingAnyEntity;
+
+                // Anunciar la acción realizada
+                if (!wasHoldingSomething && isHoldingSomething)
+                {
+                    // Agarramos un objeto
+                    UIManager.Speak(LocalizationManager.GetText("item_grabbed", "objeto"));
+                }
+                else if (wasHoldingSomething && !isHoldingSomething)
+                {
+                    // Colocamos un objeto
+                    UIManager.Speak(LocalizationManager.GetText("item_placed", "objeto"));
+                }
             }
             catch (System.Exception ex)
             {

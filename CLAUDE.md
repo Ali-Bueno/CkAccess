@@ -61,9 +61,9 @@ Se ha detectado que en ciertos menús, como los slots de mundo y personaje, el e
     2.  Antes de verbalizar una nueva opción, se comprueba si el texto es idéntico al anterior y si ha transcurrido un tiempo mínimo (50 milisegundos).
     3.  Si ambas condiciones se cumplen, el segundo anuncio se ignora. Esto filtra eficazmente las llamadas duplicadas sin afectar la capacidad de respuesta del usuario.
 
-#### 4. Navegación por Teclado y D-Pad en Inventarios (`UIMouseInputPatch.cs`)
+#### 4. Navegación por Teclado y D-Pad en Inventarios (`UIMouseInputPatch.cs`) ✅ **CORREGIDO**
 
-Se ha implementado un sistema para permitir la navegación por los slots del inventario, crafteo y menús similares utilizando el teclado (WASD/Flechas) y el D-Pad del mando.
+Se ha implementado un sistema robusto y sin conflictos para permitir la navegación por los slots del inventario, crafteo y menús similares utilizando el teclado (WASD/Flechas) y el D-Pad del mando de forma independiente.
 
 *   **Objetivo:** `PugOther.UIMouse`
 *   **Método Parcheado:** `UpdateMouseUIInput` (con un parche `Prefix`).
@@ -79,10 +79,16 @@ Se ha implementado un sistema para permitir la navegación por los slots del inv
             *   **Derecha:** `Sort`
         El parche utiliza `ReInput.players.GetPlayer(0).GetButtonDown()` con estos nombres de acción para detectar pulsaciones únicas del D-Pad.
     4.  **Lógica de Navegación:**
-        *   Si se detecta una pulsación (de teclado o D-Pad), se utiliza el método nativo del juego `currentSelectedUIElement.GetAdjacentUIElement()` para encontrar el siguiente slot en la dirección deseada.
-        *   Se actualiza la posición del puntero del ratón (`__instance.pointer.position`) para que coincida con la del nuevo slot.
+        *   El método `DetectNavigationInput()` unifica la detección de WASD/Flechas y D-Pad, retornando una dirección (`Direction.Id`).
+        *   Si se detecta una pulsación, se llama a `HandleKeyboardNavigation()` que utiliza el método nativo del juego `currentSelectedUIElement.GetAdjacentUIElement()` para encontrar el siguiente slot en la dirección deseada.
+        *   Se actualiza **directamente** la posición del puntero del ratón (`uiMouse.pointer.position`) al nuevo elemento, sin variables intermedias.
         *   Se invoca el método privado `TrySelectNewElement()` mediante reflexión para seleccionar oficialmente el nuevo slot y disparar todos los eventos asociados (como la verbalización del contenido del slot).
-    5.  **Control de Flujo:** Si el parche maneja una entrada de navegación, devuelve `false`, lo que **impide que el método original `UpdateMouseUIInput` se ejecute**. Esto evita que el juego procese el input dos veces o que el ratón interfiera con la selección. Si no se detecta ninguna entrada de navegación, el parche devuelve `true`, permitiendo que el juego funcione con normalidad.
+    5.  **Prevención de Interferencias del Ratón:** El parche `GetMouseUIViewPosition_Prefix` intercepta la posición del ratón cuando hay inventario abierto y retorna la posición del elemento seleccionado en lugar de la posición física del ratón. Esto previene que el movimiento del ratón físico interfiera con la navegación por teclado/D-Pad.
+    6.  **Sin Conflictos entre Métodos de Input:** La implementación actualiza directamente el puntero sin usar variables estáticas que puedan causar conflictos. Esto permite cambiar libremente entre teclado y D-Pad sin que uno bloquee al otro.
+
+*   **Corrección de Bug Importante (2025-01-03):**
+    *   **Problema:** La navegación con D-Pad se quedaba atascada en el último slot seleccionado con teclado. Esto ocurría porque se usaba una variable estática `_forcedPointerPosition` que nunca se limpiaba, interfiriendo con la navegación nativa del D-Pad.
+    *   **Solución:** Eliminada la variable `_forcedPointerPosition`. En su lugar, se actualiza directamente `uiMouse.pointer.position` en el momento de la navegación. Esto hace que ambos métodos de input (teclado y D-Pad) funcionen de forma independiente y sin conflictos.
 
 #### 5. Accesibilidad de Habilidades y Talentos
 

@@ -4,6 +4,7 @@ extern alias Core;
 using HarmonyLib;
 using UnityEngine;
 using Rewired;
+using System;
 using System.Linq;
 using ckAccess.Localization;
 using Vector3 = Core::UnityEngine.Vector3;
@@ -17,36 +18,44 @@ namespace ckAccess.Patches.UI
     [HarmonyPatch(typeof(PugOther.UIMouse))]
     public static class UIMouseInputPatch
     {
-        // Variable estática para forzar la posición del pointer en el siguiente frame
-        private static Vector3? _forcedPointerPosition = null;
+        // Variable estática para rastrear la última sección anunciada
+        private static string _lastAnnouncedSection = "";
 
         /// <summary>
-        /// Parche POSTFIX para forzar la posición del pointer después de que el juego lo actualice
-        /// Esto garantiza que WASD funcione sin depender del mouse físico
+        /// Parche para GetMouseUIViewPosition - hace que el juego ignore el mouse físico en inventarios
+        /// y use la posición del elemento seleccionado
         /// </summary>
-        [HarmonyPatch("UpdateMouseUIInput")]
-        [HarmonyPostfix]
-        public static void UpdateMouseUIInput_Postfix(PugOther.UIMouse __instance)
+        [HarmonyPatch("GetMouseUIViewPosition")]
+        [HarmonyPrefix]
+        public static bool GetMouseUIViewPosition_Prefix(ref Core::UnityEngine.Vector2 __result)
         {
             try
             {
-                // Si hay una posición forzada pendiente, aplicarla DESPUÉS de que el juego actualice el pointer
-                if (_forcedPointerPosition.HasValue)
+                var uiManager = PugOther.Manager.ui;
+
+                // Solo interferir si hay inventario abierto Y hay un elemento seleccionado
+                if (uiManager != null && uiManager.isAnyInventoryShowing && uiManager.currentSelectedUIElement != null)
                 {
-                    __instance.pointer.position = _forcedPointerPosition.Value;
-                    _forcedPointerPosition = null; // Limpiar para el siguiente frame
+                    // Devolver la posición del elemento seleccionado en lugar del mouse físico
+                    var pos = uiManager.currentSelectedUIElement.transform.position;
+                    __result = new Core::UnityEngine.Vector2(pos.x, pos.y);
+                    return false; // Skip el método original
                 }
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogError($"Error in UIMouseInputPatch Postfix: {ex}");
+                UnityEngine.Debug.LogError($"Error in GetMouseUIViewPosition_Prefix: {ex}");
             }
+
+            return true; // Ejecutar el método original
         }
 
         /// <summary>
-        /// Parche PREFIX para interceptar navegación con teclado/D-Pad
+        /// Parche PREFIX para interceptar navegación WASD/D-Pad Y acciones U/O
         /// ANTES de que el juego procese el mouse físico
         /// </summary>
+        private static bool _prefixLoggedOnce = false;
+
         [HarmonyPatch("UpdateMouseUIInput")]
         [HarmonyPrefix]
         public static void UpdateMouseUIInput_Prefix(PugOther.UIMouse __instance, out bool leftClickWasUsed, out bool rightClickWasUsed)
@@ -56,6 +65,12 @@ namespace ckAccess.Patches.UI
 
             try
             {
+                if (!_prefixLoggedOnce)
+                {
+                    UnityEngine.Debug.Log("[UIMouseInputPatch] PREFIX IS BEING CALLED!");
+                    _prefixLoggedOnce = true;
+                }
+
                 var uiManager = PugOther.Manager.ui;
 
                 // Solo procesar si hay un inventario, árbol de talentos o UI de crafting abierto
@@ -64,44 +79,32 @@ namespace ckAccess.Patches.UI
                     return;
                 }
 
-                // Verificar que hay un elemento seleccionado válido
+                // PRIMERO: Detectar navegación (WASD/Flechas/D-Pad)
+                var direction = DetectNavigationInput();
+                if (direction != PugUnExt.Pug.UnityExtensions.Direction.Id.zero)
+                {
+                    Plugin.Log.LogInfo($"[UIMouseInputPatch] Navegación detectada: {direction}");
+                    HandleKeyboardNavigation(__instance, uiManager, direction);
+                }
+
+                // SEGUNDO: Verificar que hay un elemento seleccionado para acciones U/O
                 if (uiManager.currentSelectedUIElement == null)
                 {
                     return;
                 }
 
-                // Detectar input de navegación (teclado y D-Pad)
-                var navigationDirection = DetectNavigationInput();
-
-                // Detectar input de acciones (U/O y gamepad)
+                // SEGUNDO: Detectar input de acciones (U/O y gamepad)
                 bool uInput = Input.GetKeyDown(KeyCode.U) || IsGamepadButtonPressed("R2");
                 bool oInput = Input.GetKeyDown(KeyCode.O) || IsGamepadButtonPressed("L2");
-                bool hasActionInput = uInput || oInput;
 
-                // Si no hay ningún input relevante, no hacer nada
-                if (navigationDirection == PugUnExt.Pug.UnityExtensions.Direction.Id.zero && !hasActionInput)
+                // Manejar acciones U/O
+                if (uInput)
                 {
-                    return;
+                    InventoryUIInputPatch.HandleUInputPublic(uiManager);
                 }
-
-                // Manejar acciones U/O (tienen prioridad sobre navegación)
-                if (hasActionInput)
+                else if (oInput)
                 {
-                    if (uInput)
-                    {
-                        InventoryUIInputPatch.HandleUInputPublic(uiManager);
-                    }
-                    else if (oInput)
-                    {
-                        InventoryUIInputPatch.HandleOInputPublic(uiManager);
-                    }
-                    return;
-                }
-
-                // Manejar navegación con WASD/Flechas/D-Pad
-                if (navigationDirection != PugUnExt.Pug.UnityExtensions.Direction.Id.zero)
-                {
-                    HandleKeyboardNavigation(__instance, uiManager, navigationDirection);
+                    InventoryUIInputPatch.HandleOInputPublic(uiManager);
                 }
             }
             catch (System.Exception ex)
@@ -111,18 +114,73 @@ namespace ckAccess.Patches.UI
         }
 
         /// <summary>
+        /// Intenta obtener el primer slot del inventario del jugador
+        /// </summary>
+        private static PugOther.UIelement TryGetFirstInventorySlot(PugOther.UIManager uiManager)
+        {
+            try
+            {
+                // Intentar obtener el inventario del jugador
+                if (uiManager.playerInventoryUI != null)
+                {
+                    var containerField = typeof(PugOther.ItemSlotsUIContainer).GetField("itemSlots",
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+                    if (containerField != null)
+                    {
+                        var slots = containerField.GetValue(uiManager.playerInventoryUI) as System.Collections.Generic.List<PugOther.InventorySlotUI>;
+                        if (slots != null && slots.Count > 0)
+                        {
+                            // Devolver el primer slot que esté visible
+                            foreach (var slot in slots)
+                            {
+                                if (slot != null && slot.isShowing)
+                                {
+                                    return slot;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                UnityEngine.Debug.LogWarning("[TryGetFirstInventorySlot] Could not access player inventory slots");
+                return null;
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"[TryGetFirstInventorySlot] Error: {ex}");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Detecta input de navegación de todas las fuentes (teclado + D-Pad)
         /// </summary>
         private static PugUnExt.Pug.UnityExtensions.Direction.Id DetectNavigationInput()
         {
             // Teclado (WASD / Flechas)
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            bool wPressed = Input.GetKeyDown(KeyCode.W);
+            bool sPressed = Input.GetKeyDown(KeyCode.S);
+            bool aPressed = Input.GetKeyDown(KeyCode.A);
+            bool dPressed = Input.GetKeyDown(KeyCode.D);
+            bool upPressed = Input.GetKeyDown(KeyCode.UpArrow);
+            bool downPressed = Input.GetKeyDown(KeyCode.DownArrow);
+            bool leftPressed = Input.GetKeyDown(KeyCode.LeftArrow);
+            bool rightPressed = Input.GetKeyDown(KeyCode.RightArrow);
+
+            if (wPressed || upPressed || sPressed || downPressed || aPressed || leftPressed || dPressed || rightPressed)
+            {
+                UnityEngine.Debug.Log($"[DetectNavigationInput] KEYBOARD: W={wPressed}, S={sPressed}, A={aPressed}, D={dPressed}, Up={upPressed}, Down={downPressed}, Left={leftPressed}, Right={rightPressed}");
+                // Debug TTS removido - demasiado spam
+            }
+
+            if (upPressed || wPressed)
                 return PugUnExt.Pug.UnityExtensions.Direction.Id.forward;
-            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+            if (downPressed || sPressed)
                 return PugUnExt.Pug.UnityExtensions.Direction.Id.back;
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            if (leftPressed || aPressed)
                 return PugUnExt.Pug.UnityExtensions.Direction.Id.left;
-            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            if (rightPressed || dPressed)
                 return PugUnExt.Pug.UnityExtensions.Direction.Id.right;
 
             // D-Pad (usando las acciones correctas del juego)
@@ -151,16 +209,24 @@ namespace ckAccess.Patches.UI
             try
             {
                 var currentElement = uiManager.currentSelectedUIElement;
-                if (currentElement == null) return;
+                if (currentElement == null)
+                {
+                    UnityEngine.Debug.LogWarning("[UIMouseInputPatch] HandleKeyboardNavigation: currentElement is null!");
+                    return;
+                }
+
+                UnityEngine.Debug.Log($"[UIMouseInputPatch] HandleKeyboardNavigation: From {currentElement.name}, Direction: {direction}");
 
                 // Obtener el siguiente elemento usando el método nativo del juego
                 var nextElement = currentElement.GetAdjacentUIElement(direction, currentElement.transform.position);
 
                 if (nextElement != null && nextElement.isShowing)
                 {
-                    // Establecer la posición forzada para el Postfix
+                    UnityEngine.Debug.Log($"[UIMouseInputPatch] Found next element: {nextElement.name}");
+
+                    // Actualizar la posición del puntero del mouse al nuevo elemento
                     var pos = nextElement.transform.position;
-                    _forcedPointerPosition = new Vector3(pos.x, pos.y, pos.z);
+                    uiMouse.pointer.position = new Vector3(pos.x, pos.y, pos.z);
 
                     // Llamar a TrySelectNewElement usando reflexión
                     var method = typeof(PugOther.UIMouse).GetMethod("TrySelectNewElement",
@@ -169,22 +235,53 @@ namespace ckAccess.Patches.UI
                     if (method != null)
                     {
                         method.Invoke(uiMouse, new object[] { nextElement, false });
+                        UnityEngine.Debug.Log($"[UIMouseInputPatch] TrySelectNewElement called successfully");
+                    }
+                    else
+                    {
+                        UnityEngine.Debug.LogError("[UIMouseInputPatch] TrySelectNewElement method not found!");
                     }
 
                     // Anunciar el nuevo elemento si es necesario
                     AnnounceElementIfNeeded(nextElement);
                 }
-                // Si no hay elemento adyacente, no hacer nada (no buscar alternativas para evitar comportamiento impredecible)
+                else
+                {
+                    UnityEngine.Debug.LogWarning($"[UIMouseInputPatch] No next element found or not showing. NextElement: {nextElement?.name ?? "null"}");
+                }
             }
             catch (System.Exception ex)
             {
                 UnityEngine.Debug.LogError($"Error en HandleKeyboardNavigation: {ex}");
-                _forcedPointerPosition = null;
             }
         }
 
-        // Variable estática para rastrear la última sección anunciada
-        private static string _lastAnnouncedSection = "";
+        /// <summary>
+        /// Parche POSTFIX en TrySelectNewElement para detectar cambios de selección
+        /// Esto funciona tanto con teclado como con mando
+        /// Solo anuncia cambios de sección, NO mueve el pointer (el juego ya lo hace)
+        /// </summary>
+        [HarmonyPatch("TrySelectNewElement", new Type[] { typeof(PugOther.UIelement), typeof(bool) })]
+        [HarmonyPostfix]
+        public static void TrySelectNewElement_Postfix(PugOther.UIelement selectedUIElement)
+        {
+            try
+            {
+                if (selectedUIElement != null)
+                {
+                    // Solo anunciar secciones si es un slot de inventario
+                    var slot = selectedUIElement.GetComponent<PugOther.InventorySlotUI>();
+                    if (slot != null)
+                    {
+                        AnnounceInventorySectionIfChanged(slot);
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogError($"Error in TrySelectNewElement_Postfix: {ex}");
+            }
+        }
 
         /// <summary>
         /// Anuncia elementos que no tienen parches específicos
