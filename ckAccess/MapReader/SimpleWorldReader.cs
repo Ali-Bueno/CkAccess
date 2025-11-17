@@ -63,7 +63,8 @@ namespace ckAccess.MapReader
         }
 
         /// <summary>
-        /// Busca entidades visibles cerca de la posición (método súper simple).
+        /// Busca entidades visibles cerca de la posición con priorización mejorada.
+        /// PRIORIDAD: 1) Objetos colocables del jugador 2) Interactuables 3) Enemigos 4) Otros
         /// </summary>
         private static string GetVisibleEntityDescription(Vector3 worldPosition)
         {
@@ -74,6 +75,16 @@ namespace ckAccess.MapReader
                 if (entityLookup == null) return null;
 
                 var targetPos = new UnityEngine.Vector3(worldPosition.x, worldPosition.y, worldPosition.z);
+
+                // Listas para priorización
+                PugOther.EntityMonoBehaviour closestPlaceable = null;
+                PugOther.EntityMonoBehaviour closestInteractable = null;
+                PugOther.EntityMonoBehaviour closestEnemy = null;
+                PugOther.EntityMonoBehaviour closestOther = null;
+                float minPlaceableDistance = float.MaxValue;
+                float minInteractableDistance = float.MaxValue;
+                float minEnemyDistance = float.MaxValue;
+                float minOtherDistance = float.MaxValue;
 
                 foreach (var kvp in entityLookup)
                 {
@@ -86,9 +97,53 @@ namespace ckAccess.MapReader
                     // Solo muy cerca (0.7 tiles)
                     if (distance <= 0.7f)
                     {
-                        return GetEntityDescription(entity);
+                        var category = ObjectCategoryHelper.GetCategory(entity);
+
+                        // Clasificar por prioridad
+                        if (IsLikelyPlayerPlaced(entity, category))
+                        {
+                            if (distance < minPlaceableDistance)
+                            {
+                                closestPlaceable = entity;
+                                minPlaceableDistance = distance;
+                            }
+                        }
+                        else if (ObjectCategoryHelper.IsInteractable(category))
+                        {
+                            if (distance < minInteractableDistance)
+                            {
+                                closestInteractable = entity;
+                                minInteractableDistance = distance;
+                            }
+                        }
+                        else if (ObjectCategoryHelper.IsHostile(category))
+                        {
+                            if (distance < minEnemyDistance)
+                            {
+                                closestEnemy = entity;
+                                minEnemyDistance = distance;
+                            }
+                        }
+                        else
+                        {
+                            if (distance < minOtherDistance)
+                            {
+                                closestOther = entity;
+                                minOtherDistance = distance;
+                            }
+                        }
                     }
                 }
+
+                // Retornar según prioridad
+                if (closestPlaceable != null)
+                    return GetEntityDescription(closestPlaceable, isPlayerPlaced: true);
+                if (closestInteractable != null)
+                    return GetEntityDescription(closestInteractable);
+                if (closestEnemy != null)
+                    return GetEntityDescription(closestEnemy);
+                if (closestOther != null)
+                    return GetEntityDescription(closestOther);
             }
             catch (Exception e)
             {
@@ -99,10 +154,34 @@ namespace ckAccess.MapReader
         }
 
         /// <summary>
-        /// Obtiene descripción simple de una entidad usando el sistema de categorización.
-        /// MEJORADO: Usa ObjectCategoryHelper en lugar de hardcodeo.
+        /// Determina si una entidad probablemente fue colocada por el jugador.
+        /// Usa heurísticas basadas en categoría y nombre.
         /// </summary>
-        private static string GetEntityDescription(PugOther.EntityMonoBehaviour entity)
+        private static bool IsLikelyPlayerPlaced(PugOther.EntityMonoBehaviour entity, ObjectCategoryHelper.ObjectCategory category)
+        {
+            // Categorías que típicamente son colocadas por jugador
+            if (category == ObjectCategoryHelper.ObjectCategory.WorkStation ||
+                category == ObjectCategoryHelper.ObjectCategory.Furniture ||
+                category == ObjectCategoryHelper.ObjectCategory.Decoration)
+            {
+                return true;
+            }
+
+            // Nombres que indican construcción/colocación
+            var name = entity.gameObject.name.ToLower();
+            if (name.Contains("placed") || name.Contains("built") || name.Contains("constructed"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Obtiene descripción simple de una entidad usando el sistema de categorización.
+        /// MEJORADO: Usa ObjectCategoryHelper y añade indicador de "colocado por jugador".
+        /// </summary>
+        private static string GetEntityDescription(PugOther.EntityMonoBehaviour entity, bool isPlayerPlaced = false)
         {
             var name = entity.gameObject.name;
             var cleanedName = CleanName(name.Replace("(clone)", "").Replace("_", " ").Trim());
@@ -110,8 +189,8 @@ namespace ckAccess.MapReader
             // Usar sistema de categorización inteligente
             var category = ObjectCategoryHelper.GetCategory(entity);
 
-            // Generar descripción basada en categoría
-            return category switch
+            // Generar descripción base basada en categoría
+            string baseDescription = category switch
             {
                 ObjectCategoryHelper.ObjectCategory.Core =>
                     LocalizationManager.GetText("the_core"),
@@ -151,11 +230,18 @@ namespace ckAccess.MapReader
 
                 _ => LocalizationManager.GetText("entity", cleanedName)
             };
+
+            // Añadir indicador de "colocado por jugador" si aplica
+            if (isPlayerPlaced)
+            {
+                baseDescription = LocalizationManager.GetText("player_placed", baseDescription);
+            }
+
+            return baseDescription;
         }
 
         /// <summary>
-        /// Obtiene descripción de tiles (simple y directo).
-        /// Actualizado para detectar mejor los tiles colocados recientemente.
+        /// Obtiene descripción de tiles con detección mejorada de tiles colocados por jugador.
         /// </summary>
         private static string GetTileDescription(Vector3 worldPosition)
         {
@@ -171,37 +257,53 @@ namespace ckAccess.MapReader
                 if (topTile.tileType == TileType.none)
                     return null;
 
+                // Verificar si probablemente fue colocado por jugador
+                bool isPlayerPlaced = PlayerPlacedHelper.IsProbablyPlayerPlacedTile(
+                    topTile.tileType,
+                    topTile.tileset,
+                    position);
+
                 // Obtener nombres
                 var tileName = TileTypeHelper.GetLocalizedName(topTile.tileType);
                 var materialName = GetSimpleMaterialName(topTile.tileset);
 
                 // Información especial para tiles importantes
+                string baseDescription;
+
                 if (TileTypeHelper.IsDamageable(topTile.tileType))
                 {
                     var tool = TileTypeHelper.GetRecommendedTool(topTile.tileType);
-                    return string.IsNullOrEmpty(materialName)
+                    baseDescription = string.IsNullOrEmpty(materialName)
                         ? LocalizationManager.GetText("destructible_tool", tileName, tool)
                         : LocalizationManager.GetText("destructible_material_tool", tileName, materialName, tool);
                 }
-
-                if (TileTypeHelper.IsBlocking(topTile.tileType))
+                else if (TileTypeHelper.IsBlocking(topTile.tileType))
                 {
-                    return string.IsNullOrEmpty(materialName)
+                    baseDescription = string.IsNullOrEmpty(materialName)
                         ? LocalizationManager.GetText("blocking", tileName)
                         : LocalizationManager.GetText("blocking_material", tileName, materialName);
                 }
-
-                if (TileTypeHelper.IsDangerous(topTile.tileType))
+                else if (TileTypeHelper.IsDangerous(topTile.tileType))
                 {
-                    return string.IsNullOrEmpty(materialName)
+                    baseDescription = string.IsNullOrEmpty(materialName)
                         ? LocalizationManager.GetText("dangerous", tileName)
                         : LocalizationManager.GetText("dangerous_material", tileName, materialName);
                 }
+                else
+                {
+                    // Tile normal
+                    baseDescription = string.IsNullOrEmpty(materialName)
+                        ? tileName
+                        : LocalizationManager.GetText("tile_with_material", tileName, materialName);
+                }
 
-                // Tile normal
-                return string.IsNullOrEmpty(materialName)
-                    ? tileName
-                    : LocalizationManager.GetText("tile_with_material", tileName, materialName);
+                // Añadir indicador de "colocado por jugador" si aplica
+                if (isPlayerPlaced)
+                {
+                    baseDescription = LocalizationManager.GetText("player_placed", baseDescription);
+                }
+
+                return baseDescription;
             }
             catch (Exception e)
             {

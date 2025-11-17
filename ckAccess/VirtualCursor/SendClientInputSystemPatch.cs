@@ -1,127 +1,89 @@
-#if false
-// ARCHIVO DESACTIVADO - Ya no es necesario
-// El nuevo sistema usa directamente el cursor nativo del juego (UIMouse.pointer)
-// en lugar de intentar modificar el sistema de input del juego.
-
 extern alias PugOther;
 using HarmonyLib;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace ckAccess.VirtualCursor
 {
     /// <summary>
-    /// Patch que intercepta el SendClientInputSystem para redirigir las acciones del cursor virtual
+    /// Patch crítico que intercepta CalculateMouseOrJoystickWorldPoint para forzar
+    /// que use la posición del cursor virtual cuando está activo.
+    ///
+    /// PROBLEMA RESUELTO:
+    /// - Con TECLADO (O): el juego usa PATH 1 (mouse físico) - ignoraba cursor virtual
+    /// - Con MANDO (L2): el juego usa PATH 2 (stick derecho) - funcionaba con cursor virtual
+    ///
+    /// SOLUCIÓN:
+    /// Este parche sobrescribe la posición calculada cuando el cursor virtual está activo,
+    /// independientemente del método de input usado.
     /// </summary>
     [HarmonyPatch(typeof(PugOther.SendClientInputSystem))]
     public static class SendClientInputSystemPatch
     {
-        // Variables para controlar cuándo usar el cursor virtual
-        private static bool _useVirtualCursorForPrimaryAction = false;
-        private static bool _useVirtualCursorForSecondaryAction = false;
-        private static bool _useVirtualCursorForInteraction = false;
-        private static float3 _virtualCursorWorldPosition;
-
         /// <summary>
-        /// Configura el cursor virtual para la próxima acción primaria (U)
+        /// Intercepta el cálculo de posición del mouse/joystick para usar cursor virtual cuando está activo.
+        /// Este es el método que el juego usa para determinar DÓNDE colocar objetos.
         /// </summary>
-        public static void SetVirtualCursorPrimaryAction(float3 worldPosition)
-        {
-            _virtualCursorWorldPosition = worldPosition;
-            _useVirtualCursorForPrimaryAction = true;
-            _useVirtualCursorForSecondaryAction = false;
-            _useVirtualCursorForInteraction = false;
-        }
-
-        /// <summary>
-        /// Configura el cursor virtual para la próxima acción secundaria (O)
-        /// </summary>
-        public static void SetVirtualCursorSecondaryAction(float3 worldPosition)
-        {
-            _virtualCursorWorldPosition = worldPosition;
-            _useVirtualCursorForPrimaryAction = false;
-            _useVirtualCursorForSecondaryAction = true;
-            _useVirtualCursorForInteraction = false;
-        }
-
-        /// <summary>
-        /// Configura el cursor virtual para la próxima interacción
-        /// </summary>
-        public static void SetVirtualCursorInteraction(float3 worldPosition)
-        {
-            _virtualCursorWorldPosition = worldPosition;
-            _useVirtualCursorForPrimaryAction = false;
-            _useVirtualCursorForSecondaryAction = false;
-            _useVirtualCursorForInteraction = true;
-        }
-
         [HarmonyPatch("CalculateMouseOrJoystickWorldPoint")]
         [HarmonyPostfix]
-        [HarmonyPriority(Priority.High)] // Alta prioridad para ejecutar antes que AutoTargeting
-        public static void CalculateMouseOrJoystickWorldPoint_Postfix(ref float2 __result, PugOther.PlayerController playerController)
+        [HarmonyPriority(Priority.VeryHigh)] // Alta prioridad para ejecutar después de AutoTargeting
+        public static void CalculateMouseOrJoystickWorldPoint_Postfix(
+            ref float2 __result,
+            PugOther.PlayerController playerController)
         {
             try
             {
-                // Primero verificar si hay un objetivo de auto-targeting activo
-                var autoTargetPos = Patches.Player.AutoTargetingPatch.GetCurrentTargetPosition();
+                // Solo en gameplay, no en menús
+                if (!IsInGameplay())
+                    return;
 
+                // PRIORIDAD 1: Auto-targeting (si está activo, tiene máxima prioridad)
+                var autoTargetPos = Patches.Player.AutoTargetingPatch.GetCurrentTargetPosition();
                 if (autoTargetPos.HasValue)
                 {
-                    // Si hay auto-target activo, usar esa posición
                     __result = new float2(autoTargetPos.Value.x, autoTargetPos.Value.z);
+                    return;
                 }
-                else if (_useVirtualCursorForPrimaryAction || _useVirtualCursorForSecondaryAction || _useVirtualCursorForInteraction)
-                {
-                    // Si no hay auto-target pero sí cursor virtual, usar cursor virtual
-                    __result = _virtualCursorWorldPosition.xy;
-                }
-                // Si no hay ninguno de los dos, dejar el resultado original del juego
-            }
-            catch (System.Exception ex)
-            {
-                // En caso de error, mantener el comportamiento original
-                UnityEngine.Debug.LogError($"Error en parche de cursor virtual: {ex}");
-            }
-        }
 
-        [HarmonyPatch("OnUpdate")]
-        [HarmonyPrefix]
-        public static void OnUpdate_Prefix()
-        {
-            try
-            {
-                // Activar las simulaciones de input cuando el cursor virtual está activo
-                if (_useVirtualCursorForPrimaryAction)
+                // PRIORIDAD 2: Cursor virtual (si está activo y alejado del jugador)
+                if (PlayerInputPatch.HasActiveCursor())
                 {
-                    PlayerInputPatch.SimulateInteract();
-                    // No resetear aquí - mantener activo mientras la tecla esté presionada
+                    Vector3 virtualCursorPos = PlayerInputPatch.GetVirtualCursorPosition();
+                    __result = new float2(virtualCursorPos.x, virtualCursorPos.z);
+                    return;
                 }
-                else if (_useVirtualCursorForSecondaryAction)
-                {
-                    PlayerInputPatch.SimulateSecondInteract();
-                    // No resetear aquí - mantener activo mientras la tecla esté presionada
-                }
-                else if (_useVirtualCursorForInteraction)
-                {
-                    PlayerInputPatch.SimulateInteractWithObject();
-                    // No resetear aquí - mantener activo mientras la tecla esté presionada
-                }
+
+                // PRIORIDAD 3: Dejar el comportamiento original del juego
+                // (mouse físico para teclado, stick para mando)
             }
             catch (System.Exception ex)
             {
-                Patches.UI.UIManager.Speak($"Error activando simulación: {ex.Message}");
+                UnityEngine.Debug.LogError($"[SendClientInputSystemPatch] Error en CalculateMouseOrJoystickWorldPoint: {ex}");
             }
         }
 
         /// <summary>
-        /// Detiene todas las acciones del cursor virtual
+        /// Verifica si estamos en gameplay (no en menús)
+        /// Usa la misma lógica que PlayerInputPatch
         /// </summary>
-        public static void StopVirtualCursorAction()
+        private static bool IsInGameplay()
         {
-            _useVirtualCursorForPrimaryAction = false;
-            _useVirtualCursorForSecondaryAction = false;
-            _useVirtualCursorForInteraction = false;
-        }
+            try
+            {
+                // No funcionar si no hay Manager o jugador
+                if (PugOther.Manager.main == null || PugOther.Manager.main.player == null)
+                    return false;
 
+                // No funcionar en inventarios (el sistema de inventario tiene su propio manejo)
+                if (PugOther.Manager.ui?.isAnyInventoryShowing == true)
+                    return false;
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
-#endif

@@ -261,6 +261,50 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
 - **Localización**: Agregadas claves `hotbar_slot_selected` y `empty_hotbar_slot` en español e inglés
 - **Archivos modificados**: `HotbarSelectionAccessibilityPatch.cs`, `es.txt`, `en.txt`
 
+#### Corrección Crítica del Cursor Virtual - Colocación con Teclado (2025)
+- **Problema**: La acción secundaria (tecla O) no colocaba objetos en la posición del cursor virtual, solo funcionaba con mando (L2).
+- **Causa Raíz**: Core Keeper tiene dos caminos diferentes para calcular la posición de acción:
+  - **PATH 1 (Teclado/Mouse)**: Usa la posición física del mouse directamente
+  - **PATH 2 (Mando)**: Calcula posición basándose en el stick derecho (que el mod intercepta)
+  - Cuando presionabas O (teclado), el juego detectaba "modo mouse" y usaba PATH 1, ignorando el cursor virtual
+- **Solución**: Implementado parche crítico en `SendClientInputSystemPatch.cs`:
+  - Intercepta `CalculateMouseOrJoystickWorldPoint` - el método que calcula dónde colocar/atacar
+  - Sobrescribe la posición calculada con la del cursor virtual cuando está activo
+  - Sistema de prioridades: 1) Auto-targeting, 2) Cursor virtual, 3) Comportamiento original
+- **Resultado**: Ahora TODAS las acciones funcionan correctamente con cursor virtual:
+  - ✅ U/R2: Atacar, minar, destruir objetos, talar árboles
+  - ✅ O/L2: Colocar objetos, usar herramientas (pala, azada), colocar bloques
+  - ✅ Funciona idénticamente con teclado y mando
+- **Archivos modificados**: `SendClientInputSystemPatch.cs`, `PlayerInputPatch.cs`
+- **Métodos añadidos**: `HasActiveCursor()`, `GetCursorOffsetMagnitude()` para verificación de estado del cursor
+
+#### Mejoras en Detección de Objetos del Cursor Virtual (2025)
+- **Problema**: El cursor virtual detectaba objetos de forma inconsistente, sin distinguir entre objetos naturales y colocados por jugador.
+- **Investigación**: Análisis exhaustivo del código del juego (PlacementHandler, TileAccessor, ObjectType) para entender el sistema de tiles y objetos.
+- **Hallazgos**:
+  - Core Keeper NO mantiene flag persistente de "colocado por jugador"
+  - Existe `TileCreatedFromEntityCD` pero es temporal (solo durante colocación)
+  - Solución: Implementar heurísticas confiables basadas en patrones del juego
+- **Implementación**:
+  1. **Sistema de Heurísticas** (`PlayerPlacedHelper.cs`):
+     - Detecta tiles exclusivos de jugador: fence, rail, bridge, rug, litFloor
+     - Detecta tilesets pintados (rangos 15-22, 37-40, 41-52, 61-64) - 100% del jugador
+     - Sistema extensible para futuras mejoras
+  2. **Priorización Mejorada** (`SimpleWorldReader.cs`):
+     - Nueva prioridad: 1) Objetos colocables, 2) Interactuables, 3) Enemigos, 4) Otros
+     - Busca el objeto MÁS CERCANO de cada categoría
+     - Heurísticas basadas en `ObjectCategory`: WorkStation, Furniture, Decoration
+  3. **Indicadores Contextuales**:
+     - Añade sufijo "(colocado)" / "(placed)" cuando detecta objeto/tile del jugador
+     - Sistema localizado en 19 idiomas
+- **Ventajas**:
+  - ✅ Detección más consistente y precisa
+  - ✅ Información contextual útil para el usuario
+  - ✅ Sin cambios en comportamiento actual - solo mejoras
+  - ✅ Usa APIs nativas del juego para mejor estabilidad
+- **Archivos creados**: `PlayerPlacedHelper.cs`
+- **Archivos modificados**: `SimpleWorldReader.cs`, `es.txt`, `en.txt` (clave `player_placed`)
+
 ### Controles del Cursor Virtual y Sistemas de Accesibilidad
 
 #### Cursor Virtual (se activa automáticamente al entrar al mundo):

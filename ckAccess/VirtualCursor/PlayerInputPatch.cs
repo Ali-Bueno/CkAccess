@@ -297,6 +297,23 @@ namespace ckAccess.VirtualCursor
         }
 
         /// <summary>
+        /// Verifica si el cursor virtual está activo (alejado del jugador)
+        /// </summary>
+        public static bool HasActiveCursor()
+        {
+            // El cursor está activo si hay offset desde el jugador
+            return (_cursorOffsetX != 0 || _cursorOffsetZ != 0);
+        }
+
+        /// <summary>
+        /// Obtiene la magnitud del offset del cursor (distancia del jugador)
+        /// </summary>
+        public static float GetCursorOffsetMagnitude()
+        {
+            return Mathf.Sqrt(_cursorOffsetX * _cursorOffsetX + _cursorOffsetZ * _cursorOffsetZ);
+        }
+
+        /// <summary>
         /// Anuncia la posición actual del cursor
         /// </summary>
         private static void AnnounceCursorPosition()
