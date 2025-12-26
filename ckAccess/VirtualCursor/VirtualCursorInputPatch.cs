@@ -27,9 +27,8 @@ namespace ckAccess.VirtualCursor
         {
             try
             {
-                // SIEMPRE actualizar el stick virtual cada frame
-                // Esto es crítico para emular el gamepad correctamente
-                PlayerInputPatch.UpdateVirtualAimInput();
+                // NOTA: PlayerInputPatch.UpdateVirtualAimInput() se llama ahora desde
+                // PlayerInputPatch.UpdateState_Prefix() para asegurar que se ejecute siempre.
 
                 // OPTIMIZACIÓN: Solo ejecutar el resto si hay teclas presionadas
                 if (!HasAnyVirtualCursorKeyPressed())

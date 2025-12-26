@@ -604,25 +604,6 @@ Se ha implementado soporte completo para los botones de acción del inventario m
 ✅ Detección automática de tipo de botón
 ✅ Funciona con cualquier `ButtonUIElement` del inventario
 
-#### Corrección de Rotación y Input del Cursor Virtual (2025) ✅ **COMPLETADO**
-
-Se ha solucionado el problema donde el personaje no giraba hacia el cursor virtual (impidiendo construir correctamente) y el input tenía retraso al estar parado.
-
-**Problema:**
-- El juego forzaba la rotación hacia el ratón físico si detectaba teclado (`PrefersKeyboardAndMouse` = true).
-- El input del cursor virtual dependía de la actualización de la UI (`UIMouse`), que podía pausarse o cambiar en ciertos estados.
-
-**Solución Implementada:**
-1.  **Simulación de Mando (`PlayerInputPatch`):** Se intercepta `PrefersKeyboardAndMouse` para devolver `false` cuando el cursor virtual está activo. Esto engaña al juego para que use la lógica de "Stick Derecho", permitiendo la rotación correcta del personaje.
-2.  **Parche de Vector de Mirada (`PlayerControllerPatch`):** Se intercepta `UpdateAim` para asegurar que el vector de ataque apunte exactamente al cursor virtual.
-3.  **Actualización de Input Robusta:** Se movió la lógica de lectura de teclas (I/J/K/L) a `PlayerInput.UpdateState`. Esto garantiza que el cursor se mueva en cada frame del sistema de input, eliminando el lag al estar parado.
-4.  **Seguridad de UI:** El sistema detecta automáticamente si se abre un inventario y restaura el "modo teclado" para evitar conflictos en la navegación de menús.
-
-**Archivos Modificados:**
-- `PlayerInputPatch.cs`: `PrefersKeyboardAndMouse_Postfix`, `UpdateState_Prefix`.
-- `PlayerControllerPatch.cs`: Nuevo parche para `UpdateAim`.
-- `VirtualCursorInputPatch.cs`: Eliminada lógica redundante.
-
 ---
 
 ### Próximos Pasos
@@ -726,3 +707,10 @@ Se ha solucionado el problema donde el personaje no giraba hacia el cursor virtu
 - Configurar prioridades en UI (ejemplo: siempre seleccionar pestañas antes que slots si el cursor está en el borde).
 - Revisar posibles conflictos con los inputs originales del juego.
 - Dejar opciones de personalización en un archivo de configuración o menú accesible.
+
+#### Módulo 8 – Corrección de Rotación y Input del Cursor Virtual ✅ **COMPLETADO**
+**Objetivo:** Asegurar que el personaje gire y actúe correctamente en la dirección del cursor virtual, emulando un stick analógico.
+- ✅ **Parche de Rotación (`PlayerControllerPatch`):** Intercepta `UpdateAim` para calcular el vector de mirada exacto hacia el cursor virtual.
+- ✅ **Simulación de Mando (`PlayerInputPatch`):** Fuerza `PrefersKeyboardAndMouse` a `false` cuando el cursor está activo en gameplay. Esto obliga al juego a usar la lógica de rotación del mando (stick derecho), permitiendo que el personaje gire físicamente.
+- ✅ **Actualización de Input Robusta:** Mueve la actualización del cursor virtual a `PlayerInput.UpdateState` para garantizar respuesta inmediata incluso si el personaje está parado o la UI cambia de modo.
+- ✅ **Seguridad de UI:** El "modo mando" simulado se desactiva automáticamente al abrir inventarios o menús para no romper la navegación por teclado en la interfaz.

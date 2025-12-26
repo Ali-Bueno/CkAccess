@@ -433,6 +433,45 @@ namespace ckAccess.VirtualCursor
             }
         }
 
+        /// <summary>
+        /// Engaña al juego para que crea que NO estamos usando teclado/ratón cuando el cursor virtual está activo.
+        /// Esto obliga a PlayerController a usar la lógica de "Stick Derecho" para la rotación (facingDirection),
+        /// la cual ya controlamos a través de GetInputAxisValue_Postfix.
+        /// </summary>
+        [HarmonyPatch("PrefersKeyboardAndMouse")]
+        [HarmonyPostfix]
+        public static void PrefersKeyboardAndMouse_Postfix(ref bool __result)
+        {
+            // Si el cursor virtual está activo, forzar modo mando
+            // PERO SOLO en gameplay puro, no si hay inventarios abiertos, para no romper la UI
+            if (HasActiveCursor() && 
+                IsInGameplay() && 
+                PugOther.Manager.ui != null && 
+                !PugOther.Manager.ui.isAnyInventoryShowing)
+            {
+                __result = false;
+            }
+        }
+
+        /// <summary>
+        /// Asegura que el input del cursor virtual se actualice en cada frame del sistema de input.
+        /// Esto es más fiable que depender de UIMouse.UpdateMouseUIInput, que podría no ejecutarse
+        /// si el juego está en modo mando puro o sin UI.
+        /// </summary>
+        [HarmonyPatch("UpdateState")]
+        [HarmonyPrefix]
+        public static void UpdateState_Prefix()
+        {
+            try
+            {
+                UpdateVirtualAimInput();
+            }
+            catch (System.Exception ex)
+            {
+                // Silenciar errores para no spammear log
+            }
+        }
+
 
         // Métodos vacíos para compatibilidad con el código existente
         public static void SimulateInteract() { }
