@@ -41,7 +41,32 @@ namespace ckAccess.VirtualCursor
                 return true;
             }
 
-            // Verificar si el cursor virtual está activo
+            // PRIORIDAD 1: Auto-targeting (si está activo, tiene máxima prioridad)
+            var autoTargetPos = Patches.Player.AutoTargetingPatch.GetCurrentTargetPosition();
+            if (autoTargetPos.HasValue)
+            {
+                // Calcular vector dirección hacia el enemigo
+                Vector3 playerPosVec = new Vector3(position.x, position.y, position.z);
+                Vector3 targetPosVec = new Vector3(autoTargetPos.Value.x, autoTargetPos.Value.y, autoTargetPos.Value.z);
+                Vector3 dir = targetPosVec - playerPosVec;
+                
+                dir.y = 0; // Aplanar
+
+                if (dir.sqrMagnitude > 0.001f)
+                {
+                    aimDirection = math.normalizesafe(new float3(dir.x, dir.y, dir.z));
+                    
+                    if (math.all(aimDirection == float3.zero))
+                        aimDirection = new float3(0f, 0f, -1f);
+                }
+
+                if (aimUI != null) aimUI.UpdateAimPosition();
+                
+                // IMPORTANTE: Retornar false para saltar lógica original y usar nuestro aim
+                return false;
+            }
+
+            // PRIORIDAD 2: Cursor virtual (si está activo)
             // Usamos PlayerInputPatch porque es quien tiene la lógica de "Stick Derecho Virtual"
             if (PlayerInputPatch.HasActiveCursor())
             {

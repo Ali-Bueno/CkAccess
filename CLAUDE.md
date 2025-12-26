@@ -623,6 +623,24 @@ Se ha solucionado el problema donde el personaje no giraba hacia el cursor virtu
 - `PlayerControllerPatch.cs`: Nuevo parche para `UpdateAim`.
 - `VirtualCursorInputPatch.cs`: Eliminada lógica redundante.
 
+#### Mejoras en Auto-Targeting (2025) ✅ **COMPLETADO**
+
+Se han realizado mejoras significativas en la fiabilidad y precisión del sistema de auto-targeting.
+
+**Problemas Resueltos:**
+- **Bloqueo a través de paredes:** El sistema apuntaba a enemigos visibles en el minimapa pero bloqueados por muros.
+- **Conflicto con Cursor Virtual:** El cursor virtual sobrescribía la dirección de ataque incluso cuando había un enemigo seleccionado.
+- **Lentitud:** El escaneo era demasiado lento (cada 15 frames).
+
+**Soluciones Implementadas:**
+1.  **Verificación de Línea de Visión (LOS):** Implementado algoritmo de Bresenham para verificar si hay muros entre el jugador y el enemigo antes de seleccionarlo.
+2.  **Prioridad de Apuntado:** Modificado `PlayerControllerPatch` para que la dirección del Auto-Targeting tenga prioridad sobre la dirección del cursor virtual.
+3.  **Mayor Frecuencia:** Aumentada la frecuencia de escaneo a cada 5 frames (~80ms) para una respuesta más rápida.
+
+**Archivos Modificados:**
+- `AutoTargetingPatch.cs`: Añadido `HasLineOfSight`, aumentado scan rate.
+- `PlayerControllerPatch.cs`: Añadida prioridad para `AutoTargetingPatch.GetCurrentTargetPosition()`.
+
 ---
 
 ### Próximos Pasos

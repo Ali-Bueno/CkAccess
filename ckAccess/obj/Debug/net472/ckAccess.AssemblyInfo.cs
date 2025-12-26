@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ckAccess")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f17a8b99527cf846881c90ec9d19cdf45807fd35")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecd90d1bb36ae7416139f6d30f827cec8606d080")]
 [assembly: System.Reflection.AssemblyProductAttribute("ckAccess")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ckAccess")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

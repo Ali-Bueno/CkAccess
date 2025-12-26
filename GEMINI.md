@@ -169,6 +169,8 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
   - **Completado:** Integración con cursor virtual - la tecla U apunta automáticamente al enemigo más cercano.
   - **Completado:** Anuncios por TTS de enemigos que entran/salen del rango con dirección y distancia.
   - **Completado:** Sistema siempre activo (sin toggles).
+  - **Completado (2025):** Mejora de Línea de Visión (LOS) - ya no apunta a enemigos a través de paredes.
+  - **Completado (2025):** Prioridad de apuntado corregida - el auto-targeting ahora prevalece sobre la dirección del cursor virtual.
 - **Completado:** Sistema de Proximidad Sonora.
   - **Completado:** Sonidos de proximidad para objetos interactuables (cofres, puertas, altares, etc.).
   - **Completado:** Sonidos de proximidad para enemigos con detección de movimiento.

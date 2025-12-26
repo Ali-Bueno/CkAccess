@@ -10,6 +10,7 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using Vector3 = Core::UnityEngine.Vector3;
+using PugTilemap;
 
 namespace ckAccess.Patches.Player
 {
@@ -26,7 +27,7 @@ namespace ckAccess.Patches.Player
         private const float RANGED_WEAPON_RANGE = 10f; // Rango para armas a distancia
         private const float MAGIC_WEAPON_RANGE = 8f; // Rango para armas mágicas
         private const float TOOL_RANGE = 2f; // Rango para herramientas
-        private const int FRAMES_BETWEEN_SCANS = 15; // Escanear enemigos cada 15 frames
+        private const int FRAMES_BETWEEN_SCANS = 5; // MEJORADO: Escanear cada 5 frames (aprox 80ms) para mejor respuesta
 
         // Estado del sistema - SIEMPRE ACTIVO
         private static bool _systemEnabled = true; // Siempre activo, no se puede desactivar
@@ -124,15 +125,20 @@ namespace ckAccess.Patches.Player
                     // Solo considerar enemigos dentro del rango efectivo
                     if (distance <= effectiveRange)
                     {
-                        var enemy = new EnemyTarget
+                        // MEJORA CRÍTICA: Verificar línea de visión (LOS)
+                        // Esto evita apuntar a enemigos a través de paredes
+                        if (HasLineOfSight(playerPos, entityWorldPos))
                         {
-                            entity = entity,
-                            position = entityWorldPos,
-                            distance = distance,
-                            name = GetEntityName(entity)
-                        };
+                            var enemy = new EnemyTarget
+                            {
+                                entity = entity,
+                                position = entityWorldPos,
+                                distance = distance,
+                                name = GetEntityName(entity)
+                            };
 
-                        _nearbyEnemies.Add(enemy);
+                            _nearbyEnemies.Add(enemy);
+                        }
                     }
                 }
 
@@ -145,6 +151,95 @@ namespace ckAccess.Patches.Player
             catch (System.Exception ex)
             {
                 UnityEngine.Debug.LogError($"Error actualizando enemigos cercanos: {ex}");
+            }
+        }
+
+        /// <summary>
+        /// Verifica si hay línea de visión clara entre dos puntos (sin paredes)
+        /// Usa algoritmo de Bresenham sobre el grid de tiles
+        /// </summary>
+        private static bool HasLineOfSight(Vector3 start, Vector3 end)
+        {
+            try
+            {
+                var map = PugOther.Manager.multiMap;
+                if (map == null) return true; // Fallback seguro
+
+                // Convertir a coordenadas de tile
+                int x0 = (int)math.round(start.x);
+                int z0 = (int)math.round(start.z);
+                int x1 = (int)math.round(end.x);
+                int z1 = (int)math.round(end.z);
+
+                // Algoritmo de Bresenham para trazar línea
+                int dx = System.Math.Abs(x1 - x0);
+                int dz = System.Math.Abs(z1 - z0);
+                int sx = x0 < x1 ? 1 : -1;
+                int sz = z0 < z1 ? 1 : -1;
+                int err = dx - dz;
+
+                // Límite de seguridad para evitar bucles infinitos (max 50 tiles)
+                int safetyCounter = 0;
+                while (true)
+                {
+                    if (safetyCounter++ > 50) break;
+
+                    // Verificar tile actual
+                    var tile = map.GetTileLayerLookup().GetTopTile(new int2(x0, z0));
+                    
+                    if (IsVisionBlocking(tile.tileType))
+                    {
+                        return false;
+                    }
+
+                    if (x0 == x1 && z0 == z1) break;
+
+                    int e2 = 2 * err;
+                    if (e2 > -dz)
+                    {
+                        err -= dz;
+                        x0 += sx;
+                    }
+                    if (e2 < dx)
+                    {
+                        err += dx;
+                        z0 += sz;
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return true; // En caso de error, asumir visible para no romper nada
+            }
+        }
+
+        /// <summary>
+        /// Determina si un tipo de tile bloquea la visión/proyectiles
+        /// </summary>
+        private static bool IsVisionBlocking(TileType type)
+        {
+            switch (type)
+            {
+                case TileType.wall:
+                case TileType.greatWall:
+                case TileType.thinWall:
+                case TileType.ore:
+                case TileType.ancientCrystal:
+                case TileType.bigRoot:
+                case TileType.chrysalis:
+                    return true;
+                
+                // Tiles que bloquean movimiento pero NO visión (agujeros, vallas, agua)
+                case TileType.pit:
+                case TileType.fence:
+                case TileType.water:
+                case TileType.rail:
+                    return false;
+
+                default:
+                    return false;
             }
         }
 
