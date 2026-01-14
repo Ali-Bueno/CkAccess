@@ -26,71 +26,73 @@
   </ItemGroup>
 
   <ItemGroup>
-    
+    <!-- Referencias del juego (desde D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed) -->
     <Reference Include="Pug.Other">
-      <HintPath>..\references\Pug.Other.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Pug.Other.dll</HintPath>
       <Private>false</Private>
       <Aliases>PugOther,Game</Aliases>
     </Reference>
-    
+
     <Reference Include="UnityEngine">
-      <HintPath>..\references\UnityEngine.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\UnityEngine.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\references\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
       <Aliases>Core</Aliases>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\references\UnityEngine.UI.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="TolkDotNet">
-      <HintPath>..\references\tolk\TolkDotNet.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="I2.Loc">
-      <HintPath>..\references\I2.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\I2.dll</HintPath>
       <Private>false</Private>
       <Aliases>I2Loc</Aliases>
     </Reference>
     <Reference Include="Pug.Base">
-      <HintPath>..\references\Pug.Base.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Pug.Base.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Pug.ECS.Components">
-      <HintPath>..\references\Pug.ECS.Components.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Pug.ECS.Components.dll</HintPath>
       <Private>false</Private>
       <Aliases>PugComps</Aliases>
     </Reference>
     <Reference Include="Pug.UnityExtensions">
-      <HintPath>..\references\Pug.UnityExtensions.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Pug.UnityExtensions.dll</HintPath>
       <Private>false</Private>
       <Aliases>PugUnExt</Aliases>
     </Reference>
     <Reference Include="Unity.Entities">
-      <HintPath>..\references\Unity.Entities.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Unity.Entities.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Unity.Mathematics">
-      <HintPath>..\references\Unity.Mathematics.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Unity.Mathematics.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Rewired_Core">
-      <HintPath>..\references\Rewired_Core.dll</HintPath>
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Rewired_Core.dll</HintPath>
       <Private>false</Private>
     </Reference>
+
+    <!-- Tolk permanece en la carpeta references del proyecto -->
+    <Reference Include="TolkDotNet">
+      <HintPath>..\references\tolk\TolkDotNet.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
     <Reference Include="Microsoft.CSharp">
       <Private>false</Private>
     </Reference>
-    <Compile Include="..\ck code 2\RewiredConsts\*.cs" />
-    
-    
+    <Compile Include="..\ck code\RewiredConsts\*.cs" />
+
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

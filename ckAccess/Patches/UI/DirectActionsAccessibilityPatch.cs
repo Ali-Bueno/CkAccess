@@ -157,7 +157,8 @@ namespace ckAccess.Patches.UI
         {
             try
             {
-                string name = objectID.ToString().ToLower();
+                var id = objectID;
+                string name = id.ToString().ToLower();
                 return name.Contains("armor") || name.Contains("helm") || name.Contains("chest") ||
                        name.Contains("pants") || name.Contains("boots") || name.Contains("ring") ||
                        name.Contains("necklace") || name.Contains("lantern") || name.Contains("bag") ||
@@ -185,7 +186,8 @@ namespace ckAccess.Patches.UI
         {
             try
             {
-                string name = objectID.ToString().ToLower();
+                var id = objectID;
+                string name = id.ToString().ToLower();
                 return name.Contains("food") || name.Contains("potion") || name.Contains("bread") ||
                        name.Contains("meat") || name.Contains("berry") || name.Contains("fish") ||
                        name.Contains("mushroom") || name.Contains("drink") || name.Contains("health") ||
@@ -205,7 +207,8 @@ namespace ckAccess.Patches.UI
         {
             try
             {
-                string name = objectID.ToString().ToLower();
+                var id = objectID;
+                string name = id.ToString().ToLower();
                 return name.Contains("seed") || name.Contains("block") || name.Contains("wall") ||
                        name.Contains("torch") || name.Contains("workbench") || name.Contains("furnace") ||
                        name.Contains("chest") || name.Contains("table") || name.Contains("chair") ||

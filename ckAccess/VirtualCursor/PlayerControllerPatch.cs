@@ -35,6 +35,9 @@ namespace ckAccess.VirtualCursor
             PugOther.PlayerInput inputModule,
             PugOther.AimUI aimUI)
         {
+            // Copiar a variable local para evitar warning Harmony003
+            var pos = position;
+
             // Si el bloqueo de apuntado está activo, dejar que el juego lo maneje
             if (isAimingBlocked)
             {
@@ -46,7 +49,7 @@ namespace ckAccess.VirtualCursor
             if (autoTargetPos.HasValue)
             {
                 // Calcular vector dirección hacia el enemigo
-                Vector3 playerPosVec = new Vector3(position.x, position.y, position.z);
+                Vector3 playerPosVec = new Vector3(pos.x, pos.y, pos.z);
                 Vector3 targetPosVec = new Vector3(autoTargetPos.Value.x, autoTargetPos.Value.y, autoTargetPos.Value.z);
                 Vector3 dir = targetPosVec - playerPosVec;
                 
@@ -74,9 +77,9 @@ namespace ckAccess.VirtualCursor
                 Vector3 virtualCursorPos = PlayerInputPatch.GetVirtualCursorPosition();
                 
                 // Calcular vector dirección: Destino - Origen
-                // Nota: 'position' es la RenderPosition del jugador (float3)
+                // Nota: 'pos' es la RenderPosition del jugador (float3)
                 // Convertir float3 a Vector3 manualmente para evitar errores de compilación
-                Vector3 playerPosVec = new Vector3(position.x, position.y, position.z);
+                Vector3 playerPosVec = new Vector3(pos.x, pos.y, pos.z);
                 Vector3 dir = virtualCursorPos - playerPosVec;
                 
                 // Aplanar el vector (ignorar altura)

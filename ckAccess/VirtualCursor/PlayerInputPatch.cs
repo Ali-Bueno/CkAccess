@@ -341,8 +341,10 @@ namespace ckAccess.VirtualCursor
         /// </summary>
         private static string GetDirectionName(Vector2 dir)
         {
+            // Copiar a variable local para evitar warning Harmony003
+            var direction = dir;
             // Direcciones cardinales e intermedias
-            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             if (angle < 0) angle += 360;
 
             if (angle >= 337.5f || angle < 22.5f) return "derecha";
@@ -466,7 +468,7 @@ namespace ckAccess.VirtualCursor
             {
                 UpdateVirtualAimInput();
             }
-            catch (System.Exception ex)
+            catch
             {
                 // Silenciar errores para no spammear log
             }

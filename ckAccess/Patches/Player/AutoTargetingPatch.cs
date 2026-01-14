@@ -162,14 +162,18 @@ namespace ckAccess.Patches.Player
         {
             try
             {
+                // Copiar a variables locales para evitar warning Harmony003
+                var startPos = start;
+                var endPos = end;
+
                 var map = PugOther.Manager.multiMap;
                 if (map == null) return true; // Fallback seguro
 
                 // Convertir a coordenadas de tile
-                int x0 = (int)math.round(start.x);
-                int z0 = (int)math.round(start.z);
-                int x1 = (int)math.round(end.x);
-                int z1 = (int)math.round(end.z);
+                int x0 = (int)math.round(startPos.x);
+                int z0 = (int)math.round(startPos.z);
+                int x1 = (int)math.round(endPos.x);
+                int z1 = (int)math.round(endPos.z);
 
                 // Algoritmo de Bresenham para trazar línea
                 int dx = System.Math.Abs(x1 - x0);
@@ -369,7 +373,9 @@ namespace ckAccess.Patches.Player
         {
             try
             {
-                string itemName = objectID.ToString().ToLower();
+                // Copiar a variable local para evitar warning Harmony003
+                var id = objectID;
+                string itemName = id.ToString().ToLower();
 
                 // Armas a distancia (mayor rango)
                 if (itemName.Contains("bow") || itemName.Contains("crossbow") ||

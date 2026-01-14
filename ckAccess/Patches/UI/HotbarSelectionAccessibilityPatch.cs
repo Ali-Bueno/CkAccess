@@ -89,7 +89,8 @@ namespace ckAccess.Patches.UI
             {
                 // Por ahora usar el toString del ObjectID
                 // En el futuro se puede mejorar con acceso a la base de datos del juego
-                return objectID.ToString();
+                var id = objectID;
+                return id.ToString();
             }
             catch
             {

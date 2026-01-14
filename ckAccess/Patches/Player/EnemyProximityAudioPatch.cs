@@ -622,7 +622,11 @@ namespace ckAccess.Patches.Player
         {
             try
             {
-                float distance = Vector3.Distance(from, to);
+                // Copiar a variables locales para evitar warning Harmony003
+                var fromPos = from;
+                var toPos = to;
+
+                float distance = Vector3.Distance(fromPos, toPos);
 
                 // Regla simple: si están muy cerca, siempre hay línea de visión
                 if (distance < 2f) return true;
@@ -634,10 +638,10 @@ namespace ckAccess.Patches.Player
                 var tileLayerLookup = multiMap.GetTileLayerLookup();
 
                 // Puntos de inicio y fin en coordenadas de tile
-                int x0 = Mathf.RoundToInt(from.x);
-                int z0 = Mathf.RoundToInt(from.z);
-                int x1 = Mathf.RoundToInt(to.x);
-                int z1 = Mathf.RoundToInt(to.z);
+                int x0 = Mathf.RoundToInt(fromPos.x);
+                int z0 = Mathf.RoundToInt(fromPos.z);
+                int x1 = Mathf.RoundToInt(toPos.x);
+                int z1 = Mathf.RoundToInt(toPos.z);
 
                 // Bresenham line algorithm
                 int dx = Mathf.Abs(x1 - x0);

@@ -127,7 +127,8 @@ namespace ckAccess.Notifications
                 string message;
                 if (amount > 1)
                 {
-                    message = LocalizationManager.GetText("item_picked_multiple", itemName, amount.ToString());
+                    var amountValue = amount;
+                    message = LocalizationManager.GetText("item_picked_multiple", itemName, amountValue.ToString());
                 }
                 else
                 {
@@ -156,7 +157,8 @@ namespace ckAccess.Notifications
             {
                 // Por ahora usar el toString del ObjectID
                 // En el futuro se puede mejorar para obtener nombres localizados
-                string name = objectID.ToString();
+                var id = objectID;
+                string name = id.ToString();
 
                 // Formatear el nombre: remover prefijos y hacer más legible
                 name = name.Replace("_", " ");
@@ -164,7 +166,8 @@ namespace ckAccess.Notifications
             }
             catch
             {
-                return objectID.ToString();
+                var id = objectID;
+                return id.ToString();
             }
         }
     }

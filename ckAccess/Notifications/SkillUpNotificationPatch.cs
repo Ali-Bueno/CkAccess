@@ -73,8 +73,11 @@ namespace ckAccess.Notifications
         /// </summary>
         private static string GetSkillName(SkillID skillID)
         {
+            // Copiar a variable local para evitar warning Harmony003
+            var skill = skillID;
+
             // Mapeo de SkillID a claves de localización
-            string localizationKey = $"skill_{skillID.ToString().ToLower()}";
+            string localizationKey = $"skill_{skill.ToString().ToLower()}";
 
             // Intentar obtener texto localizado
             string localizedName = LocalizationManager.GetText(localizationKey);
@@ -82,7 +85,7 @@ namespace ckAccess.Notifications
             // Si no hay localización, usar el enum como fallback
             if (localizedName == localizationKey || string.IsNullOrEmpty(localizedName))
             {
-                return skillID.ToString();
+                return skill.ToString();
             }
 
             return localizedName;

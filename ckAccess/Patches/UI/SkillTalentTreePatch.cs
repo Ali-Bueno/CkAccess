@@ -53,10 +53,13 @@ namespace ckAccess.Patches.UI
         /// </summary>
         private static string GetSkillName(SkillID skillToShow)
         {
+            // Copiar a variable local para evitar warning Harmony003
+            var skill = skillToShow;
+
             try
             {
                 // Mapeo directo de SkillID a nombres legibles
-                string skillName = skillToShow switch
+                string skillName = skill switch
                 {
                     SkillID.Mining => LocalizationManager.GetText("skill_mining"),
                     SkillID.Running => LocalizationManager.GetText("skill_running"),
@@ -70,14 +73,14 @@ namespace ckAccess.Patches.UI
                     SkillID.Magic => LocalizationManager.GetText("skill_magic"),
                     SkillID.Summoning => LocalizationManager.GetText("skill_summoning"),
                     SkillID.Explosives => LocalizationManager.GetText("skill_explosives"),
-                    _ => skillToShow.ToString()
+                    _ => skill.ToString()
                 };
 
                 return skillName;
             }
             catch
             {
-                return skillToShow.ToString();
+                return skill.ToString();
             }
         }
     }

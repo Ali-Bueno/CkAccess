@@ -139,7 +139,8 @@ namespace ckAccess.Patches.UI
             {
                 // Simplificado: usar solo el nombre del enum
                 // El sistema de localización del juego se encargará de traducirlo si es necesario
-                string enumName = objectID.ToString();
+                var id = objectID;
+                string enumName = id.ToString();
 
                 // Intentar obtener el nombre localizado usando el patrón del juego
                 string localizedKey = "Objects/" + enumName;
@@ -156,7 +157,8 @@ namespace ckAccess.Patches.UI
             }
             catch
             {
-                return objectID.ToString();
+                var id = objectID;
+                return id.ToString();
             }
         }
 

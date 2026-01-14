@@ -14,7 +14,9 @@ using System;
 namespace ckAccess
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+#pragma warning disable BepInEx002 // False positive: Plugin correctly inherits from BaseUnityPlugin
     public class Plugin : BaseUnityPlugin
+#pragma warning restore BepInEx002
     {
         public static Plugin Instance { get; private set; }
         public static ManualLogSource Log { get; private set; }
