@@ -46,12 +46,6 @@ namespace ckAccess.VirtualCursor
                     return; // Skip virtual cursor input
                 }
 
-                // Handle hotbar navigation first (works in game and inventory)
-                if (Patches.UI.HotbarAccessibilityPatch.HandleHotbarNavigation())
-                {
-                    return; // Hotbar navigation handled, don't process other input
-                }
-
                 // Handle debug/feedback inputs
                 HandleVirtualCursorInput();
             }
