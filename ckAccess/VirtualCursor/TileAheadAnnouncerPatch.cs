@@ -5,8 +5,9 @@ using HarmonyLib;
 using DavyKager;
 using ckAccess.MapReader;
 using ckAccess.Helpers;
-using Unity.Mathematics;
 using UnityEngine;
+using Vector3 = Core::UnityEngine.Vector3;
+using Mathf = Core::UnityEngine.Mathf;
 
 namespace ckAccess.VirtualCursor
 {
@@ -46,16 +47,16 @@ namespace ckAccess.VirtualCursor
                 if (!LocalPlayerHelper.IsLocalPlayer(__instance))
                     return;
 
-                // NO anunciar tiles si hay algún menú/UI abierto
-                if (IsAnyMenuOpen())
+                // NO anunciar tiles si hay algún menú/UI abierto - usar helper centralizado
+                if (!GameplayStateHelper.IsInGameplayWithoutInventory())
                     return;
 
                 // Verificar cooldown de tiempo
                 if (Time.time - _lastAnnounceTime < MIN_ANNOUNCE_INTERVAL)
                     return;
 
-                // Obtener posición actual del jugador local
-                if (!TryGetPlayerPosition(__instance, out Vector3 playerPos))
+                // Obtener posición actual del jugador local usando helper centralizado
+                if (!LocalPlayerHelper.TryGetLocalPlayerPosition(out Vector3 playerPos))
                     return;
 
                 // Inicializar la posición previa si es la primera vez
@@ -93,8 +94,9 @@ namespace ckAccess.VirtualCursor
                     return; // Misma posición, no anunciar
                 }
 
-                // Obtener descripción del tile en frente
-                string tileDescription = SimpleWorldReader.GetSimpleDescription(aheadPosition);
+                // Obtener descripción del tile en frente (convertir Vector3 para SimpleWorldReader)
+                var unityPos = new UnityEngine.Vector3(aheadPosition.x, aheadPosition.y, aheadPosition.z);
+                string tileDescription = SimpleWorldReader.GetSimpleDescription(unityPos);
 
                 // Solo anunciar si el tile cambió
                 if (tileDescription != _lastAnnouncedTile)
@@ -121,28 +123,6 @@ namespace ckAccess.VirtualCursor
         }
 
         /// <summary>
-        /// Verifica si hay algún menú o UI abierto
-        /// </summary>
-        private static bool IsAnyMenuOpen()
-        {
-            try
-            {
-                var manager = PugOther.Manager.ui;
-                if (manager == null) return false;
-
-                // Verificar inventarios, cofres, mesas de trabajo, menús, etc.
-                // Este campo cubre la mayoría de los casos: inventario, cofres, estaciones de trabajo, etc.
-                return manager.isAnyInventoryShowing;
-            }
-            catch
-            {
-                // En caso de error, ser conservadores y asumir que hay un menú abierto
-                return true;
-            }
-        }
-
-
-        /// <summary>
         /// Calcula la posición del tile en frente del jugador según la dirección de movimiento
         /// </summary>
         private static Vector3 CalculateAheadPosition(Vector3 playerPos, Vector3 direction)
@@ -158,38 +138,6 @@ namespace ckAccess.VirtualCursor
             );
 
             return aheadPos;
-        }
-
-        /// <summary>
-        /// Obtiene la posición del jugador de forma segura
-        /// </summary>
-        private static bool TryGetPlayerPosition(PugOther.PlayerController player, out Vector3 position)
-        {
-            position = Vector3.zero;
-
-            try
-            {
-                if (player == null) return false;
-
-                var worldPos = player.WorldPosition;
-                position = new Vector3(worldPos.x, worldPos.y, worldPos.z);
-                return true;
-            }
-            catch
-            {
-                try
-                {
-                    if (player.transform != null)
-                    {
-                        var pos = player.transform.position;
-                        position = new Vector3(pos.x, pos.y, pos.z);
-                        return true;
-                    }
-                }
-                catch { }
-            }
-
-            return false;
         }
 
         /// <summary>

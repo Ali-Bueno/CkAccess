@@ -2,12 +2,12 @@ extern alias PugOther;
 extern alias Core;
 
 using System;
-using System.Collections.Generic;
 using PugTilemap;
 using Unity.Mathematics;
 using UnityEngine;
 using DavyKager;
 using ckAccess.Localization;
+using ckAccess.Helpers;
 
 namespace ckAccess.MapReader
 {
@@ -99,7 +99,7 @@ namespace ckAccess.MapReader
                     {
                         var category = ObjectCategoryHelper.GetCategory(entity);
 
-                        // Clasificar por prioridad
+                        // Clasificar por prioridad usando detección mejorada
                         if (IsLikelyPlayerPlaced(entity, category))
                         {
                             if (distance < minPlaceableDistance)
@@ -108,7 +108,7 @@ namespace ckAccess.MapReader
                                 minPlaceableDistance = distance;
                             }
                         }
-                        else if (ObjectCategoryHelper.IsInteractable(category))
+                        else if (EntityClassificationHelper.IsInteractable(entity) || ObjectCategoryHelper.IsInteractable(category))
                         {
                             if (distance < minInteractableDistance)
                             {
@@ -116,7 +116,7 @@ namespace ckAccess.MapReader
                                 minInteractableDistance = distance;
                             }
                         }
-                        else if (ObjectCategoryHelper.IsHostile(category))
+                        else if (EntityClassificationHelper.IsEnemy(entity) || ObjectCategoryHelper.IsHostile(category))
                         {
                             if (distance < minEnemyDistance)
                             {

@@ -10,7 +10,6 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using Vector3 = Core::UnityEngine.Vector3;
-using PugTilemap;
 
 namespace ckAccess.Patches.Player
 {
@@ -40,66 +39,6 @@ namespace ckAccess.Patches.Player
         private static HashSet<PugOther.EntityMonoBehaviour> _previouslyInRangeEnemies = new HashSet<PugOther.EntityMonoBehaviour>();
         private static float _lastAnnouncementTime = 0f;
         private const float ANNOUNCEMENT_COOLDOWN = 1.5f; // Cooldown entre anuncios para evitar spam
-
-        #region Enemy Detection Patterns
-
-        // Patrones de aliados/minions del jugador (excluir siempre)
-        private static readonly string[] AllyPatterns = {
-            "minion", "summon", "companion", "familiar", "pet", "ally"
-        };
-
-        // Patrones de objetos estáticos (excluir siempre)
-        private static readonly string[] StaticObjectPatterns = {
-            "statue", "statua", "dummy", "mannequin", "practice",
-            "totem", "spawner", "turret", "trap", "decoration", "prop",
-            "destructible", "breakable", "crate", "barrel", "chest",
-            "container", "furniture", "plant", "tree", "rock", "ore",
-            "crystal", "wall", "floor", "ceiling"
-        };
-
-        // Prefijos de enemigos conocidos
-        private static readonly string[] EnemyPrefixes = {
-            "slime", "orangeslime", "acidslime", "poisonslime",
-            "spider", "cavespider", "webspider",
-            "skeleton", "undeadskeleton",
-            "goblin", "cavegoblin",
-            "zombie", "demon", "larva", "grub", "worm", "bat", "rat"
-        };
-
-        // Patrones que indican enemigo (contiene)
-        private static readonly string[] EnemyContainsPatterns = {
-            "shaman", "witch", "mage", "knight", "warrior",
-            "guardian", "brute", "crawler", "enemy", "hostile", "monster", "boss"
-        };
-
-        // Patrones de NPCs amigables (excluir)
-        private static readonly string[] FriendlyNpcPatterns = {
-            "npc", "merchant", "vendor", "friendly"
-        };
-
-        #endregion
-
-        #region Pattern Matching Helpers
-
-        private static bool ContainsAny(string name, string[] patterns)
-        {
-            foreach (var pattern in patterns)
-            {
-                if (name.Contains(pattern)) return true;
-            }
-            return false;
-        }
-
-        private static bool StartsWithAny(string name, string[] prefixes)
-        {
-            foreach (var prefix in prefixes)
-            {
-                if (name.StartsWith(prefix)) return true;
-            }
-            return false;
-        }
-
-        #endregion
 
         // Estructura para almacenar información de enemigos
         private struct EnemyTarget
@@ -215,96 +154,11 @@ namespace ckAccess.Patches.Player
         }
 
         /// <summary>
-        /// Verifica si hay línea de visión clara entre dos puntos (sin paredes)
-        /// Usa algoritmo de Bresenham sobre el grid de tiles
+        /// Verifica si hay línea de visión clara entre dos puntos usando el helper centralizado.
         /// </summary>
         private static bool HasLineOfSight(Vector3 start, Vector3 end)
         {
-            try
-            {
-                // Copiar a variables locales para evitar warning Harmony003
-                var startPos = start;
-                var endPos = end;
-
-                var map = PugOther.Manager.multiMap;
-                if (map == null) return true; // Fallback seguro
-
-                // Convertir a coordenadas de tile
-                int x0 = (int)math.round(startPos.x);
-                int z0 = (int)math.round(startPos.z);
-                int x1 = (int)math.round(endPos.x);
-                int z1 = (int)math.round(endPos.z);
-
-                // Algoritmo de Bresenham para trazar línea
-                int dx = System.Math.Abs(x1 - x0);
-                int dz = System.Math.Abs(z1 - z0);
-                int sx = x0 < x1 ? 1 : -1;
-                int sz = z0 < z1 ? 1 : -1;
-                int err = dx - dz;
-
-                // Límite de seguridad para evitar bucles infinitos (max 50 tiles)
-                int safetyCounter = 0;
-                while (true)
-                {
-                    if (safetyCounter++ > 50) break;
-
-                    // Verificar tile actual
-                    var tile = map.GetTileLayerLookup().GetTopTile(new int2(x0, z0));
-                    
-                    if (IsVisionBlocking(tile.tileType))
-                    {
-                        return false;
-                    }
-
-                    if (x0 == x1 && z0 == z1) break;
-
-                    int e2 = 2 * err;
-                    if (e2 > -dz)
-                    {
-                        err -= dz;
-                        x0 += sx;
-                    }
-                    if (e2 < dx)
-                    {
-                        err += dx;
-                        z0 += sz;
-                    }
-                }
-
-                return true;
-            }
-            catch
-            {
-                return true; // En caso de error, asumir visible para no romper nada
-            }
-        }
-
-        /// <summary>
-        /// Determina si un tipo de tile bloquea la visión/proyectiles
-        /// </summary>
-        private static bool IsVisionBlocking(TileType type)
-        {
-            switch (type)
-            {
-                case TileType.wall:
-                case TileType.greatWall:
-                case TileType.thinWall:
-                case TileType.ore:
-                case TileType.ancientCrystal:
-                case TileType.bigRoot:
-                case TileType.chrysalis:
-                    return true;
-                
-                // Tiles que bloquean movimiento pero NO visión (agujeros, vallas, agua)
-                case TileType.pit:
-                case TileType.fence:
-                case TileType.water:
-                case TileType.rail:
-                    return false;
-
-                default:
-                    return false;
-            }
+            return LineOfSightHelper.HasLineOfSight(start, end);
         }
 
         /// <summary>
@@ -373,146 +227,28 @@ namespace ckAccess.Patches.Player
         }
 
         /// <summary>
-        /// Calcula el rango efectivo basado en el arma equipada
+        /// Calcula el rango efectivo basado en el arma equipada usando el sistema nativo de ObjectType.
         /// </summary>
         public static float CalculateEffectiveRange(PugOther.PlayerController player)
         {
             try
             {
-                // Obtener el item equipado
-                var equippedSlot = player.GetEquippedSlot();
-
-                // Obtener información del objeto equipado
                 var inventoryHandler = player.playerInventoryHandler;
                 if (inventoryHandler == null)
-                {
                     return AUTO_TARGET_BASE_RANGE;
-                }
 
-                // Convertir EquipmentSlot a índice si es necesario
-                int slotIndex = 0;
-                try
+                // Buscar el primer item equipado en el hotbar
+                for (int i = 0; i < 10; i++)
                 {
-                    // Intentar obtener el índice del slot equipado
-                    if (equippedSlot != null)
+                    var itemData = inventoryHandler.GetContainedObjectData(i);
+                    if (itemData.objectID != ObjectID.None)
                     {
-                        // GetEquippedSlot devuelve un EquipmentSlot, necesitamos el índice del hotbar
-                        // Por ahora, usar el primer slot del hotbar
-                        for (int i = 0; i < 10; i++)
-                        {
-                            var data = inventoryHandler.GetContainedObjectData(i);
-                            if (data.objectID != ObjectID.None)
-                            {
-                                slotIndex = i;
-                                break;
-                            }
-                        }
+                        // Usar el helper centralizado para obtener el rango basado en ObjectType
+                        return EntityClassificationHelper.GetWeaponRange(itemData.objectID);
                     }
                 }
-                catch { }
 
-                var itemData = inventoryHandler.GetContainedObjectData(slotIndex);
-                if (itemData.objectID == ObjectID.None)
-                {
-                    return TOOL_RANGE;
-                }
-
-                // Detectar tipo de arma basándose en el ObjectID y componentes
-                return DetermineWeaponRange(itemData.objectID);
-            }
-            catch
-            {
-                return AUTO_TARGET_BASE_RANGE; // Fallback
-            }
-        }
-
-        /// <summary>
-        /// Determina el rango del arma basándose en su ObjectID y tipo
-        /// </summary>
-        private static float DetermineWeaponRange(ObjectID objectID)
-        {
-            try
-            {
-                // Copiar a variable local para evitar warning Harmony003
-                var id = objectID;
-                string itemName = id.ToString().ToLower();
-
-                // Armas a distancia (mayor rango)
-                if (itemName.Contains("bow") || itemName.Contains("crossbow") ||
-                    itemName.Contains("gun") || itemName.Contains("rifle") ||
-                    itemName.Contains("slingshot") || itemName.Contains("blowpipe"))
-                {
-                    return RANGED_WEAPON_RANGE;
-                }
-
-                // Armas mágicas (rango medio)
-                if (itemName.Contains("staff") || itemName.Contains("wand") ||
-                    itemName.Contains("scepter") || itemName.Contains("orb") ||
-                    itemName.Contains("tome") || itemName.Contains("book") ||
-                    itemName.Contains("crystal") || itemName.Contains("rune"))
-                {
-                    return MAGIC_WEAPON_RANGE;
-                }
-
-                // Armas cuerpo a cuerpo (rango corto)
-                if (itemName.Contains("sword") || itemName.Contains("axe") ||
-                    itemName.Contains("mace") || itemName.Contains("hammer") ||
-                    itemName.Contains("spear") || itemName.Contains("dagger") ||
-                    itemName.Contains("club") || itemName.Contains("blade") ||
-                    itemName.Contains("scythe") || itemName.Contains("whip"))
-                {
-                    return MELEE_WEAPON_RANGE;
-                }
-
-                // Herramientas (rango mínimo)
-                if (itemName.Contains("pickaxe") || itemName.Contains("shovel") ||
-                    itemName.Contains("hoe") || itemName.Contains("watering") ||
-                    itemName.Contains("fishing") || itemName.Contains("tool"))
-                {
-                    return TOOL_RANGE;
-                }
-
-                // Verificar si tiene componente de arma usando reflexión
-                // Verificar si tiene componentes de proyectil (armas a distancia)
-                try
-                {
-                    // Usar reflexión para verificar componentes sin depender de tipos específicos
-                    var hasProjectile = false;
-                    try
-                    {
-                        var projectileType = System.Type.GetType("PugComps.ProjectileOnUseCD, Pug.Other");
-                        if (projectileType != null)
-                        {
-                            var hasComponentMethod = typeof(PugOther.PugDatabase).GetMethod("HasComponent");
-                            if (hasComponentMethod != null)
-                            {
-                                var genericMethod = hasComponentMethod.MakeGenericMethod(projectileType);
-                                hasProjectile = (bool)genericMethod.Invoke(null, new object[] { objectID });
-                            }
-                        }
-                    }
-                    catch { }
-
-                    if (hasProjectile)
-                    {
-                        return RANGED_WEAPON_RANGE;
-                    }
-
-                    // Verificar por tipo de objeto genérico
-                    var objectInfo = PugOther.PugDatabase.GetObjectInfo(objectID);
-                    if (objectInfo != null)
-                    {
-                        // Verificar si es equipable (probablemente un arma)
-                        if (PugOther.PugDatabase.HasComponent<PugComps.EquipmentCD>(objectID))
-                        {
-                            return MELEE_WEAPON_RANGE;
-                        }
-                    }
-                }
-                catch { }
-
-                // Default: rango base
-                return AUTO_TARGET_BASE_RANGE;
+                return TOOL_RANGE; // Sin items equipados
             }
             catch
             {
@@ -521,79 +257,20 @@ namespace ckAccess.Patches.Player
         }
 
         /// <summary>
-        /// Verifica si una entidad es un enemigo REAL (no estatuas, minions ni decoraciones)
+        /// Verifica si una entidad es un enemigo REAL (no estatuas, minions ni decoraciones).
+        /// Usa el helper centralizado con detección ECS y fallback a patrones de nombre.
         /// </summary>
         public static bool IsEnemyEntity(PugOther.EntityMonoBehaviour entity)
         {
-            try
-            {
-                var gameObject = entity.gameObject;
-                if (gameObject == null) return false;
-
-                // 1. Verificar componentes ECS (minions, pets)
-                if (IsPlayerMinion(entity))
-                    return false;
-
-                string name = gameObject.name.ToLower();
-
-                // 2. Excluir aliados por patrón de nombre
-                if (ContainsAny(name, AllyPatterns))
-                    return false;
-
-                // 3. Excluir objetos estáticos (estatuas, decoraciones, etc.)
-                if (ContainsAny(name, StaticObjectPatterns))
-                    return false;
-
-                // 4. Verificar si es un enemigo conocido por prefijo
-                if (StartsWithAny(name, EnemyPrefixes))
-                    return true;
-
-                // 5. Caso especial: Orcos (tienen muchas estatuas)
-                if ((name.StartsWith("orc_") || name.StartsWith("ork_") ||
-                     name.Equals("orc") || name.Equals("ork")))
-                    return true;
-
-                // 6. Caso especial: Hongos venenosos
-                if (name.Contains("mushroom") && name.Contains("poison"))
-                    return true;
-
-                // 7. Verificar patrones de enemigo genéricos
-                if (ContainsAny(name, EnemyContainsPatterns))
-                    return true;
-
-                // 8. Excluir NPCs amigables
-                if (ContainsAny(name, FriendlyNpcPatterns))
-                    return false;
-
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
+            return EntityClassificationHelper.IsEnemy(entity);
         }
 
         /// <summary>
-        /// Verifica si la entidad es un minion/mascota del jugador usando componentes ECS
+        /// Verifica si la entidad es un minion/mascota del jugador usando componentes ECS.
         /// </summary>
         private static bool IsPlayerMinion(PugOther.EntityMonoBehaviour entity)
         {
-            try
-            {
-                var entityData = entity.entity;
-                var world = entity.world;
-
-                if (world == null || entityData == default)
-                    return false;
-
-                return world.EntityManager.HasComponent<PugComps.MinionCD>(entityData) ||
-                       world.EntityManager.HasComponent<PugComps.PetCD>(entityData) ||
-                       world.EntityManager.HasComponent<PugComps.MinionOwnerCD>(entityData);
-            }
-            catch
-            {
-                return false;
-            }
+            return EntityClassificationHelper.IsPlayerMinion(entity);
         }
 
         /// <summary>

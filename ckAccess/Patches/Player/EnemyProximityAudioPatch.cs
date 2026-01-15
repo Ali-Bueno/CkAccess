@@ -1,14 +1,10 @@
 extern alias PugOther;
 extern alias Core;
-extern alias PugComps;
 using HarmonyLib;
 using ckAccess.Patches.UI;
 using ckAccess.Helpers;
-using PugTilemap;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 using Vector3 = Core::UnityEngine.Vector3;
 
@@ -616,104 +612,11 @@ namespace ckAccess.Patches.Player
         public static bool IsSystemEnabled => _systemEnabled;
 
         /// <summary>
-        /// Verifica si hay línea de visión entre dos puntos (sin paredes bloqueando)
+        /// Verifica si hay línea de visión entre dos puntos usando el helper centralizado.
         /// </summary>
         private static bool HasLineOfSight(Vector3 from, Vector3 to)
         {
-            try
-            {
-                // Copiar a variables locales para evitar warning Harmony003
-                var fromPos = from;
-                var toPos = to;
-
-                float distance = Vector3.Distance(fromPos, toPos);
-
-                // Regla simple: si están muy cerca, siempre hay línea de visión
-                if (distance < 2f) return true;
-
-                // Verificar tiles entre los dos puntos usando algoritmo de Bresenham
-                var multiMap = PugOther.Manager.multiMap;
-                if (multiMap == null) return true; // Si no podemos verificar, permitir
-
-                var tileLayerLookup = multiMap.GetTileLayerLookup();
-
-                // Puntos de inicio y fin en coordenadas de tile
-                int x0 = Mathf.RoundToInt(fromPos.x);
-                int z0 = Mathf.RoundToInt(fromPos.z);
-                int x1 = Mathf.RoundToInt(toPos.x);
-                int z1 = Mathf.RoundToInt(toPos.z);
-
-                // Bresenham line algorithm
-                int dx = Mathf.Abs(x1 - x0);
-                int dz = Mathf.Abs(z1 - z0);
-                int sx = x0 < x1 ? 1 : -1;
-                int sz = z0 < z1 ? 1 : -1;
-                int err = dx - dz;
-
-                while (true)
-                {
-                    // Verificar el tile actual
-                    var position = new int2(x0, z0);
-                    var topTile = tileLayerLookup.GetTopTile(position);
-
-                    // Si es una pared sólida, bloquea la visión
-                    if (topTile.tileType.IsWallTile())
-                    {
-                        // EXCEPCIÓN: Permitir ver a través de cristales y vallas
-                        if (!IsSeeThrough(topTile.tileType, topTile.tileset))
-                        {
-                            return false; // Pared sólida bloquea
-                        }
-                    }
-
-                    // Si llegamos al destino, hay línea de visión
-                    if (x0 == x1 && z0 == z1) break;
-
-                    int e2 = 2 * err;
-                    if (e2 > -dz)
-                    {
-                        err -= dz;
-                        x0 += sx;
-                    }
-                    if (e2 < dx)
-                    {
-                        err += dx;
-                        z0 += sz;
-                    }
-                }
-
-                return true; // No hay paredes bloqueando
-            }
-            catch (System.Exception ex)
-            {
-                // En caso de error, ser conservadores y permitir el sonido
-                UnityEngine.Debug.LogWarning($"Error verificando línea de visión: {ex.Message}");
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Verifica si un tipo de tile permite ver a través de él
-        /// </summary>
-        private static bool IsSeeThrough(TileType tileType, int tileset)
-        {
-            // Vallas y cristales permiten ver a través
-            if (tileType == TileType.fence) return true;
-
-            // Cristales (tileset 34 = glass/crystal)
-            if (tileset == 34) return true;
-
-            // Paredes finas (pueden ser cristales o rejas)
-            if (tileType == TileType.thinWall)
-            {
-                // Si es cristal, permitir ver
-                if (tileset == 34) return true;
-                // Otras paredes finas podrían permitir ver dependiendo del material
-                // Por ahora, ser conservadores y bloquear
-                return false;
-            }
-
-            return false;
+            return LineOfSightHelper.HasLineOfSight(from, to);
         }
     }
 }

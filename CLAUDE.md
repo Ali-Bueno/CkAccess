@@ -648,60 +648,75 @@ Se han realizado mejoras significativas en la fiabilidad y precisión del sistem
 
 Se realizó una limpieza exhaustiva del código para mejorar mantenibilidad y eliminar redundancias.
 
-#### 1. Helper Centralizado de Estado de Gameplay
+#### 1. Arquitectura de Helpers Centralizados
 
-**Problema:** Tres implementaciones casi idénticas de detección de gameplay (`IsInGameplay()` / `IsInExcludedMenu()`) en diferentes archivos.
+Se han creado helpers centralizados para eliminar código duplicado y mejorar la mantenibilidad:
 
-**Solución:** Creado `GameplayStateHelper.cs` en la carpeta Helpers:
-- `IsInGameplay()` - Verificación completa (jugador, texto, pausa, controlador)
-- `IsInExcludedMenu()` - Inverso de IsInGameplay
-- `IsInGameplayWithoutInventory()` - Gameplay + sin inventario abierto
+##### `LineOfSightHelper.cs` - Verificación de Línea de Visión
+- **`HasLineOfSight(Vector3 from, Vector3 to)`** - Algoritmo de Bresenham centralizado
+- **`IsVisionBlocking(TileType, int tileset)`** - Determina si un tile bloquea visión
+- **`IsSeeThrough(TileType, int tileset)`** - Tiles transparentes (cristales, vallas)
+- **`GetCardinalDirection(Vector3 from, Vector3 to)`** - Dirección cardinal localizada
 
-**Archivos actualizados:**
-- `PlayerInputPatch.cs` → usa `GameplayStateHelper.IsInGameplay()`
-- `VirtualCursorInputPatch.cs` → usa `GameplayStateHelper.IsInExcludedMenu()`
-- `SendClientInputSystemPatch.cs` → usa `GameplayStateHelper.IsInGameplayWithoutInventory()`
+**Usado por:** `ProximityAudioPatch`, `EnemyProximityAudioPatch`, `AutoTargetingPatch`
 
-#### 2. Código Muerto Eliminado
+##### `EntityClassificationHelper.cs` - Clasificación de Entidades con ECS
+- **`IsInteractable(EntityMonoBehaviour)`** - Detecta interactuables usando componentes ECS
+- **`IsEnemy(EntityMonoBehaviour)`** - Detecta enemigos usando estados ECS (ChaseStateCD, MeleeAttackStateCD)
+- **`IsPlayerMinion(EntityMonoBehaviour)`** - Detecta minions/pets del jugador (MinionCD, PetCD)
+- **`GetWeaponCategory(ObjectID)`** - Clasifica armas usando ObjectType nativo del juego
+- **`GetWeaponRange(ObjectID)`** - Rango basado en categoría de arma
+
+**Categorías de Armas (usando ObjectType del juego):**
+| Categoría | ObjectType | Rango |
+|-----------|------------|-------|
+| Melee | MeleeWeapon (500) | 3 tiles |
+| Ranged | RangeWeapon (501), ThrowingWeapon (503) | 10 tiles |
+| Magic | SummoningWeapon (502), CastingItem (602), BeamWeapon (610) | 8 tiles |
+| Tool | Shovel, Hoe, MiningPick, etc. | 2 tiles |
+
+**Usado por:** `AutoTargetingPatch`, `SimpleWorldReader`, `ProximityAudioPatch`
+
+##### `GameplayStateHelper.cs` - Estado del Juego
+- **`IsInGameplay()`** - Verificación completa (jugador, texto, pausa, controlador)
+- **`IsInExcludedMenu()`** - Inverso de IsInGameplay
+- **`IsInGameplayWithoutInventory()`** - Gameplay + sin inventario abierto
+
+**Usado por:** `PlayerInputPatch`, `VirtualCursorInputPatch`, `SendClientInputSystemPatch`, `TileAheadAnnouncerPatch`
+
+##### `LocalPlayerHelper.cs` - Identificación de Jugador Local (Multijugador)
+- **`GetLocalPlayer()`** - Devuelve el PlayerController del jugador local
+- **`IsLocalPlayer(PlayerController)`** - Verifica si es el jugador local
+- **`TryGetLocalPlayerPosition(out Vector3)`** - Posición del jugador local
+
+**Usado por:** Todos los sistemas de accesibilidad
+
+#### 2. Archivos Refactorizados
+
+| Archivo | Cambios |
+|---------|---------|
+| `ProximityAudioPatch.cs` | Usa `EntityClassificationHelper.IsInteractable()` y `LineOfSightHelper` |
+| `AutoTargetingPatch.cs` | Usa `EntityClassificationHelper.IsEnemy()`, `GetWeaponRange()` y `LineOfSightHelper` |
+| `EnemyProximityAudioPatch.cs` | Usa `LineOfSightHelper.HasLineOfSight()` |
+| `SimpleWorldReader.cs` | Usa `EntityClassificationHelper` para mejor detección |
+| `TileAheadAnnouncerPatch.cs` | Usa `GameplayStateHelper` y `LocalPlayerHelper` |
+
+#### 3. Código Eliminado
 
 | Archivo | Código Eliminado |
 |---------|------------------|
-| `VirtualCursor.cs` | `StopPrimaryAction()`, `StopSecondaryAction()`, `IsPlaceableItem()`, `GetItemName()` |
-| `VirtualCursorInputPatch.cs` | `_uKeyHeld`, `_oKeyHeld`, `IsAnyActionKeyHeld()`, `IsKeyHeld()`, `IsR3Pressed()` |
-| `PlayerInputPatch.cs` | `SimulateInteract()`, `SimulateSecondInteract()`, `StopAllSimulations()`, debug logging |
-| `RadicalMenuPatch.cs` | Debug logging excesivo en `GetSessionId()` |
-| `InventorySlotAccessibilityPatch.cs` | **Archivo eliminado** (completamente deshabilitado, reemplazado por `InventorySlotUIPatch.cs`) |
+| `ProximityAudioPatch.cs` | ~70 líneas (LOS duplicado, patrones hardcodeados) |
+| `AutoTargetingPatch.cs` | ~150 líneas (patrones de enemigos, clasificación de armas, LOS) |
+| `EnemyProximityAudioPatch.cs` | ~100 líneas (LOS duplicado) |
+| `TileAheadAnnouncerPatch.cs` | ~40 líneas (IsAnyMenuOpen, TryGetPlayerPosition duplicados) |
 
-#### 3. Refactorización de `AutoTargetingPatch.IsEnemyEntity()`
+#### 4. Beneficios de la Refactorización
 
-**Problema:** Método de 200+ líneas con lógica repetitiva y difícil de mantener.
-
-**Solución:** Extraídos patrones a arrays constantes y métodos helper:
-
-```csharp
-// Patrones centralizados
-private static readonly string[] AllyPatterns = { "minion", "summon", "companion", ... };
-private static readonly string[] StaticObjectPatterns = { "statue", "decoration", ... };
-private static readonly string[] EnemyPrefixes = { "slime", "spider", "skeleton", ... };
-private static readonly string[] EnemyContainsPatterns = { "shaman", "boss", ... };
-
-// Helpers reutilizables
-private static bool ContainsAny(string name, string[] patterns);
-private static bool StartsWithAny(string name, string[] prefixes);
-private static bool IsPlayerMinion(EntityMonoBehaviour entity);
-```
-
-**Resultado:**
-- Método reducido de ~200 líneas a ~50 líneas
-- Añadir nuevos enemigos = agregar string al array
-- Lógica clara en 8 pasos secuenciales
-- Verificación de minions extraída a método separado
-
-#### Resumen de Impacto
-
-- **~400 líneas de código eliminadas/simplificadas**
-- **1 archivo eliminado** (`InventorySlotAccessibilityPatch.cs`)
-- **1 helper nuevo** (`GameplayStateHelper.cs`)
+- **~360 líneas de código duplicado eliminadas**
+- **2 helpers nuevos** (`LineOfSightHelper.cs`, `EntityClassificationHelper.cs`)
+- **Detección ECS nativa** en lugar de patrones de strings hardcodeados
+- **Clasificación de armas** usando `ObjectType` enum del juego
+- **Código más mantenible** - cambios centralizados en helpers
 - **0 cambios funcionales** - Todo sigue funcionando igual
 
 ---
