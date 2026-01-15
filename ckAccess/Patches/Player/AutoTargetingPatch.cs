@@ -41,6 +41,66 @@ namespace ckAccess.Patches.Player
         private static float _lastAnnouncementTime = 0f;
         private const float ANNOUNCEMENT_COOLDOWN = 1.5f; // Cooldown entre anuncios para evitar spam
 
+        #region Enemy Detection Patterns
+
+        // Patrones de aliados/minions del jugador (excluir siempre)
+        private static readonly string[] AllyPatterns = {
+            "minion", "summon", "companion", "familiar", "pet", "ally"
+        };
+
+        // Patrones de objetos estáticos (excluir siempre)
+        private static readonly string[] StaticObjectPatterns = {
+            "statue", "statua", "dummy", "mannequin", "practice",
+            "totem", "spawner", "turret", "trap", "decoration", "prop",
+            "destructible", "breakable", "crate", "barrel", "chest",
+            "container", "furniture", "plant", "tree", "rock", "ore",
+            "crystal", "wall", "floor", "ceiling"
+        };
+
+        // Prefijos de enemigos conocidos
+        private static readonly string[] EnemyPrefixes = {
+            "slime", "orangeslime", "acidslime", "poisonslime",
+            "spider", "cavespider", "webspider",
+            "skeleton", "undeadskeleton",
+            "goblin", "cavegoblin",
+            "zombie", "demon", "larva", "grub", "worm", "bat", "rat"
+        };
+
+        // Patrones que indican enemigo (contiene)
+        private static readonly string[] EnemyContainsPatterns = {
+            "shaman", "witch", "mage", "knight", "warrior",
+            "guardian", "brute", "crawler", "enemy", "hostile", "monster", "boss"
+        };
+
+        // Patrones de NPCs amigables (excluir)
+        private static readonly string[] FriendlyNpcPatterns = {
+            "npc", "merchant", "vendor", "friendly"
+        };
+
+        #endregion
+
+        #region Pattern Matching Helpers
+
+        private static bool ContainsAny(string name, string[] patterns)
+        {
+            foreach (var pattern in patterns)
+            {
+                if (name.Contains(pattern)) return true;
+            }
+            return false;
+        }
+
+        private static bool StartsWithAny(string name, string[] prefixes)
+        {
+            foreach (var prefix in prefixes)
+            {
+                if (name.StartsWith(prefix)) return true;
+            }
+            return false;
+        }
+
+        #endregion
+
         // Estructura para almacenar información de enemigos
         private struct EnemyTarget
         {
@@ -470,195 +530,65 @@ namespace ckAccess.Patches.Player
                 var gameObject = entity.gameObject;
                 if (gameObject == null) return false;
 
-                // FILTRO CRÍTICO: Excluir MINIONS y PETS del jugador
-                // Los minions invocados tienen el componente MinionCD o MinionOwnerCD
-                // Las mascotas tienen el componente PetCD
-                try
-                {
-                    var entityData = entity.entity;
-                    var world = entity.world;
-
-                    if (world != null && entityData != default)
-                    {
-                        // Verificar si es un minion invocado por el jugador
-                        if (world.EntityManager.HasComponent<PugComps.MinionCD>(entityData))
-                        {
-                            return false; // Es un minion del jugador, NO es enemigo
-                        }
-
-                        // Verificar si es una mascota del jugador
-                        if (world.EntityManager.HasComponent<PugComps.PetCD>(entityData))
-                        {
-                            return false; // Es una mascota, NO es enemigo
-                        }
-
-                        // NUEVO: Verificar MinionOwnerCD (componente alternativo para minions)
-                        if (world.EntityManager.HasComponent<PugComps.MinionOwnerCD>(entityData))
-                        {
-                            return false; // Es un minion con dueño, NO es enemigo
-                        }
-                    }
-                }
-                catch
-                {
-                    // Si falla la verificación de componentes, continuar con las otras verificaciones
-                }
+                // 1. Verificar componentes ECS (minions, pets)
+                if (IsPlayerMinion(entity))
+                    return false;
 
                 string name = gameObject.name.ToLower();
 
-                // FILTRO ADICIONAL POR NOMBRE: Excluir minions por patrones de nombre comunes
-                // Los minions del jugador suelen tener estos patrones en sus nombres
-                if (name.Contains("minion") ||
-                    name.Contains("summon") ||
-                    name.Contains("companion") ||
-                    name.Contains("familiar") ||
-                    name.Contains("pet") ||
-                    name.Contains("ally"))
-                {
-                    return false; // Es un minion/aliado del jugador, NO es enemigo
-                }
-
-                // FILTRO ULTRA ESTRICTO: Si contiene "statue" EN CUALQUIER PARTE, NO es enemigo
-                if (name.Contains("statue") || name.Contains("statua"))
+                // 2. Excluir aliados por patrón de nombre
+                if (ContainsAny(name, AllyPatterns))
                     return false;
 
-                // Si contiene "dummy" o "mannequin", tampoco
-                if (name.Contains("dummy") || name.Contains("mannequin") || name.Contains("practice"))
+                // 3. Excluir objetos estáticos (estatuas, decoraciones, etc.)
+                if (ContainsAny(name, StaticObjectPatterns))
                     return false;
 
-                // FILTRO MEJORADO: Excluir objetos que definitivamente NO son enemigos
-                // Decoraciones y objetos del entorno
-                if (name.Contains("totem") ||
-                    name.Contains("spawner") ||
-                    name.Contains("turret") ||
-                    name.Contains("trap") ||
-                    name.Contains("decoration") ||
-                    name.Contains("prop") ||
-                    name.Contains("destructible") ||
-                    name.Contains("breakable") ||
-                    name.Contains("crate") ||
-                    name.Contains("barrel") ||
-                    name.Contains("chest") ||
-                    name.Contains("container") ||
-                    name.Contains("furniture") ||
-                    name.Contains("plant") ||
-                    name.Contains("tree") ||
-                    name.Contains("rock") ||
-                    name.Contains("ore") ||
-                    name.Contains("crystal") ||
-                    name.Contains("wall") ||
-                    name.Contains("floor") ||
-                    name.Contains("ceiling"))
-                {
-                    return false; // No son enemigos, son objetos del mundo
-                }
-
-                // Verificar si tiene componentes que lo identifican como enemigo
-                // Por ahora no podemos acceder a objectID desde EntityMonoBehaviour directamente
-                bool hasEnemyComponents = false;
-
-                // Si no encontramos componentes, usar lista de nombres
-                // IMPORTANTE: Solo incluir enemigos REALES que atacan
-                // Excluir explícitamente cosas como "fly" si es una mosca decorativa
-
-                // VERIFICACIÓN ADICIONAL: El nombre debe contener algún indicador de movimiento o vida
-                // Los enemigos reales suelen tener componentes o sufijos que indican que son entidades vivas
-                bool hasLifeIndicator = name.Contains("(clone)") ||
-                                       name.Contains("spawned") ||
-                                       name.Contains("alive") ||
-                                       name.Contains("active") ||
-                                       name.Contains("mob_") ||
-                                       name.Contains("enemy_") ||
-                                       name.Contains("hostile_");
-
-                // Para enemigos conocidos, verificar que NO sean estatuas Y que parezcan vivos
-                // El nombre exacto importa - los enemigos reales tienen patrones específicos
-
-                // Slimes reales
-                if ((name.StartsWith("slime") || name.StartsWith("orangeslime") ||
-                     name.StartsWith("acidslime") || name.StartsWith("poisonslime")) &&
-                    !name.Contains("statue"))
+                // 4. Verificar si es un enemigo conocido por prefijo
+                if (StartsWithAny(name, EnemyPrefixes))
                     return true;
 
-                // Arañas reales
-                if ((name.StartsWith("spider") || name.StartsWith("cavespider") ||
-                     name.StartsWith("webspider")) && !name.Contains("statue"))
-                    return true;
-
-                // Esqueletos reales
-                if ((name.StartsWith("skeleton") || name.StartsWith("undeadskeleton")) &&
-                    !name.Contains("statue"))
-                    return true;
-
-                // Goblins reales
-                if ((name.StartsWith("goblin") || name.StartsWith("cavegoblin")) &&
-                    !name.Contains("statue"))
-                    return true;
-
-                // Orcos - CUIDADO: muchas estatuas de orcos
+                // 5. Caso especial: Orcos (tienen muchas estatuas)
                 if ((name.StartsWith("orc_") || name.StartsWith("ork_") ||
-                     name.Equals("orc") || name.Equals("ork")) &&
-                    !name.Contains("statue"))
+                     name.Equals("orc") || name.Equals("ork")))
                     return true;
 
-                // Zombies reales
-                if (name.StartsWith("zombie") && !name.Contains("statue"))
-                    return true;
-
-                // Demonios reales
-                if (name.StartsWith("demon") && !name.Contains("statue"))
-                    return true;
-
-                // Larvas - verificar que no sea spawner
-                if ((name.StartsWith("larva") || name.StartsWith("grub")) &&
-                    !name.Contains("statue") && !name.Contains("spawner"))
-                    return true;
-
-                // Gusanos
-                if (name.StartsWith("worm") && !name.Contains("statue"))
-                    return true;
-
-                // Murciélagos
-                if (name.StartsWith("bat") && !name.Contains("statue"))
-                    return true;
-
-                // Ratas
-                if (name.StartsWith("rat") && !name.Contains("statue"))
-                    return true;
+                // 6. Caso especial: Hongos venenosos
                 if (name.Contains("mushroom") && name.Contains("poison"))
-                    return true; // Hongos venenosos que atacan
-                if (name.Contains("shaman"))
-                    return true;
-                if (name.Contains("witch"))
-                    return true;
-                if (name.Contains("mage") && !name.Contains("statue"))
-                    return true;
-                if (name.Contains("knight") && !name.Contains("statue"))
-                    return true;
-                if (name.Contains("warrior") && !name.Contains("statue"))
-                    return true;
-                if (name.Contains("guardian") && !name.Contains("statue"))
-                    return true;
-                if (name.Contains("brute"))
-                    return true;
-                if (name.Contains("crawler"))
                     return true;
 
-                // Patrones genéricos pero con más cuidado
-                if ((name.Contains("enemy") || name.Contains("hostile") || name.Contains("monster")) &&
-                    !name.Contains("statue") && !name.Contains("dummy"))
+                // 7. Verificar patrones de enemigo genéricos
+                if (ContainsAny(name, EnemyContainsPatterns))
                     return true;
 
-                // Jefes (bosses) siempre son enemigos
-                if (name.Contains("boss") && !name.Contains("statue"))
-                    return true;
+                // 8. Excluir NPCs amigables
+                if (ContainsAny(name, FriendlyNpcPatterns))
+                    return false;
 
-                // Si tiene componentes de enemigo pero no matchó nombres, probablemente es enemigo
-                if (hasEnemyComponents && !name.Contains("npc") && !name.Contains("merchant") &&
-                    !name.Contains("vendor") && !name.Contains("friendly"))
-                    return true;
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-                return false; // Por defecto, no es enemigo
+        /// <summary>
+        /// Verifica si la entidad es un minion/mascota del jugador usando componentes ECS
+        /// </summary>
+        private static bool IsPlayerMinion(PugOther.EntityMonoBehaviour entity)
+        {
+            try
+            {
+                var entityData = entity.entity;
+                var world = entity.world;
+
+                if (world == null || entityData == default)
+                    return false;
+
+                return world.EntityManager.HasComponent<PugComps.MinionCD>(entityData) ||
+                       world.EntityManager.HasComponent<PugComps.PetCD>(entityData) ||
+                       world.EntityManager.HasComponent<PugComps.MinionOwnerCD>(entityData);
             }
             catch
             {

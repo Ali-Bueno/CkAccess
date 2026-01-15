@@ -644,6 +644,68 @@ Se han realizado mejoras significativas en la fiabilidad y precisión del sistem
 
 ---
 
+### Refactorización de Código (2025-01) ✅ **COMPLETADO**
+
+Se realizó una limpieza exhaustiva del código para mejorar mantenibilidad y eliminar redundancias.
+
+#### 1. Helper Centralizado de Estado de Gameplay
+
+**Problema:** Tres implementaciones casi idénticas de detección de gameplay (`IsInGameplay()` / `IsInExcludedMenu()`) en diferentes archivos.
+
+**Solución:** Creado `GameplayStateHelper.cs` en la carpeta Helpers:
+- `IsInGameplay()` - Verificación completa (jugador, texto, pausa, controlador)
+- `IsInExcludedMenu()` - Inverso de IsInGameplay
+- `IsInGameplayWithoutInventory()` - Gameplay + sin inventario abierto
+
+**Archivos actualizados:**
+- `PlayerInputPatch.cs` → usa `GameplayStateHelper.IsInGameplay()`
+- `VirtualCursorInputPatch.cs` → usa `GameplayStateHelper.IsInExcludedMenu()`
+- `SendClientInputSystemPatch.cs` → usa `GameplayStateHelper.IsInGameplayWithoutInventory()`
+
+#### 2. Código Muerto Eliminado
+
+| Archivo | Código Eliminado |
+|---------|------------------|
+| `VirtualCursor.cs` | `StopPrimaryAction()`, `StopSecondaryAction()`, `IsPlaceableItem()`, `GetItemName()` |
+| `VirtualCursorInputPatch.cs` | `_uKeyHeld`, `_oKeyHeld`, `IsAnyActionKeyHeld()`, `IsKeyHeld()`, `IsR3Pressed()` |
+| `PlayerInputPatch.cs` | `SimulateInteract()`, `SimulateSecondInteract()`, `StopAllSimulations()`, debug logging |
+| `RadicalMenuPatch.cs` | Debug logging excesivo en `GetSessionId()` |
+| `InventorySlotAccessibilityPatch.cs` | **Archivo eliminado** (completamente deshabilitado, reemplazado por `InventorySlotUIPatch.cs`) |
+
+#### 3. Refactorización de `AutoTargetingPatch.IsEnemyEntity()`
+
+**Problema:** Método de 200+ líneas con lógica repetitiva y difícil de mantener.
+
+**Solución:** Extraídos patrones a arrays constantes y métodos helper:
+
+```csharp
+// Patrones centralizados
+private static readonly string[] AllyPatterns = { "minion", "summon", "companion", ... };
+private static readonly string[] StaticObjectPatterns = { "statue", "decoration", ... };
+private static readonly string[] EnemyPrefixes = { "slime", "spider", "skeleton", ... };
+private static readonly string[] EnemyContainsPatterns = { "shaman", "boss", ... };
+
+// Helpers reutilizables
+private static bool ContainsAny(string name, string[] patterns);
+private static bool StartsWithAny(string name, string[] prefixes);
+private static bool IsPlayerMinion(EntityMonoBehaviour entity);
+```
+
+**Resultado:**
+- Método reducido de ~200 líneas a ~50 líneas
+- Añadir nuevos enemigos = agregar string al array
+- Lógica clara en 8 pasos secuenciales
+- Verificación de minions extraída a método separado
+
+#### Resumen de Impacto
+
+- **~400 líneas de código eliminadas/simplificadas**
+- **1 archivo eliminado** (`InventorySlotAccessibilityPatch.cs`)
+- **1 helper nuevo** (`GameplayStateHelper.cs`)
+- **0 cambios funcionales** - Todo sigue funcionando igual
+
+---
+
 ### Próximos Pasos
 
 1.  **Accesibilizar la mesa de crafteo y otros menús de crafting.**

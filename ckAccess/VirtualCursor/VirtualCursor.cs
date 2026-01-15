@@ -165,22 +165,6 @@ namespace ckAccess.VirtualCursor
             }
         }
 
-        /// <summary>
-        /// Ya no es necesario detener nada - el juego maneja todo automáticamente
-        /// </summary>
-        public static void StopPrimaryAction()
-        {
-            // No hacer nada - el juego maneja esto automáticamente
-        }
-
-        /// <summary>
-        /// Ya no es necesario detener nada - el juego maneja todo automáticamente
-        /// </summary>
-        public static void StopSecondaryAction()
-        {
-            // No hacer nada - el juego maneja esto automáticamente
-        }
-
         #endregion
 
         #region Native Cursor Movement
@@ -373,46 +357,6 @@ namespace ckAccess.VirtualCursor
                 int tileX = (int)math.round(position.x);
                 int tileZ = (int)math.round(position.z);
                 UIManager.Speak($"Posición x={tileX}, z={tileZ}");
-            }
-        }
-
-        /// <summary>
-        /// Verifica si un objeto es colocable (bloques, decoraciones, semillas)
-        /// </summary>
-        private static bool IsPlaceableItem(ObjectID objectID)
-        {
-            try
-            {
-                string name = objectID.ToString().ToLower();
-                return name.Contains("seed") || name.Contains("block") || name.Contains("wall") ||
-                       name.Contains("torch") || name.Contains("workbench") || name.Contains("furnace") ||
-                       name.Contains("chest") || name.Contains("table") || name.Contains("chair") ||
-                       name.Contains("door") || name.Contains("bed") || name.Contains("farm") ||
-                       name.Contains("floor") || name.Contains("carpet") || name.Contains("bridge") ||
-                       name.Contains("fence") || name.Contains("rail") || name.Contains("statue") ||
-                       name.Contains("decoration") || name.Contains("plant") || name.Contains("spike") ||
-                       name.Contains("trap") || name.Contains("lantern") || name.Contains("crystal");
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Obtiene el nombre de un item usando su ObjectID
-        /// </summary>
-        private static string GetItemName(ObjectID objectID)
-        {
-            try
-            {
-                // Simplificado: usar solo el toString del objectID por ahora
-                // En el futuro se puede mejorar con acceso a la base de datos del juego
-                return objectID.ToString();
-            }
-            catch
-            {
-                return "Unknown Item";
             }
         }
 

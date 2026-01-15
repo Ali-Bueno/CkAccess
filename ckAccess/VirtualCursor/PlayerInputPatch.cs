@@ -3,6 +3,7 @@ using HarmonyLib;
 using UnityEngine;
 using System.Collections.Generic;
 using Rewired;
+using ckAccess.Helpers;
 
 namespace ckAccess.VirtualCursor
 {
@@ -37,7 +38,7 @@ namespace ckAccess.VirtualCursor
         public static void UpdateVirtualAimInput()
         {
             // CRÍTICO: No funcionar en menús principales o cuando estamos escribiendo
-            if (!IsInGameplay())
+            if (!GameplayStateHelper.IsInGameplay())
             {
                 _virtualAimInput = Vector2.zero;
                 return;
@@ -148,12 +149,6 @@ namespace ckAccess.VirtualCursor
                 // - RightJoyStickY = 60 (input raw)
                 float horizontalAxis = rewiredPlayer.GetAxis("RightJoyStickX");
                 float verticalAxis = rewiredPlayer.GetAxis("RightJoyStickY");
-
-                // DEBUG: Log valores si hay algún movimiento significativo
-                if (Mathf.Abs(horizontalAxis) > 0.1f || Mathf.Abs(verticalAxis) > 0.1f)
-                {
-                    UnityEngine.Debug.Log($"[ckAccess] Right Stick: H={horizontalAxis:F2}, V={verticalAxis:F2}");
-                }
 
                 // Verificar zona muerta (deadzone) para evitar drift del stick
                 if (Mathf.Abs(horizontalAxis) < STICK_DEADZONE && Mathf.Abs(verticalAxis) < STICK_DEADZONE)
@@ -389,7 +384,7 @@ namespace ckAccess.VirtualCursor
         public static void WasButtonPressedDownThisFrame_Postfix(ref bool __result, PugOther.PlayerInput.InputType inputType)
         {
             // CRÍTICO: No funcionar en menús principales o cuando estamos escribiendo
-            if (!IsInGameplay())
+            if (!GameplayStateHelper.IsInGameplay())
                 return;
 
             // Solo mapear si no hay inventarios abiertos (estamos en gameplay)
@@ -416,7 +411,7 @@ namespace ckAccess.VirtualCursor
         public static void IsButtonCurrentlyDown_Postfix(ref bool __result, PugOther.PlayerInput.InputType inputType)
         {
             // CRÍTICO: No funcionar en menús principales o cuando estamos escribiendo
-            if (!IsInGameplay())
+            if (!GameplayStateHelper.IsInGameplay())
                 return;
 
             // Solo mapear si no hay inventarios abiertos (estamos en gameplay)
@@ -447,7 +442,7 @@ namespace ckAccess.VirtualCursor
             // Si el cursor virtual está activo, forzar modo mando
             // PERO SOLO en gameplay puro, no si hay inventarios abiertos, para no romper la UI
             if (HasActiveCursor() && 
-                IsInGameplay() && 
+                GameplayStateHelper.IsInGameplay() && 
                 PugOther.Manager.ui != null && 
                 !PugOther.Manager.ui.isAnyInventoryShowing)
             {
@@ -474,69 +469,5 @@ namespace ckAccess.VirtualCursor
             }
         }
 
-
-        // Métodos vacíos para compatibilidad con el código existente
-        public static void SimulateInteract() { }
-        public static void SimulateSecondInteract() { }
-        public static void StopAllSimulations() { }
-
-        /// <summary>
-        /// Verifica si estamos en gameplay real (no en menús principales, no escribiendo)
-        /// </summary>
-        private static bool IsInGameplay()
-        {
-            try
-            {
-                // Si no hay jugador activo, no estamos en gameplay
-                var main = PugOther.Manager.main;
-                if (main == null || main.player == null)
-                    return false;
-
-                // Verificar si hay un campo de texto activo
-                var input = PugOther.Manager.input;
-                if (input != null)
-                {
-                    // Verificar si textInputIsActive (propiedad calculada)
-                    try
-                    {
-                        var textInputIsActiveProp = AccessTools.Property(input.GetType(), "textInputIsActive");
-                        if (textInputIsActiveProp != null)
-                        {
-                            bool textInputIsActive = (bool)textInputIsActiveProp.GetValue(input);
-                            if (textInputIsActive)
-                                return false;
-                        }
-                    }
-                    catch { }
-                }
-
-                var uiManager = PugOther.Manager.ui;
-                if (uiManager != null)
-                {
-
-                    // Si el juego está pausado, no estamos en gameplay
-                    if (UnityEngine.Time.timeScale == 0f)
-                        return false;
-                }
-
-                // Verificar que el controlador del jugador esté activo
-                try
-                {
-                    var playerController = main.player as PugOther.PlayerController;
-                    if (playerController == null)
-                        return false;
-
-                    if (!playerController.enabled || !playerController.gameObject.activeInHierarchy)
-                        return false;
-                }
-                catch { }
-
-                return true;
-            }
-            catch (System.Exception)
-            {
-                return false;
-            }
-        }
     }
 }

@@ -232,60 +232,19 @@ namespace ckAccess.Patches.UI
             try
             {
                 var networking = PugOther.Manager.networking;
-                Logger.LogInfo($"[DEBUG] networking is null: {networking == null}");
-
-                if (networking == null)
-                {
-                    Logger.LogWarning("NetworkingManager es null");
+                if (networking == null || networking.OfflineSession)
                     return null;
-                }
 
-                // Verificar si estamos en una sesión offline
-                Logger.LogInfo($"[DEBUG] OfflineSession: {networking.OfflineSession}");
-                if (networking.OfflineSession)
-                {
-                    Logger.LogInfo("Sesión offline detectada, no hay session ID");
-                    return null;
-                }
-
-                // Intentar obtener todos los campos para debug
-                var allFields = networking.GetType().GetFields(
-                    System.Reflection.BindingFlags.NonPublic |
-                    System.Reflection.BindingFlags.Public |
-                    System.Reflection.BindingFlags.Instance);
-
-                Logger.LogInfo($"[DEBUG] Total campos encontrados: {allFields.Length}");
-                foreach (var field in allFields)
-                {
-                    if (field.Name.ToLower().Contains("session") || field.Name.ToLower().Contains("join"))
-                    {
-                        var value = field.GetValue(networking);
-                        Logger.LogInfo($"[DEBUG] Campo: {field.Name}, Tipo: {field.FieldType.Name}, Valor: {value}");
-                    }
-                }
-
-                // Usar reflexión para acceder al campo privado currentSessionId
                 var fieldInfo = networking.GetType().GetField("currentSessionId",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-                Logger.LogInfo($"[DEBUG] fieldInfo is null: {fieldInfo == null}");
-
                 if (fieldInfo != null)
-                {
-                    string sessionId = fieldInfo.GetValue(networking) as string;
-                    Logger.LogInfo($"[DEBUG] Session ID obtenido: '{sessionId}'");
-                    return sessionId;
-                }
-                else
-                {
-                    Logger.LogWarning("Campo 'currentSessionId' no encontrado");
-                }
+                    return fieldInfo.GetValue(networking) as string;
 
                 return null;
             }
-            catch (System.Exception e)
+            catch
             {
-                Logger.LogError($"Error obteniendo session ID: {e}");
                 return null;
             }
         }
