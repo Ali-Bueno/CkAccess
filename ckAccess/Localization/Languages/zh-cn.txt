@@ -343,3 +343,6 @@ button_quick_stack_nearby=堆叠到附近
 
 # Player Placed Objects
 player_placed={0} (已放置)
+
+# Biome Announcer
+biome_entered=进入了{0}

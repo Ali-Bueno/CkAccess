@@ -344,3 +344,6 @@ button_quick_stack_nearby=In der Nähe stapeln
 
 # Player Placed Objects
 player_placed={0} (platziert)
+
+# Biome Announcer
+biome_entered={0} betreten

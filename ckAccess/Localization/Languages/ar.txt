@@ -343,3 +343,6 @@ button_quick_stack_nearby=تكديس في القريب
 
 # Player Placed Objects
 player_placed={0} (موضوع)
+
+# Biome Announcer
+biome_entered=دخلت إلى {0}

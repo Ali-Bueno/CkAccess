@@ -344,3 +344,6 @@ button_quick_stack_nearby=Quick Stack Nearby
 
 # Player Placed Objects
 player_placed={0} (placed)
+
+# Biome Announcer
+biome_entered=Entered {0}

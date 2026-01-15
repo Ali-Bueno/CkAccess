@@ -344,3 +344,6 @@ button_quick_stack_nearby=Apilar en cercanos
 
 # Objetos Colocados por el Jugador
 player_placed={0} (colocado)
+
+# Anunciador de Biomas
+biome_entered=Entraste a {0}

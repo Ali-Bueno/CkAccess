@@ -343,3 +343,6 @@ button_quick_stack_nearby=근처에 스택
 
 # Player Placed Objects
 player_placed={0} (배치됨)
+
+# Biome Announcer
+biome_entered={0}에 진입함

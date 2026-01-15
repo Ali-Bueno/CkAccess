@@ -191,6 +191,11 @@ Se ha implementado un sistema completo para la accesibilidad de habilidades (Ski
   - **Completado:** Detección automática de tipo de botón mediante `ButtonUIElement`.
   - **Completado:** Integración completa con sistema de clicks simulados existente.
   - **Completado:** Anuncios por TTS del nombre del botón al presionar U/R2.
+- **Completado:** Sistema de Anuncio de Biomas (2025).
+  - **Completado:** Detección automática de cambios de bioma/tileset.
+  - **Completado:** Anuncios por TTS al entrar en un nuevo bioma.
+  - **Completado:** Soporte para 60+ biomas del juego.
+  - **Completado:** Localización en 14 idiomas.
 
 ---
 ### Últimas Correcciones Técnicas (2024)
@@ -464,6 +469,38 @@ Anuncia automáticamente el tile que está en frente del jugador según la direc
 
 #### Archivo:
 - **`TileAheadAnnouncerPatch.cs`**: Parche en `PlayerController.ManagedUpdate`
+
+### Sistema de Anunciador de Biomas ✅ **COMPLETADO**
+
+Anuncia automáticamente cuando el jugador entra en un nuevo bioma/zona del mapa.
+
+#### Funcionamiento:
+- **Detección de Tileset**: Lee el tileset del tile bajo el jugador en cada frame
+- **Comparación Inteligente**: Solo anuncia cuando el bioma cambia, no en cada movimiento
+- **Inicialización Silenciosa**: Al cargar el mundo, detecta el bioma inicial sin anunciarlo
+- **Cooldown**: 500ms entre anuncios para evitar spam
+- **Umbral de Movimiento**: Solo verifica cambios cuando el jugador se mueve 0.3+ tiles
+- **Filtrado de Genéricos**: No anuncia biomas desconocidos ("Material X")
+- **Multijugador Safe**: Solo procesa el jugador local
+
+#### Biomas Soportados (60+):
+- **Básicos**: Tierra, Piedra, Obsidiana, Lava, Naturaleza, Moho, Mar, Arena, Arcilla
+- **Especiales**: Desierto, Nieve, Cristal, Piedra Oscura, Alienígena, Oasis, Pradera
+- **Construcciones**: Madera, Piedra, y todas las variantes de colores (amarillo, verde, rojo, púrpura, azul, etc.)
+- **Templos**: Templo del Desierto, Templo Antiguo del Desierto
+- **Eventos**: San Valentín, Pascua
+
+#### Localización:
+- Clave: `biome_entered` - "Entraste a {0}" / "Entered {0}"
+- Soporta los 14 idiomas del mod
+
+#### Archivo:
+- **`BiomeAnnouncerPatch.cs`**: Parche en `PlayerController.ManagedUpdate`
+
+#### Métodos Públicos:
+- `ClearCache()`: Limpia el cache (útil al cambiar de mundo)
+- `GetCurrentBiomeName()`: Devuelve el nombre del bioma actual
+- `GetCurrentTilesetIndex()`: Devuelve el índice del tileset actual
 
 ### Sistema de Categorización de Objetos ✅ **COMPLETADO**
 

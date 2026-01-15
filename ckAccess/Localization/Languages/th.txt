@@ -343,3 +343,6 @@ button_quick_stack_nearby=สแต็คใกล้เคียง
 
 # Player Placed Objects
 player_placed={0} (วางแล้ว)
+
+# Biome Announcer
+biome_entered=เข้าสู่ {0}

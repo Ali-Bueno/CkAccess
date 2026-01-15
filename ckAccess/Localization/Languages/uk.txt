@@ -343,3 +343,6 @@ button_quick_stack_nearby=Скласти до найближчих
 
 # Player Placed Objects
 player_placed={0} (розміщено)
+
+# Biome Announcer
+biome_entered=Увійшли до {0}

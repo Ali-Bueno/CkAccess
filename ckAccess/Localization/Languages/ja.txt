@@ -343,3 +343,6 @@ button_quick_stack_nearby=近くにスタック
 
 # Player Placed Objects
 player_placed={0} (配置済み)
+
+# Biome Announcer
+biome_entered={0}に入りました

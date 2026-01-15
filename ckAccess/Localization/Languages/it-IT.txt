@@ -343,3 +343,6 @@ button_quick_stack_nearby=Impila nelle vicinanze
 
 # Player Placed Objects
 player_placed={0} (posizionato)
+
+# Biome Announcer
+biome_entered=Entrato in {0}
