@@ -10,10 +10,7 @@ cursor_reset_error=重置光标出错
 limit_reached=已达到限制
 cursor_limit_reached=Cursor limit reached
 primary_action_error=主要操作出错: {0}
-placing_at_position=正在放置于位置 x={0}, z={1}
-item_placed_at_position={0} 已放置于位置 x={1}, z={2}
 secondary_action_error=次要操作出错: {0}
-interaction_error=交互出错: {0}
 cursor_not_initialized=光标未初始化
 current_position=当前位置: x={0}, z={1}
 position_reading_error=读取玩家位置出错
@@ -27,23 +24,16 @@ tab_souls=标签页: 灵魂
 tab_number=标签页 {0}
 navigation_error=导航标签页出错: {0}
 selection_error=选择对象出错: {0}
-empty_slot=空槽位
 slot_selection_error=槽位选择出错: {0}
 skill_error=打开技能出错: {0}
-click_simulation_error=模拟点击出错: {0}
 no_element_selected=未选择任何元素
 no_element_selected_secondary=未选择任何元素进行次要操作
 secondary_action_error_ui=次要操作出错: {0}
 empty_slot_no_action=空槽位，无可用操作
 secondary_action_performed=次要操作已执行
 secondary_slot_error=槽位次要操作出错: {0}
-right_click_simulation_error=模拟右键点击出错: {0}
 talent_action=天赋操作: {0}
 talent_selected=天赋已选择
-talent_selection_error=天赋选择出错: {0}
-skills=技能
-preset_selection_error=预设选择出错: {0}
-preset_selected=已选择预设: {0}
 equipment_preset_selected=装备预设已选择
 equipment_preset_selected_generic=已选择装备预设 {0}
 equipment_preset_error=装备预设出错: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=统计数据窗口已切换
 stats=统计数据
 stats_button_activated=统计数据按钮已激活
 stats_error=打开统计数据出错: {0}
-selected_item=已选择: {0}
 
 # 技能和天赋消息
 talent_tree_opened=天赋树已打开: {0}
@@ -93,7 +82,6 @@ dangerous_material={0} 的 {1}(危险)
 area_not_available=区域不可用
 unknown_position=位置未知
 unknown=未知
-player_position_error=无法获取玩家位置
 cannot_read_player_position=无法读取玩家位置
 position_reading_error_generic=读取位置出错
 empty_area_around=周围区域为空
@@ -110,61 +98,31 @@ available_material={0}: 你有 {1}
 and_more_materials=以及更多材料
 invalid_recipe=无效配方
 cannot_craft_materials=无法制作: 缺少材料
-inventory_full=背包已满
 crafted_item=已制作 {0}
 crafting_error=制作出错
 
 # 直接操作消息
 empty_slot_cannot_equip=空槽位，无法装备
 item_not_equippable={0} 无法装备
-equipment_window_not_open=装备窗口未打开
 item_equipped={0} 已装备
 item_cannot_equip=无法装备 {0}
 equip_error=装备出错
 empty_slot_cannot_use=空槽位，无法使用
-item_not_usable={0} 无法使用
 item_used={0} 已使用
-item_cannot_use=无法使用 {0}
 item_placed={0} 已放置
 item_action_performed=已对 {0} 执行操作
 use_error=使用出错
-no_crafting_available=没有可用制作
-crafting_station_available=制作站可用，使用库存中的配方
-select_recipe_item=选择一个配方物品
-recipe_item_detected=检测到配方: {0}
-not_a_recipe=此物品不是配方
-craft_error=制作出错
 
 # 快捷栏消息
-hotbar_changed=已选择快捷栏 {0}
-no_weapon_equipped=未装备武器
 empty_hotbar_slot=快捷栏槽位为空
-unknown=未知
-current_hotbar_item=快捷栏 {0}，槽位 {1}: {2}
-hotbar_error=快捷栏出错
-durability_critical=耐久度严重不足 {0}%
-durability_low=耐久度较低 {0}%
-durability_normal=耐久度 {0}%
-durability_full=耐久度满
-hotbar_info_available=快捷栏信息可用
 hotbar_slot_selected=已选择槽位 {0}
 
 # 物体状态
 equipped=，已装备
 
 # UI元素
-stats_button=统计数据按钮: {0}
-equipment_preset=装备预设: {0}
-crafting_button=制作按钮: {0}
-organize_button=整理按钮: {0}
-quick_action_button=快速操作按钮: {0}
 button=按钮: {0}
 tab=标签页: {0}
-preset=预设: {0}
-statistics=统计数据: {0}
-bag=背包: {0}
-shortcut=快捷键: {0}
-element=元素: {0}
 
 # 弹出消息
 hold_to_confirm=按住以确认
@@ -205,15 +163,6 @@ tile_big_root=大根
 tile_ground_slime=鼻涕虫痕迹
 tile_ancient_crystal=古代水晶
 tile_chrysalis=蛹
-
-# 瓷砖分类
-category_construction=建造
-category_liquid=液体
-category_mineral=矿物
-category_organic=有机
-category_stone=石头
-category_crystal=水晶
-category_unknown=未知
 
 # 瓷砖材料分类
 material_earth=土壤
@@ -366,3 +315,31 @@ tileset_alien=外星
 tileset_oasis=绿洲
 tileset_explosive_forest=爆炸森林
 tileset_explosive_desert=爆炸沙漠
+
+# Intro/Outro
+intro_skip_message=按住空格键跳过介绍
+
+# Tutorial Buffer
+session_id=会话ID
+
+# Inventory Item Actions
+item_grabbed={0} 已抓取
+
+# Inventory Section Names
+section_player_inventory=玩家背包
+section_chest_inventory=宝箱背包
+section_crafting_inventory=制作背包
+section_equipment=装备
+section_pouch=袋子
+section_unknown=未知区域
+
+# Inventory Buttons
+button_pressed={0}
+button_error=按钮按下出错: {0}
+button_sort=整理
+button_quick_stack=快速堆叠
+button_lock=锁定/解锁物品
+button_quick_stack_nearby=堆叠到附近
+
+# Player Placed Objects
+player_placed={0} (已放置)

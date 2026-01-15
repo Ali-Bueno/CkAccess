@@ -10,10 +10,7 @@ cursor_reset_error=重置遊標時出錯
 limit_reached=已達到限制
 cursor_limit_reached=Cursor limit reached
 primary_action_error=主要動作出錯：{0}
-placing_at_position=正在位置 x={0}，z={1} 放置
-item_placed_at_position={0} 已放置在位置 x={1}，z={2}
 secondary_action_error=次要動作出錯：{0}
-interaction_error=互動出錯：{0}
 cursor_not_initialized=遊標未初始化
 current_position=目前位置：x={0}，z={1}
 position_reading_error=讀取玩家位置時出錯
@@ -27,23 +24,16 @@ tab_souls=分頁：靈魂
 tab_number=分頁 {0}
 navigation_error=導覽分頁時出錯：{0}
 selection_error=選擇物體時出錯：{0}
-empty_slot=空的格子
 slot_selection_error=選擇格子時出錯：{0}
 skill_error=打開技能時出錯：{0}
-click_simulation_error=模擬點擊時出錯：{0}
 no_element_selected=未選擇任何元素
 no_element_selected_secondary=未選擇任何元素進行次要動作
 secondary_action_error_ui=次要動作出錯：{0}
 empty_slot_no_action=格子為空，沒有可用動作
 secondary_action_performed=已執行次要動作
 secondary_slot_error=格子次要動作出錯：{0}
-right_click_simulation_error=模擬滑鼠右鍵點擊時出錯：{0}
 talent_action=天賦動作：{0}
 talent_selected=已選擇天賦
-talent_selection_error=選擇天賦時出錯：{0}
-skills=技能
-preset_selection_error=選擇預設組合時出錯：{0}
-preset_selected=已選擇預設組合：{0}
 equipment_preset_selected=已選擇裝備預設組合
 equipment_preset_selected_generic=已選擇裝備預設組合 {0}
 equipment_preset_error=裝備預設組合出錯：{0}
@@ -52,7 +42,6 @@ stats_window_toggled=統計資訊視窗已切換
 stats=統計資訊
 stats_button_activated=統計資訊按鈕已啟動
 stats_error=打開統計資訊時出錯：{0}
-selected_item=已選擇：{0}
 
 # 技能和天賦訊息
 talent_tree_opened=天賦樹已打開：{0}
@@ -93,7 +82,6 @@ dangerous_material={0} 的 {1}（危險）
 area_not_available=區域不可用
 unknown_position=位置未知
 unknown=未知
-player_position_error=無法取得玩家位置
 cannot_read_player_position=無法讀取玩家位置
 position_reading_error_generic=讀取位置時出錯
 empty_area_around=周圍區域空無一物
@@ -110,61 +98,31 @@ available_material={0}：你有 {1}
 and_more_materials=及更多材料
 invalid_recipe=無效配方
 cannot_craft_materials=無法製作：缺少材料
-inventory_full=物品欄已滿
 crafted_item=已製作 {0}
 crafting_error=製作出錯
 
 # 直接動作訊息
 empty_slot_cannot_equip=格子為空，無法裝備
 item_not_equippable={0} 無法裝備
-equipment_window_not_open=裝備視窗未打開
 item_equipped=已裝備 {0}
 item_cannot_equip=無法裝備 {0}
 equip_error=裝備時出錯
 empty_slot_cannot_use=格子為空，無法使用
-item_not_usable={0} 無法使用
 item_used=已使用 {0}
-item_cannot_use=無法使用 {0}
 item_placed=已放置 {0}
 item_action_performed=已在 {0} 執行動作
 use_error=使用時出錯
-no_crafting_available=沒有可用的製作
-crafting_station_available=製作站可用，使用物品欄中的配方
-select_recipe_item=選擇一個配方物品
-recipe_item_detected=偵測到配方：{0}
-not_a_recipe=此物品不是配方
-craft_error=製作時出錯
 
 # 快捷列訊息
-hotbar_changed=已選擇快捷列 {0}
-no_weapon_equipped=未裝備武器
 empty_hotbar_slot=快捷列格子為空
-unknown=未知
-current_hotbar_item=快捷列 {0}，格子 {1}：{2}
-hotbar_error=快捷列出錯
-durability_critical=耐久度臨界 {0}%
-durability_low=耐久度低 {0}%
-durability_normal=耐久度 {0}%
-durability_full=耐久度滿
-hotbar_info_available=快捷列資訊可用
 hotbar_slot_selected=已選擇格子 {0}
 
 # 物體狀態
 equipped=，已裝備
 
 # 使用者介面元素
-stats_button=統計資訊按鈕：{0}
-equipment_preset=裝備預設組合：{0}
-crafting_button=製作按鈕：{0}
-organize_button=整理按鈕：{0}
-quick_action_button=快速動作按鈕：{0}
 button=按鈕：{0}
 tab=分頁：{0}
-preset=預設組合：{0}
-statistics=統計資訊：{0}
-bag=背包：{0}
-shortcut=快捷鍵：{0}
-element=元素：{0}
 
 # 快顯訊息
 hold_to_confirm=按住以確認
@@ -205,15 +163,6 @@ tile_big_root=大根
 tile_ground_slime=鼻涕蟲跡
 tile_ancient_crystal=古老水晶
 tile_chrysalis=蛹
-
-# 地塊類別
-category_construction=建築
-category_liquid=液體
-category_mineral=礦物
-category_organic=有機物
-category_stone=石頭
-category_crystal=水晶
-category_unknown=未知
 
 # 地塊材料類別
 material_earth=土壤
@@ -366,3 +315,31 @@ tileset_alien=外星人
 tileset_oasis=綠洲
 tileset_explosive_forest=爆炸森林
 tileset_explosive_desert=爆炸沙漠
+
+# Intro/Outro
+intro_skip_message=按住空格鍵跳過介紹
+
+# Tutorial Buffer
+session_id=會話ID
+
+# Inventory Item Actions
+item_grabbed={0} 已抓取
+
+# Inventory Section Names
+section_player_inventory=玩家物品欄
+section_chest_inventory=寶箱物品欄
+section_crafting_inventory=製作物品欄
+section_equipment=裝備
+section_pouch=袋子
+section_unknown=未知區域
+
+# Inventory Buttons
+button_pressed={0}
+button_error=按鈕按下出錯：{0}
+button_sort=整理
+button_quick_stack=快速堆疊
+button_lock=鎖定/解鎖物品
+button_quick_stack_nearby=堆疊到附近
+
+# Player Placed Objects
+player_placed={0} (已放置)

@@ -10,10 +10,7 @@ cursor_reset_error=カーソルリセットエラー
 limit_reached=上限に達しました
 cursor_limit_reached=Cursor limit reached
 primary_action_error=主アクション エラー: {0}
-placing_at_position=位置 x={0}, z={1} に配置中
-item_placed_at_position={0} を位置 x={1}, z={2} に配置しました
 secondary_action_error=副アクション エラー: {0}
-interaction_error=相互作用エラー: {0}
 cursor_not_initialized=カーソルが初期化されていません
 current_position=現在位置: x={0}, z={1}
 position_reading_error=プレイヤー位置の読み込みエラー
@@ -27,23 +24,16 @@ tab_souls=タブ: ソウル
 tab_number=タブ {0}
 navigation_error=タブナビゲーション エラー: {0}
 selection_error=オブジェクト選択エラー: {0}
-empty_slot=空きスロット
 slot_selection_error=スロット選択エラー: {0}
 skill_error=スキルを開くエラー: {0}
-click_simulation_error=クリックシミュレーション エラー: {0}
 no_element_selected=要素が選択されていません
 no_element_selected_secondary=副アクション用に要素が選択されていません
 secondary_action_error_ui=副アクション エラー: {0}
 empty_slot_no_action=空きスロット、利用可能なアクションはありません
 secondary_action_performed=副アクションが実行されました
 secondary_slot_error=スロット副アクション エラー: {0}
-right_click_simulation_error=右クリックシミュレーション エラー: {0}
 talent_action=タレント アクション: {0}
 talent_selected=タレントが選択されました
-talent_selection_error=タレント選択エラー: {0}
-skills=スキル
-preset_selection_error=プリセット選択エラー: {0}
-preset_selected=プリセットが選択されました: {0}
 equipment_preset_selected=装備プリセットが選択されました
 equipment_preset_selected_generic=装備プリセット {0} が選択されました
 equipment_preset_error=装備プリセット エラー: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=統計情報ウィンドウが切り替えられました
 stats=統計情報
 stats_button_activated=統計情報ボタンが有効化されました
 stats_error=統計情報を開くエラー: {0}
-selected_item=選択済み: {0}
 
 # スキルとタレントのメッセージ
 talent_tree_opened=タレントツリーが開かれました: {0}
@@ -93,7 +82,6 @@ dangerous_material={0}の{1} (危険)
 area_not_available=エリアは利用できません
 unknown_position=位置不明
 unknown=不明
-player_position_error=プレイヤー位置を取得できませんでした
 cannot_read_player_position=プレイヤー位置が読み込めません
 position_reading_error_generic=位置読み込みエラー
 empty_area_around=周囲は空です
@@ -110,61 +98,31 @@ available_material={0}: 所持 {1}
 and_more_materials=その他の材料
 invalid_recipe=無効なレシピ
 cannot_craft_materials=作成できません: 材料が不足しています
-inventory_full=インベントリが満杯です
 crafted_item={0} を作成しました
 crafting_error=クラフティング エラー
 
 # 直接アクションのメッセージ
 empty_slot_cannot_equip=空きスロット、装備できません
 item_not_equippable={0} は装備できません
-equipment_window_not_open=装備ウィンドウが開いていません
 item_equipped={0} が装備されました
 item_cannot_equip={0} を装備できません
 equip_error=装備エラー
 empty_slot_cannot_use=空きスロット、使用できません
-item_not_usable={0} は使用できません
 item_used={0} を使用しました
-item_cannot_use={0} を使用できません
 item_placed={0} を配置しました
 item_action_performed={0} でアクションが実行されました
 use_error=使用エラー
-no_crafting_available=利用可能なクラフティングはありません
-crafting_station_available=クラフティングステーションが利用可能です。インベントリのレシピを使用してください
-select_recipe_item=レシピアイテムを選択してください
-recipe_item_detected=レシピが検出されました: {0}
-not_a_recipe=このアイテムはレシピではありません
-craft_error=クラフティング エラー
 
 # ホットバーのメッセージ
-hotbar_changed=ホットバー {0} が選択されました
-no_weapon_equipped=装備された武器がありません
 empty_hotbar_slot=ホットバースロットが空です
-unknown=不明
-current_hotbar_item=ホットバー {0}、スロット {1}: {2}
-hotbar_error=ホットバー エラー
-durability_critical=耐久度は危機的 {0}%
-durability_low=耐久度は低い {0}%
-durability_normal=耐久度 {0}%
-durability_full=耐久度は完全です
-hotbar_info_available=ホットバー情報が利用可能です
 hotbar_slot_selected=スロット {0} が選択されました
 
 # オブジェクトの状態
 equipped=, 装備済み
 
 # UI要素
-stats_button=統計情報ボタン: {0}
-equipment_preset=装備プリセット: {0}
-crafting_button=クラフティングボタン: {0}
-organize_button=整理ボタン: {0}
-quick_action_button=クイックアクションボタン: {0}
 button=ボタン: {0}
 tab=タブ: {0}
-preset=プリセット: {0}
-statistics=統計情報: {0}
-bag=バッグ: {0}
-shortcut=ショートカット: {0}
-element=要素: {0}
 
 # ポップアップメッセージ
 hold_to_confirm=確認するには押し続けてください
@@ -205,15 +163,6 @@ tile_big_root=大きな根
 tile_ground_slime=スライムの跡
 tile_ancient_crystal=古い結晶
 tile_chrysalis=蛹
-
-# タイルのカテゴリー
-category_construction=建設
-category_liquid=液体
-category_mineral=鉱物
-category_organic=有機物
-category_stone=石
-category_crystal=結晶
-category_unknown=不明
 
 # タイルの材料カテゴリー
 material_earth=土
@@ -366,3 +315,31 @@ tileset_alien=エイリアン
 tileset_oasis=オアシス
 tileset_explosive_forest=爆発的な森
 tileset_explosive_desert=爆発的な砂漠
+
+# Intro/Outro
+intro_skip_message=イントロをスキップするにはスペースを押し続けてください
+
+# Tutorial Buffer
+session_id=セッションID
+
+# Inventory Item Actions
+item_grabbed={0} を掴みました
+
+# Inventory Section Names
+section_player_inventory=プレイヤーインベントリ
+section_chest_inventory=チェストインベントリ
+section_crafting_inventory=クラフティングインベントリ
+section_equipment=装備
+section_pouch=ポーチ
+section_unknown=不明なセクション
+
+# Inventory Buttons
+button_pressed={0}
+button_error=ボタン押下エラー: {0}
+button_sort=整理
+button_quick_stack=クイックスタック
+button_lock=アイテムのロック/アンロック
+button_quick_stack_nearby=近くにスタック
+
+# Player Placed Objects
+player_placed={0} (配置済み)

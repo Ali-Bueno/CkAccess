@@ -10,10 +10,7 @@ cursor_reset_error=Error resetting cursor
 limit_reached=Limit reached
 cursor_limit_reached=Cursor limit reached
 primary_action_error=Error in primary action: {0}
-placing_at_position=Placing at position x={0}, z={1}
-item_placed_at_position={0} placed at position x={1}, z={2}
 secondary_action_error=Error in secondary action: {0}
-interaction_error=Error in interaction: {0}
 cursor_not_initialized=Cursor not initialized
 current_position=Current position: x={0}, z={1}
 position_reading_error=Error reading player position
@@ -27,23 +24,16 @@ tab_souls=Tab: Souls
 tab_number=Tab {0}
 navigation_error=Error navigating tabs: {0}
 selection_error=Error selecting object: {0}
-empty_slot=Empty slot
 slot_selection_error=Error in slot selection: {0}
 skill_error=Error opening skill: {0}
-click_simulation_error=Error simulating click: {0}
 no_element_selected=No element selected
 no_element_selected_secondary=No element selected for secondary action
 secondary_action_error_ui=Error in secondary action: {0}
 empty_slot_no_action=Empty slot, no action available
 secondary_action_performed=Secondary action performed
 secondary_slot_error=Error in slot secondary action: {0}
-right_click_simulation_error=Error simulating right click: {0}
 talent_action=Action on talent: {0}
 talent_selected=Talent selected
-talent_selection_error=Error selecting talent: {0}
-skills=Skills
-preset_selection_error=Error selecting preset: {0}
-preset_selected=Preset selected: {0}
 equipment_preset_selected=Equipment preset selected
 equipment_preset_selected_generic=Equipment preset {0} selected
 equipment_preset_error=Error with equipment preset: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=Stats window toggled
 stats=Stats
 stats_button_activated=Stats button activated
 stats_error=Error opening stats: {0}
-selected_item=Selected: {0}
 
 # Skill and Talent Messages
 talent_tree_opened=Talent tree opened: {0}
@@ -93,7 +82,6 @@ dangerous_material=Dangerous {1} {0}
 area_not_available=Area not available
 unknown_position=Unknown position
 unknown=Unknown
-player_position_error=Could not get player position
 cannot_read_player_position=Cannot read player position
 position_reading_error_generic=Error reading position
 empty_area_around=Empty area around
@@ -110,61 +98,31 @@ available_material={0}: have {1}
 and_more_materials=and more materials
 invalid_recipe=Invalid recipe
 cannot_craft_materials=Cannot craft: missing materials
-inventory_full=Inventory full
 crafted_item=Crafted {0}
 crafting_error=Crafting error
 
 # Direct Actions Messages
 empty_slot_cannot_equip=Empty slot, cannot equip
 item_not_equippable={0} cannot be equipped
-equipment_window_not_open=Equipment window not open
 item_equipped={0} equipped
 item_cannot_equip=Cannot equip {0}
 equip_error=Error equipping
 empty_slot_cannot_use=Empty slot, cannot use
-item_not_usable={0} cannot be used
 item_used={0} used
-item_cannot_use=Cannot use {0}
 item_placed={0} placed
 item_action_performed=Action performed on {0}
 use_error=Error using
-no_crafting_available=No crafting available
-crafting_station_available=Crafting station available, use inventory recipes
-select_recipe_item=Select a recipe item
-recipe_item_detected=Recipe detected: {0}
-not_a_recipe=This item is not a recipe
-craft_error=Error crafting
 
 # Hotbar Messages
-hotbar_changed=Hotbar {0} selected
-no_weapon_equipped=No weapon equipped
 empty_hotbar_slot=Empty hotbar slot
-unknown=Unknown
-current_hotbar_item=Hotbar {0}, slot {1}: {2}
-hotbar_error=Hotbar error
-durability_critical=critical durability {0}%
-durability_low=low durability {0}%
-durability_normal=durability {0}%
-durability_full=full durability
-hotbar_info_available=Hotbar information available
 hotbar_slot_selected=Slot {0} selected
 
 # Item Status
 equipped=, equipped
 
 # UI Elements
-stats_button=Stats button: {0}
-equipment_preset=Equipment preset: {0}
-crafting_button=Crafting button: {0}
-organize_button=Organize button: {0}
-quick_action_button=Quick action button: {0}
 button=Button: {0}
 tab=Tab: {0}
-preset=Preset: {0}
-statistics=Statistics: {0}
-bag=Bag: {0}
-shortcut=Shortcut: {0}
-element=Element: {0}
 
 # Pop-up Messages
 hold_to_confirm=hold to confirm
@@ -205,15 +163,6 @@ tile_big_root=Big root
 tile_ground_slime=Slime trail
 tile_ancient_crystal=Ancient crystal
 tile_chrysalis=Chrysalis
-
-# Tile Categories
-category_construction=Construction
-category_liquid=Liquid
-category_mineral=Mineral
-category_organic=Organic
-category_stone=Stone
-category_crystal=Crystal
-category_unknown=Unknown
 
 # Tile Material Categories
 material_earth=Earth
@@ -265,6 +214,7 @@ inventory_opened=Inventory opened
 inventory_closed=Inventory closed
 character_window_opened=Character window opened
 character_window_closed=Character window closed
+
 # Notification System Messages
 item_picked_single=Picked up: {0}
 item_picked_multiple=Picked up: {0} x{1}
@@ -305,7 +255,7 @@ enemy_bat=Bat
 enemy_rat=Rat
 enemy_boss=Boss
 
-# Notification System Messages
+# Notification Navigation
 no_notifications=No notifications
 first_notification=First notification
 last_notification=Last notification
@@ -367,42 +317,13 @@ tileset_oasis=oasis
 tileset_explosive_forest=explosive forest
 tileset_explosive_desert=explosive desert
 
-# Interaction Messages
-interact_available=Press E to interact with {0}
-interactable_object=object
-object_type_chest=chest
-object_type_door=door
-object_type_workstation=workstation
-
 # Intro/Outro
 intro_skip_message=Hold space to skip the intro
 
 # Tutorial Buffer
-no_tutorials=No tutorials in buffer
 session_id=Session ID
 
-# Drop/Throw system
-cannot_drop_this=Cannot drop this element
-drop_error=Drop error: {0}
-player_not_found=Player not found
-cannot_drop_from_this_inventory=Cannot drop from this inventory
-dropped_all=Dropped {0} x{1}
-dropped_one=Dropped {0}
-drop_item_error=Error dropping item: {0}
-
-# Improved inventory accessibility
-slot_selected={0} selected
-slot_selected_with_amount={0} x{1} selected
-empty_slot_with_held_item=Empty slot. Holding {0}
-actions_with_held_item=Press U to place, O to place half
-actions_transfer_or_drop=Shift+U to transfer to {0}, Q to drop
-actions_take_or_move=U to take, Shift+U to move to inventory
-actions_normal=U to grab, O to grab half, Q to drop
-chest=chest
-crafting_station=crafting station
-item_transferred_to=Transferred to {0}
-item_taken_from=Taken from {0}
-item_placed={0} placed
+# Inventory Item Actions
 item_grabbed={0} grabbed
 
 # Inventory Section Names
@@ -420,3 +341,6 @@ button_sort=Sort
 button_quick_stack=Quick Stack
 button_lock=Lock/Unlock Items
 button_quick_stack_nearby=Quick Stack Nearby
+
+# Player Placed Objects
+player_placed={0} (placed)

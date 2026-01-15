@@ -10,10 +10,7 @@ cursor_reset_error=Ошибка сброса курсора
 limit_reached=Достигнут предел
 cursor_limit_reached=Cursor limit reached
 primary_action_error=Ошибка основного действия: {0}
-placing_at_position=Размещение в позиции x={0}, z={1}
-item_placed_at_position={0} размещен в позиции x={1}, z={2}
 secondary_action_error=Ошибка дополнительного действия: {0}
-interaction_error=Ошибка взаимодействия: {0}
 cursor_not_initialized=Курсор не инициализирован
 current_position=Текущая позиция: x={0}, z={1}
 position_reading_error=Ошибка чтения позиции игрока
@@ -27,23 +24,16 @@ tab_souls=Вкладка: Души
 tab_number=Вкладка {0}
 navigation_error=Ошибка навигации по вкладкам: {0}
 selection_error=Ошибка выбора объекта: {0}
-empty_slot=Пустой слот
 slot_selection_error=Ошибка выбора слота: {0}
 skill_error=Ошибка открытия навыка: {0}
-click_simulation_error=Ошибка симуляции клика: {0}
 no_element_selected=Не выбран ни один элемент
 no_element_selected_secondary=Не выбран ни один элемент для дополнительного действия
 secondary_action_error_ui=Ошибка дополнительного действия: {0}
 empty_slot_no_action=Пустой слот, действие недоступно
 secondary_action_performed=Дополнительное действие выполнено
 secondary_slot_error=Ошибка дополнительного действия со слотом: {0}
-right_click_simulation_error=Ошибка симуляции правого клика: {0}
 talent_action=Действие с талантом: {0}
 talent_selected=Талант выбран
-talent_selection_error=Ошибка выбора таланта: {0}
-skills=Навыки
-preset_selection_error=Ошибка выбора пресета: {0}
-preset_selected=Пресет выбран: {0}
 equipment_preset_selected=Пресет снаряжения выбран
 equipment_preset_selected_generic=Пресет снаряжения {0} выбран
 equipment_preset_error=Ошибка с пресетом снаряжения: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=Окно статистики переключено
 stats=Статистика
 stats_button_activated=Кнопка статистики активирована
 stats_error=Ошибка открытия статистики: {0}
-selected_item=Выбрано: {0}
 
 # Сообщения навыков и талантов
 talent_tree_opened=Дерево талантов открыто: {0}
@@ -93,7 +82,6 @@ dangerous_material={0} из {1} (опасно)
 area_not_available=Область недоступна
 unknown_position=Неизвестная позиция
 unknown=Неизвестно
-player_position_error=Не удалось получить позицию игрока
 cannot_read_player_position=Невозможно прочитать позицию игрока
 position_reading_error_generic=Ошибка чтения позиции
 empty_area_around=Пустая область вокруг
@@ -110,61 +98,31 @@ available_material={0}: у вас {1}
 and_more_materials=и другие материалы
 invalid_recipe=Неверный рецепт
 cannot_craft_materials=Невозможно создать: не хватает материалов
-inventory_full=Инвентарь полон
 crafted_item=Создано {0}
 crafting_error=Ошибка создания
 
 # Сообщения прямых действий
 empty_slot_cannot_equip=Пустой слот, невозможно экипировать
 item_not_equippable={0} нельзя экипировать
-equipment_window_not_open=Окно снаряжения не открыто
 item_equipped={0} экипировано
 item_cannot_equip=Невозможно экипировать {0}
 equip_error=Ошибка экипировки
 empty_slot_cannot_use=Пустой слот, невозможно использовать
-item_not_usable={0} нельзя использовать
 item_used={0} использовано
-item_cannot_use=Невозможно использовать {0}
 item_placed={0} размещен
 item_action_performed=Действие выполнено с {0}
 use_error=Ошибка использования
-no_crafting_available=Крафт недоступен
-crafting_station_available=Станция крафта доступна, используйте рецепты из инвентаря
-select_recipe_item=Выберите предмет рецепта
-recipe_item_detected=Рецепт обнаружен: {0}
-not_a_recipe=Этот предмет не является рецептом
-craft_error=Ошибка крафта
 
 # Сообщения панели быстрого доступа
-hotbar_changed=Панель {0} выбрана
-no_weapon_equipped=Оружие не экипировано
 empty_hotbar_slot=Пустой слот панели быстрого доступа
-unknown=Неизвестно
-current_hotbar_item=Панель {0}, слот {1}: {2}
-hotbar_error=Ошибка панели быстрого доступа
-durability_critical=критическая прочность {0}%
-durability_low=низкая прочность {0}%
-durability_normal=прочность {0}%
-durability_full=полная прочность
-hotbar_info_available=Информация панели быстрого доступа доступна
 hotbar_slot_selected=Слот {0} выбран
 
 # Состояние объектов
 equipped=, экипировано
 
 # Элементы интерфейса
-stats_button=Кнопка статистики: {0}
-equipment_preset=Пресет снаряжения: {0}
-crafting_button=Кнопка крафта: {0}
-organize_button=Кнопка сортировки: {0}
-quick_action_button=Кнопка быстрого действия: {0}
 button=Кнопка: {0}
 tab=Вкладка: {0}
-preset=Пресет: {0}
-statistics=Статистика: {0}
-bag=Сумка: {0}
-shortcut=Ярлык: {0}
-element=Элемент: {0}
 
 # Всплывающие сообщения
 hold_to_confirm=удерживайте для подтверждения
@@ -205,15 +163,6 @@ tile_big_root=Большой корень
 tile_ground_slime=След слизи
 tile_ancient_crystal=Древний кристалл
 tile_chrysalis=Кокон
-
-# Категории тайлов
-category_construction=Постройка
-category_liquid=Жидкость
-category_mineral=Минерал
-category_organic=Органическое
-category_stone=Камень
-category_crystal=Кристалл
-category_unknown=Неизвестно
 
 # Категории материалов тайлов
 material_earth=Земля
@@ -366,3 +315,31 @@ tileset_alien=чужеродное
 tileset_oasis=оазис
 tileset_explosive_forest=взрывной лес
 tileset_explosive_desert=взрывная пустыня
+
+# Intro/Outro
+intro_skip_message=Удерживайте пробел, чтобы пропустить вступление
+
+# Tutorial Buffer
+session_id=ID сессии
+
+# Inventory Item Actions
+item_grabbed={0} взято
+
+# Inventory Section Names
+section_player_inventory=Инвентарь игрока
+section_chest_inventory=Инвентарь сундука
+section_crafting_inventory=Инвентарь создания
+section_equipment=Снаряжение
+section_pouch=Сумка
+section_unknown=Неизвестный раздел
+
+# Inventory Buttons
+button_pressed={0}
+button_error=Ошибка нажатия кнопки: {0}
+button_sort=Сортировать
+button_quick_stack=Быстрое складывание
+button_lock=Заблокировать/Разблокировать предметы
+button_quick_stack_nearby=Сложить в ближайшие
+
+# Player Placed Objects
+player_placed={0} (размещено)

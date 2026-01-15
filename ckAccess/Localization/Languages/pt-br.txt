@@ -10,10 +10,7 @@ cursor_reset_error=Erro ao resetar cursor
 limit_reached=Limite alcançado
 cursor_limit_reached=Cursor limit reached
 primary_action_error=Erro na ação primária: {0}
-placing_at_position=Colocando na posição x={0}, z={1}
-item_placed_at_position={0} colocado na posição x={1}, z={2}
 secondary_action_error=Erro na ação secundária: {0}
-interaction_error=Erro na interação: {0}
 cursor_not_initialized=Cursor não inicializado
 current_position=Posição atual: x={0}, z={1}
 position_reading_error=Erro ao ler posição do jogador
@@ -27,23 +24,16 @@ tab_souls=Aba: Almas
 tab_number=Aba {0}
 navigation_error=Erro ao navegar nas abas: {0}
 selection_error=Erro ao selecionar objeto: {0}
-empty_slot=Slot vazio
 slot_selection_error=Erro na seleção de slot: {0}
 skill_error=Erro ao abrir habilidade: {0}
-click_simulation_error=Erro ao simular clique: {0}
 no_element_selected=Nenhum elemento selecionado
 no_element_selected_secondary=Nenhum elemento selecionado para ação secundária
 secondary_action_error_ui=Erro na ação secundária: {0}
 empty_slot_no_action=Slot vazio, nenhuma ação disponível
 secondary_action_performed=Ação secundária realizada
 secondary_slot_error=Erro na ação secundária do slot: {0}
-right_click_simulation_error=Erro ao simular clique direito: {0}
 talent_action=Ação no talento: {0}
 talent_selected=Talento selecionado
-talent_selection_error=Erro ao selecionar talento: {0}
-skills=Habilidades
-preset_selection_error=Erro ao selecionar preset: {0}
-preset_selected=Preset selecionado: {0}
 equipment_preset_selected=Preset de equipamento selecionado
 equipment_preset_selected_generic=Preset de equipamento {0} selecionado
 equipment_preset_error=Erro com preset de equipamento: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=Janela de estatísticas alternada
 stats=Estatísticas
 stats_button_activated=Botão de estatísticas ativado
 stats_error=Erro ao abrir estatísticas: {0}
-selected_item=Selecionado: {0}
 
 # Mensagens de Habilidades e Talentos
 talent_tree_opened=Árvore de talentos aberta: {0}
@@ -93,7 +82,6 @@ dangerous_material={0} de {1} (perigoso)
 area_not_available=Área não disponível
 unknown_position=Posição desconhecida
 unknown=Desconhecido
-player_position_error=Não foi possível obter a posição do jogador
 cannot_read_player_position=Não é possível ler a posição do jogador
 position_reading_error_generic=Erro ao ler posição
 empty_area_around=Área vazia ao redor
@@ -110,61 +98,31 @@ available_material={0}: você tem {1}
 and_more_materials=e mais materiais
 invalid_recipe=Receita inválida
 cannot_craft_materials=Não é possível criar: faltam materiais
-inventory_full=Inventário cheio
 crafted_item=Criado {0}
 crafting_error=Erro ao criar
 
 # Mensagens de Ações Diretas
 empty_slot_cannot_equip=Slot vazio, não pode equipar
 item_not_equippable={0} não pode ser equipado
-equipment_window_not_open=Janela de equipamento não está aberta
 item_equipped={0} equipado
 item_cannot_equip=Não é possível equipar {0}
 equip_error=Erro ao equipar
 empty_slot_cannot_use=Slot vazio, não pode usar
-item_not_usable={0} não pode ser usado
 item_used={0} usado
-item_cannot_use=Não é possível usar {0}
 item_placed={0} colocado
 item_action_performed=Ação realizada em {0}
 use_error=Erro ao usar
-no_crafting_available=Não há crafting disponível
-crafting_station_available=Estação de crafting disponível, use as receitas do inventário
-select_recipe_item=Selecione um item de receita
-recipe_item_detected=Receita detectada: {0}
-not_a_recipe=Este item não é uma receita
-craft_error=Erro ao criar
 
 # Mensagens do Hotbar
-hotbar_changed=Hotbar {0} selecionado
-no_weapon_equipped=Sem arma equipada
 empty_hotbar_slot=Slot de hotbar vazio
-unknown=Desconhecido
-current_hotbar_item=Hotbar {0}, slot {1}: {2}
-hotbar_error=Erro no hotbar
-durability_critical=durabilidade crítica {0}%
-durability_low=durabilidade baixa {0}%
-durability_normal=durabilidade {0}%
-durability_full=durabilidade completa
-hotbar_info_available=Informação do hotbar disponível
 hotbar_slot_selected=Slot {0} selecionado
 
 # Estado de Objetos
 equipped=, equipado
 
 # Elementos UI
-stats_button=Botão de estatísticas: {0}
-equipment_preset=Preset de equipamento: {0}
-crafting_button=Botão de criação: {0}
-organize_button=Botão de organizar: {0}
-quick_action_button=Botão de ação rápida: {0}
 button=Botão: {0}
 tab=Aba: {0}
-preset=Preset: {0}
-statistics=Estatísticas: {0}
-bag=Bolsa: {0}
-shortcut=Atalho: {0}
-element=Elemento: {0}
 
 # Mensagens Pop-up
 hold_to_confirm=mantenha pressionado para confirmar
@@ -205,15 +163,6 @@ tile_big_root=Raiz grande
 tile_ground_slime=Rastro de slime
 tile_ancient_crystal=Cristal antigo
 tile_chrysalis=Crisálida
-
-# Categorias de Tiles
-category_construction=Construção
-category_liquid=Líquido
-category_mineral=Mineral
-category_organic=Orgânico
-category_stone=Pedra
-category_crystal=Cristal
-category_unknown=Desconhecido
 
 # Categorias de Materiais de Tiles
 material_earth=Terra
@@ -366,3 +315,31 @@ tileset_alien=alienígena
 tileset_oasis=oásis
 tileset_explosive_forest=floresta explosiva
 tileset_explosive_desert=deserto explosivo
+
+# Intro/Outro
+intro_skip_message=Segure espaço para pular a intro
+
+# Tutorial Buffer
+session_id=ID da sessão
+
+# Inventory Item Actions
+item_grabbed={0} pegou
+
+# Inventory Section Names
+section_player_inventory=Inventário do jogador
+section_chest_inventory=Inventário do baú
+section_crafting_inventory=Inventário de criação
+section_equipment=Equipamento
+section_pouch=Bolsa
+section_unknown=Seção desconhecida
+
+# Inventory Buttons
+button_pressed={0}
+button_error=Erro ao pressionar botão: {0}
+button_sort=Ordenar
+button_quick_stack=Empilhar rápido
+button_lock=Bloquear/Desbloquear itens
+button_quick_stack_nearby=Empilhar em baús próximos
+
+# Player Placed Objects
+player_placed={0} (colocado)

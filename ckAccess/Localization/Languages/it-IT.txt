@@ -10,10 +10,7 @@ cursor_reset_error=Errore nel ripristino del cursore
 limit_reached=Limite raggiunto
 cursor_limit_reached=Cursor limit reached
 primary_action_error=Errore nell'azione primaria: {0}
-placing_at_position=Posizionamento in posizione x={0}, z={1}
-item_placed_at_position={0} posizionato in posizione x={1}, z={2}
 secondary_action_error=Errore nell'azione secondaria: {0}
-interaction_error=Errore nell'interazione: {0}
 cursor_not_initialized=Cursore non inizializzato
 current_position=Posizione attuale: x={0}, z={1}
 position_reading_error=Errore nella lettura della posizione del giocatore
@@ -27,23 +24,16 @@ tab_souls=Scheda: Anime
 tab_number=Scheda {0}
 navigation_error=Errore nella navigazione delle schede: {0}
 selection_error=Errore nella selezione dell'oggetto: {0}
-empty_slot=Slot vuoto
 slot_selection_error=Errore nella selezione dello slot: {0}
 skill_error=Errore nell'apertura dell'abilità: {0}
-click_simulation_error=Errore nella simulazione del clic: {0}
 no_element_selected=Nessun elemento selezionato
 no_element_selected_secondary=Nessun elemento selezionato per l'azione secondaria
 secondary_action_error_ui=Errore nell'azione secondaria: {0}
 empty_slot_no_action=Slot vuoto, nessuna azione disponibile
 secondary_action_performed=Azione secondaria eseguita
 secondary_slot_error=Errore nell'azione secondaria dello slot: {0}
-right_click_simulation_error=Errore nella simulazione del clic destro: {0}
 talent_action=Azione sul talento: {0}
 talent_selected=Talento selezionato
-talent_selection_error=Errore nella selezione del talento: {0}
-skills=Abilità
-preset_selection_error=Errore nella selezione del preset: {0}
-preset_selected=Preset selezionato: {0}
 equipment_preset_selected=Preset equipaggiamento selezionato
 equipment_preset_selected_generic=Preset equipaggiamento {0} selezionato
 equipment_preset_error=Errore con il preset equipaggiamento: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=Finestra statistiche attivata/disattivata
 stats=Statistiche
 stats_button_activated=Pulsante statistiche attivato
 stats_error=Errore nell'apertura delle statistiche: {0}
-selected_item=Selezionato: {0}
 
 # Messaggi di Abilità e Talenti
 talent_tree_opened=Albero dei talenti aperto: {0}
@@ -93,7 +82,6 @@ dangerous_material={0} di {1} (pericoloso)
 area_not_available=Area non disponibile
 unknown_position=Posizione sconosciuta
 unknown=Sconosciuto
-player_position_error=Impossibile ottenere la posizione del giocatore
 cannot_read_player_position=Impossibile leggere la posizione del giocatore
 position_reading_error_generic=Errore nella lettura della posizione
 empty_area_around=Area vuota circostante
@@ -110,61 +98,31 @@ available_material={0}: hai {1}
 and_more_materials=e altri materiali
 invalid_recipe=Ricetta non valida
 cannot_craft_materials=Non si può creare: mancano materiali
-inventory_full=Inventario pieno
 crafted_item=Creato {0}
 crafting_error=Errore nella creazione
 
 # Messaggi di Azioni Dirette
 empty_slot_cannot_equip=Slot vuoto, impossibile equipaggiare
 item_not_equippable={0} non può essere equipaggiato
-equipment_window_not_open=La finestra dell'equipaggiamento non è aperta
 item_equipped={0} equipaggiato
 item_cannot_equip=Impossibile equipaggiare {0}
 equip_error=Errore nell'equipaggiare
 empty_slot_cannot_use=Slot vuoto, impossibile usare
-item_not_usable={0} non può essere usato
 item_used={0} usato
-item_cannot_use=Impossibile usare {0}
 item_placed={0} posizionato
 item_action_performed=Azione eseguita su {0}
 use_error=Errore nell'uso
-no_crafting_available=Nessun crafting disponibile
-crafting_station_available=Stazione di crafting disponibile, usa le ricette dall'inventario
-select_recipe_item=Seleziona un oggetto ricetta
-recipe_item_detected=Ricetta rilevata: {0}
-not_a_recipe=Questo oggetto non è una ricetta
-craft_error=Errore nel crafting
 
 # Messaggi della Barra Rapida
-hotbar_changed=Barra rapida {0} selezionata
-no_weapon_equipped=Nessuna arma equipaggiata
 empty_hotbar_slot=Slot barra rapida vuoto
-unknown=Sconosciuto
-current_hotbar_item=Barra rapida {0}, slot {1}: {2}
-hotbar_error=Errore nella barra rapida
-durability_critical=durabilità critica {0}%
-durability_low=durabilità bassa {0}%
-durability_normal=durabilità {0}%
-durability_full=durabilità completa
-hotbar_info_available=Informazioni barra rapida disponibili
 hotbar_slot_selected=Slot {0} selezionato
 
 # Stato degli Oggetti
 equipped=, equipaggiato
 
 # Elementi UI
-stats_button=Pulsante statistiche: {0}
-equipment_preset=Preset equipaggiamento: {0}
-crafting_button=Pulsante crafting: {0}
-organize_button=Pulsante organizza: {0}
-quick_action_button=Pulsante azione rapida: {0}
 button=Pulsante: {0}
 tab=Scheda: {0}
-preset=Preset: {0}
-statistics=Statistiche: {0}
-bag=Borsa: {0}
-shortcut=Scorciatoia: {0}
-element=Elemento: {0}
 
 # Messaggi Pop-up
 hold_to_confirm=tieni premuto per confermare
@@ -205,15 +163,6 @@ tile_big_root=Radice grande
 tile_ground_slime=Traccia di melma
 tile_ancient_crystal=Cristallo antico
 tile_chrysalis=Crisalide
-
-# Categorie di Tile
-category_construction=Costruzione
-category_liquid=Liquido
-category_mineral=Minerale
-category_organic=Organico
-category_stone=Pietra
-category_crystal=Cristallo
-category_unknown=Sconosciuto
 
 # Categorie di Materiali dei Tile
 material_earth=Terra
@@ -366,3 +315,31 @@ tileset_alien=alieno
 tileset_oasis=oasi
 tileset_explosive_forest=foresta esplosiva
 tileset_explosive_desert=deserto esplosivo
+
+# Intro/Outro
+intro_skip_message=Tieni premuto spazio per saltare l'intro
+
+# Tutorial Buffer
+session_id=ID sessione
+
+# Inventory Item Actions
+item_grabbed={0} afferrato
+
+# Inventory Section Names
+section_player_inventory=Inventario del giocatore
+section_chest_inventory=Inventario del forziere
+section_crafting_inventory=Inventario di creazione
+section_equipment=Equipaggiamento
+section_pouch=Borsello
+section_unknown=Sezione sconosciuta
+
+# Inventory Buttons
+button_pressed={0}
+button_error=Errore nel premere il pulsante: {0}
+button_sort=Ordina
+button_quick_stack=Impila veloce
+button_lock=Blocca/Sblocca oggetti
+button_quick_stack_nearby=Impila nelle vicinanze
+
+# Player Placed Objects
+player_placed={0} (posizionato)

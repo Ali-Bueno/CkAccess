@@ -10,10 +10,7 @@ cursor_reset_error=Error reseteando cursor
 limit_reached=Límite alcanzado
 cursor_limit_reached=Límite de cursor alcanzado
 primary_action_error=Error en acción primaria: {0}
-placing_at_position=Colocando en posición x={0}, z={1}
-item_placed_at_position={0} colocado en posición x={1}, z={2}
 secondary_action_error=Error en acción secundaria: {0}
-interaction_error=Error en interacción: {0}
 cursor_not_initialized=Cursor no inicializado
 current_position=Posición actual: x={0}, z={1}
 position_reading_error=Error leyendo posición del jugador
@@ -27,23 +24,16 @@ tab_souls=Pestaña: Almas
 tab_number=Pestaña {0}
 navigation_error=Error navegando pestañas: {0}
 selection_error=Error seleccionando objeto: {0}
-empty_slot=Slot vacío
 slot_selection_error=Error en selección de slot: {0}
 skill_error=Error abriendo habilidad: {0}
-click_simulation_error=Error simulando click: {0}
 no_element_selected=Ningún elemento seleccionado
 no_element_selected_secondary=Ningún elemento seleccionado para acción secundaria
 secondary_action_error_ui=Error en acción secundaria: {0}
 empty_slot_no_action=Slot vacío, no hay acción disponible
 secondary_action_performed=Acción secundaria realizada
 secondary_slot_error=Error en acción secundaria de slot: {0}
-right_click_simulation_error=Error simulando click derecho: {0}
 talent_action=Acción en talento: {0}
 talent_selected=Talento seleccionado
-talent_selection_error=Error seleccionando talento: {0}
-skills=Habilidades
-preset_selection_error=Error seleccionando preset: {0}
-preset_selected=Preset seleccionado: {0}
 equipment_preset_selected=Preset de equipo seleccionado
 equipment_preset_selected_generic=Preset de equipo {0} seleccionado
 equipment_preset_error=Error con preset de equipo: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=Ventana de estadísticas alternada
 stats=Estadísticas
 stats_button_activated=Botón de estadísticas activado
 stats_error=Error abriendo estadísticas: {0}
-selected_item=Seleccionado: {0}
 
 # Mensajes de Habilidades y Talentos
 talent_tree_opened=Árbol de talentos abierto: {0}
@@ -93,7 +82,6 @@ dangerous_material={0} de {1} (peligroso)
 area_not_available=Área no disponible
 unknown_position=Posición desconocida
 unknown=Desconocido
-player_position_error=No se pudo obtener la posición del jugador
 cannot_read_player_position=No se puede leer la posición del jugador
 position_reading_error_generic=Error leyendo posición
 empty_area_around=Área vacía alrededor
@@ -110,61 +98,31 @@ available_material={0}: tienes {1}
 and_more_materials=y más materiales
 invalid_recipe=Receta inválida
 cannot_craft_materials=No se puede crear: faltan materiales
-inventory_full=Inventario lleno
 crafted_item=Creado {0}
 crafting_error=Error al crear
 
 # Mensajes de Acciones Directas
 empty_slot_cannot_equip=Slot vacío, no se puede equipar
 item_not_equippable={0} no se puede equipar
-equipment_window_not_open=Ventana de equipamiento no está abierta
 item_equipped={0} equipado
 item_cannot_equip=No se puede equipar {0}
 equip_error=Error al equipar
 empty_slot_cannot_use=Slot vacío, no se puede usar
-item_not_usable={0} no se puede usar
 item_used={0} usado
-item_cannot_use=No se puede usar {0}
 item_placed={0} colocado
 item_action_performed=Acción realizada en {0}
 use_error=Error al usar
-no_crafting_available=No hay crafting disponible
-crafting_station_available=Estación de crafting disponible, usa las recetas del inventario
-select_recipe_item=Selecciona un item de receta
-recipe_item_detected=Receta detectada: {0}
-not_a_recipe=Este item no es una receta
-craft_error=Error al craftear
 
 # Mensajes del Hotbar
-hotbar_changed=Hotbar {0} seleccionado
-no_weapon_equipped=Sin arma equipada
 empty_hotbar_slot=Slot de hotbar vacío
-unknown=Desconocido
-current_hotbar_item=Hotbar {0}, slot {1}: {2}
-hotbar_error=Error en hotbar
-durability_critical=durabilidad crítica {0}%
-durability_low=durabilidad baja {0}%
-durability_normal=durabilidad {0}%
-durability_full=durabilidad completa
-hotbar_info_available=Información del hotbar disponible
 hotbar_slot_selected=Slot {0} seleccionado
 
 # Estado de Objetos
 equipped=, equipado
 
 # Elementos UI
-stats_button=Botón de estadísticas: {0}
-equipment_preset=Preset de equipo: {0}
-crafting_button=Botón de crafteo: {0}
-organize_button=Botón de organizar: {0}
-quick_action_button=Botón de acción rápida: {0}
 button=Botón: {0}
 tab=Pestaña: {0}
-preset=Preset: {0}
-statistics=Estadísticas: {0}
-bag=Bolsa: {0}
-shortcut=Atajo: {0}
-element=Elemento: {0}
 
 # Mensajes Pop-up
 hold_to_confirm=mantén pulsado para confirmar
@@ -205,15 +163,6 @@ tile_big_root=Raíz grande
 tile_ground_slime=Rastro de slime
 tile_ancient_crystal=Cristal antiguo
 tile_chrysalis=Crisálida
-
-# Categorías de Tiles
-category_construction=Construcción
-category_liquid=Líquido
-category_mineral=Mineral
-category_organic=Orgánico
-category_stone=Piedra
-category_crystal=Cristal
-category_unknown=Desconocido
 
 # Categorías de Materiales de Tiles
 material_earth=Tierra
@@ -265,6 +214,7 @@ inventory_opened=Inventario abierto
 inventory_closed=Inventario cerrado
 character_window_opened=Ventana de personaje abierta
 character_window_closed=Ventana de personaje cerrada
+
 # Mensajes del Sistema de Notificaciones
 item_picked_single=Recogido: {0}
 item_picked_multiple=Recogido: {0} x{1}
@@ -305,12 +255,12 @@ enemy_bat=Murciélago
 enemy_rat=Rata
 enemy_boss=Jefe
 
-# Notification System Messages
+# Navegación de Notificaciones
 no_notifications=No hay notificaciones
 first_notification=Primera notificación
 last_notification=Última notificación
 
-# Object Category Descriptions
+# Descripciones de Categorías de Objetos
 category_core=Núcleo
 category_chest=Cofre
 category_workstation=Estación de trabajo
@@ -327,14 +277,14 @@ category_door=Puerta
 category_statue=Estatua
 category_unknown=Objeto desconocido
 
-# Entity Type Prefixes
+# Prefijos de Tipos de Entidad
 prefix_animal=Animal
 prefix_creature=Criatura
 prefix_statue=Estatua
 prefix_furniture=Mueble
 prefix_structure=Estructura
 
-# Additional Tileset Names
+# Nombres Adicionales de Tileset
 tileset_extras=extras
 tileset_base_building_wood=construcción de madera
 tileset_larva_hive=panal de larvas
@@ -367,45 +317,16 @@ tileset_oasis=oasis
 tileset_explosive_forest=bosque explosivo
 tileset_explosive_desert=desierto explosivo
 
-# Mensajes de Interacción
-interact_available=Presiona E para interactuar con {0}
-interactable_object=objeto
-object_type_chest=cofre
-object_type_door=puerta
-object_type_workstation=estación de trabajo
-
 # Intro/Outro
 intro_skip_message=Mantén espacio para saltar la introducción
 
-# Tutorial Buffer
-no_tutorials=No hay tutoriales en el buffer
+# Buffer de Tutoriales
 session_id=ID de sesión
 
-# Sistema de Drop/Tirar objetos
-cannot_drop_this=No se puede tirar este elemento
-drop_error=Error al tirar: {0}
-player_not_found=Jugador no encontrado
-cannot_drop_from_this_inventory=No se puede tirar desde este inventario
-dropped_all=Tirado {0} x{1}
-dropped_one=Tirado {0}
-drop_item_error=Error tirando objeto: {0}
-
-# Accesibilidad mejorada de inventario
-slot_selected={0} seleccionado
-slot_selected_with_amount={0} x{1} seleccionado
-empty_slot_with_held_item=Slot vacío. Tienes {0} en la mano
-actions_with_held_item=Presiona U para colocar, O para colocar mitad
-actions_transfer_or_drop=Shift+U para transferir a {0}, Q para tirar
-actions_take_or_move=U para tomar, Shift+U para mover al inventario
-actions_normal=U para agarrar, O para agarrar mitad, Q para tirar
-chest=cofre
-crafting_station=estación de crafteo
-item_transferred_to=Transferido a {0}
-item_taken_from=Tomado de {0}
-item_placed={0} colocado
+# Acciones de Items en Inventario
 item_grabbed={0} agarrado
 
-# Inventory Section Names
+# Nombres de Secciones de Inventario
 section_player_inventory=Inventario del jugador
 section_chest_inventory=Inventario del cofre
 section_crafting_inventory=Inventario de crafteo
@@ -413,10 +334,13 @@ section_equipment=Equipamiento
 section_pouch=Bolsa
 section_unknown=Sección desconocida
 
-# Inventory Buttons
+# Botones de Inventario
 button_pressed={0}
 button_error=Error al presionar el botón: {0}
 button_sort=Ordenar
 button_quick_stack=Apilar rápidamente
 button_lock=Bloquear/Desbloquear objetos
 button_quick_stack_nearby=Apilar en cercanos
+
+# Objetos Colocados por el Jugador
+player_placed={0} (colocado)

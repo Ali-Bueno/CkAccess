@@ -10,10 +10,7 @@ cursor_reset_error=Fehler beim Zurücksetzen des Cursors
 limit_reached=Grenze erreicht
 cursor_limit_reached=Cursor limit reached
 primary_action_error=Fehler bei primärer Aktion: {0}
-placing_at_position=Platzierung an Position x={0}, z={1}
-item_placed_at_position={0} platziert an Position x={1}, z={2}
 secondary_action_error=Fehler bei sekundärer Aktion: {0}
-interaction_error=Fehler bei Interaktion: {0}
 cursor_not_initialized=Cursor nicht initialisiert
 current_position=Aktuelle Position: x={0}, z={1}
 position_reading_error=Fehler beim Lesen der Spielerposition
@@ -27,23 +24,16 @@ tab_souls=Tab: Seelen
 tab_number=Tab {0}
 navigation_error=Fehler beim Navigieren der Tabs: {0}
 selection_error=Fehler beim Auswählen des Objekts: {0}
-empty_slot=Leerer Slot
 slot_selection_error=Fehler bei Slot-Auswahl: {0}
 skill_error=Fehler beim Öffnen der Fähigkeit: {0}
-click_simulation_error=Fehler beim Simulieren des Klicks: {0}
 no_element_selected=Kein Element ausgewählt
 no_element_selected_secondary=Kein Element für sekundäre Aktion ausgewählt
 secondary_action_error_ui=Fehler bei sekundärer Aktion: {0}
 empty_slot_no_action=Leerer Slot, keine Aktion verfügbar
 secondary_action_performed=Sekundäre Aktion ausgeführt
 secondary_slot_error=Fehler bei sekundärer Slot-Aktion: {0}
-right_click_simulation_error=Fehler beim Simulieren des Rechtsklicks: {0}
 talent_action=Aktion bei Talent: {0}
 talent_selected=Talent ausgewählt
-talent_selection_error=Fehler beim Auswählen des Talents: {0}
-skills=Fähigkeiten
-preset_selection_error=Fehler beim Auswählen der Voreinstellung: {0}
-preset_selected=Voreinstellung ausgewählt: {0}
 equipment_preset_selected=Ausrüstungsvoreinstellung ausgewählt
 equipment_preset_selected_generic=Ausrüstungsvoreinstellung {0} ausgewählt
 equipment_preset_error=Fehler mit Ausrüstungsvoreinstellung: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=Statistikfenster umgeschaltet
 stats=Statistiken
 stats_button_activated=Statistik-Button aktiviert
 stats_error=Fehler beim Öffnen der Statistiken: {0}
-selected_item=Ausgewählt: {0}
 
 # Fähigkeiten- und Talent-Nachrichten
 talent_tree_opened=Talentbaum geöffnet: {0}
@@ -93,7 +82,6 @@ dangerous_material={0} aus {1} (gefährlich)
 area_not_available=Bereich nicht verfügbar
 unknown_position=Unbekannte Position
 unknown=Unbekannt
-player_position_error=Spielerposition konnte nicht ermittelt werden
 cannot_read_player_position=Spielerposition kann nicht gelesen werden
 position_reading_error_generic=Fehler beim Lesen der Position
 empty_area_around=Leerer Bereich rundherum
@@ -110,61 +98,31 @@ available_material={0}: vorhanden {1}
 and_more_materials=und weitere Materialien
 invalid_recipe=Ungültiges Rezept
 cannot_craft_materials=Kann nicht hergestellt werden: Materialien fehlen
-inventory_full=Inventar voll
 crafted_item={0} hergestellt
 crafting_error=Fehler beim Herstellen
 
 # Direkte Aktionen-Nachrichten
 empty_slot_cannot_equip=Leerer Slot, kann nicht ausgerüstet werden
 item_not_equippable={0} kann nicht ausgerüstet werden
-equipment_window_not_open=Ausrüstungsfenster ist nicht geöffnet
 item_equipped={0} ausgerüstet
 item_cannot_equip=Kann {0} nicht ausrüsten
 equip_error=Fehler beim Ausrüsten
 empty_slot_cannot_use=Leerer Slot, kann nicht verwendet werden
-item_not_usable={0} kann nicht verwendet werden
 item_used={0} verwendet
-item_cannot_use=Kann {0} nicht verwenden
 item_placed={0} platziert
 item_action_performed=Aktion ausgeführt bei {0}
 use_error=Fehler beim Verwenden
-no_crafting_available=Kein Crafting verfügbar
-crafting_station_available=Crafting-Station verfügbar, verwende Inventarrezepte
-select_recipe_item=Wähle ein Rezept-Item
-recipe_item_detected=Rezept erkannt: {0}
-not_a_recipe=Dieses Item ist kein Rezept
-craft_error=Fehler beim Craften
 
 # Hotbar-Nachrichten
-hotbar_changed=Hotbar {0} ausgewählt
-no_weapon_equipped=Keine Waffe ausgerüstet
 empty_hotbar_slot=Leerer Hotbar-Slot
-unknown=Unbekannt
-current_hotbar_item=Hotbar {0}, Slot {1}: {2}
-hotbar_error=Hotbar-Fehler
-durability_critical=kritische Haltbarkeit {0}%
-durability_low=niedrige Haltbarkeit {0}%
-durability_normal=Haltbarkeit {0}%
-durability_full=volle Haltbarkeit
-hotbar_info_available=Hotbar-Information verfügbar
 hotbar_slot_selected=Slot {0} ausgewählt
 
 # Objektstatus
 equipped=, ausgerüstet
 
 # UI-Elemente
-stats_button=Statistik-Button: {0}
-equipment_preset=Ausrüstungsvoreinstellung: {0}
-crafting_button=Crafting-Button: {0}
-organize_button=Organisieren-Button: {0}
-quick_action_button=Schnellaktion-Button: {0}
 button=Button: {0}
 tab=Tab: {0}
-preset=Voreinstellung: {0}
-statistics=Statistiken: {0}
-bag=Tasche: {0}
-shortcut=Tastenkürzel: {0}
-element=Element: {0}
 
 # Pop-up-Nachrichten
 hold_to_confirm=halten zum Bestätigen
@@ -205,15 +163,6 @@ tile_big_root=Große Wurzel
 tile_ground_slime=Schleimspur
 tile_ancient_crystal=Alter Kristall
 tile_chrysalis=Chrysalis
-
-# Kachelkategorien
-category_construction=Konstruktion
-category_liquid=Flüssigkeit
-category_mineral=Mineral
-category_organic=Organisch
-category_stone=Stein
-category_crystal=Kristall
-category_unknown=Unbekannt
 
 # Kachelmaterialkategorien
 material_earth=Erde
@@ -367,3 +316,31 @@ tileset_alien=Außerirdisch
 tileset_oasis=Oase
 tileset_explosive_forest=Explosiver Wald
 tileset_explosive_desert=Explosive Wüste
+
+# Intro/Outro
+intro_skip_message=Leertaste gedrückt halten, um das Intro zu überspringen
+
+# Tutorial Buffer
+session_id=Sitzungs-ID
+
+# Inventory Item Actions
+item_grabbed={0} aufgehoben
+
+# Inventory Section Names
+section_player_inventory=Spielerinventar
+section_chest_inventory=Truheninventar
+section_crafting_inventory=Herstellungsinventar
+section_equipment=Ausrüstung
+section_pouch=Beutel
+section_unknown=Unbekannter Bereich
+
+# Inventory Buttons
+button_pressed={0}
+button_error=Fehler beim Drücken des Buttons: {0}
+button_sort=Sortieren
+button_quick_stack=Schnell stapeln
+button_lock=Objekte sperren/entsperren
+button_quick_stack_nearby=In der Nähe stapeln
+
+# Player Placed Objects
+player_placed={0} (platziert)

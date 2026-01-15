@@ -10,10 +10,7 @@ cursor_reset_error=Erreur lors de la réinitialisation du curseur
 limit_reached=Limite atteinte
 cursor_limit_reached=Cursor limit reached
 primary_action_error=Erreur dans l'action primaire : {0}
-placing_at_position=Placement à la position x={0}, z={1}
-item_placed_at_position={0} placé à la position x={1}, z={2}
 secondary_action_error=Erreur dans l'action secondaire : {0}
-interaction_error=Erreur lors de l'interaction : {0}
 cursor_not_initialized=Curseur non initialisé
 current_position=Position actuelle : x={0}, z={1}
 position_reading_error=Erreur lors de la lecture de la position du joueur
@@ -27,23 +24,16 @@ tab_souls=Onglet : Âmes
 tab_number=Onglet {0}
 navigation_error=Erreur de navigation des onglets : {0}
 selection_error=Erreur lors de la sélection de l'objet : {0}
-empty_slot=Emplacement vide
 slot_selection_error=Erreur de sélection d'emplacement : {0}
 skill_error=Erreur lors de l'ouverture de la compétence : {0}
-click_simulation_error=Erreur lors de la simulation du clic : {0}
 no_element_selected=Aucun élément sélectionné
 no_element_selected_secondary=Aucun élément sélectionné pour l'action secondaire
 secondary_action_error_ui=Erreur dans l'action secondaire : {0}
 empty_slot_no_action=Emplacement vide, aucune action disponible
 secondary_action_performed=Action secondaire effectuée
 secondary_slot_error=Erreur dans l'action secondaire de l'emplacement : {0}
-right_click_simulation_error=Erreur lors de la simulation du clic droit : {0}
 talent_action=Action sur le talent : {0}
 talent_selected=Talent sélectionné
-talent_selection_error=Erreur lors de la sélection du talent : {0}
-skills=Compétences
-preset_selection_error=Erreur lors de la sélection du préréglage : {0}
-preset_selected=Préréglage sélectionné : {0}
 equipment_preset_selected=Préréglage d'équipement sélectionné
 equipment_preset_selected_generic=Préréglage d'équipement {0} sélectionné
 equipment_preset_error=Erreur avec le préréglage d'équipement : {0}
@@ -52,7 +42,6 @@ stats_window_toggled=Fenêtre de statistiques basculée
 stats=Statistiques
 stats_button_activated=Bouton de statistiques activé
 stats_error=Erreur lors de l'ouverture des statistiques : {0}
-selected_item=Sélectionné : {0}
 
 # Messages de compétences et talents
 talent_tree_opened=Arbre de talents ouvert : {0}
@@ -93,7 +82,6 @@ dangerous_material={0} en {1} (dangereux)
 area_not_available=Zone non disponible
 unknown_position=Position inconnue
 unknown=Inconnu
-player_position_error=Impossible d'obtenir la position du joueur
 cannot_read_player_position=Impossible de lire la position du joueur
 position_reading_error_generic=Erreur lors de la lecture de la position
 empty_area_around=Zone vide autour
@@ -110,61 +98,31 @@ available_material={0} : disponibles {1}
 and_more_materials=et plus de matériaux
 invalid_recipe=Recette invalide
 cannot_craft_materials=Ne peut pas être fabriqué : matériaux manquants
-inventory_full=Inventaire plein
 crafted_item={0} fabriqué
 crafting_error=Erreur lors de la fabrication
 
 # Messages d'actions directes
 empty_slot_cannot_equip=Emplacement vide, impossible d'équiper
 item_not_equippable={0} ne peut pas être équipé
-equipment_window_not_open=Fenêtre d'équipement non ouverte
 item_equipped={0} équipé
 item_cannot_equip=Impossible d'équiper {0}
 equip_error=Erreur lors de l'équipement
 empty_slot_cannot_use=Emplacement vide, impossible d'utiliser
-item_not_usable={0} ne peut pas être utilisé
 item_used={0} utilisé
-item_cannot_use=Impossible d'utiliser {0}
 item_placed={0} placé
 item_action_performed=Action effectuée sur {0}
 use_error=Erreur lors de l'utilisation
-no_crafting_available=Aucun artisanat disponible
-crafting_station_available=Station d'artisanat disponible, utilisez les recettes de l'inventaire
-select_recipe_item=Sélectionnez un objet de recette
-recipe_item_detected=Recette détectée : {0}
-not_a_recipe=Cet objet n'est pas une recette
-craft_error=Erreur lors de la fabrication
 
 # Messages de la barre d'action rapide
-hotbar_changed=Barre d'action {0} sélectionnée
-no_weapon_equipped=Aucune arme équipée
 empty_hotbar_slot=Emplacement de barre vide
-unknown=Inconnu
-current_hotbar_item=Barre {0}, emplacement {1} : {2}
-hotbar_error=Erreur de barre d'action
-durability_critical=durabilité critique {0}%
-durability_low=faible durabilité {0}%
-durability_normal=durabilité {0}%
-durability_full=durabilité complète
-hotbar_info_available=Information de barre disponible
 hotbar_slot_selected=Emplacement {0} sélectionné
 
 # État des objets
 equipped=, équipé
 
 # Éléments UI
-stats_button=Bouton de statistiques : {0}
-equipment_preset=Préréglage d'équipement : {0}
-crafting_button=Bouton d'artisanat : {0}
-organize_button=Bouton d'organisation : {0}
-quick_action_button=Bouton d'action rapide : {0}
 button=Bouton : {0}
 tab=Onglet : {0}
-preset=Préréglage : {0}
-statistics=Statistiques : {0}
-bag=Sac : {0}
-shortcut=Raccourci : {0}
-element=Élément : {0}
 
 # Messages pop-up
 hold_to_confirm=maintenir pour confirmer
@@ -205,15 +163,6 @@ tile_big_root=Grande racine
 tile_ground_slime=Trace de slime
 tile_ancient_crystal=Cristal antique
 tile_chrysalis=Chrysalide
-
-# Catégories de tuiles
-category_construction=Construction
-category_liquid=Liquide
-category_mineral=Minéral
-category_organic=Organique
-category_stone=Pierre
-category_crystal=Cristal
-category_unknown=Inconnu
 
 # Catégories de matériaux de tuiles
 material_earth=Terre
@@ -367,3 +316,31 @@ tileset_alien=alien
 tileset_oasis=oasis
 tileset_explosive_forest=forêt explosive
 tileset_explosive_desert=désert explosif
+
+# Intro/Outro
+intro_skip_message=Maintenez espace pour passer l'intro
+
+# Tutorial Buffer
+session_id=ID de session
+
+# Inventory Item Actions
+item_grabbed={0} saisi
+
+# Inventory Section Names
+section_player_inventory=Inventaire du joueur
+section_chest_inventory=Inventaire du coffre
+section_crafting_inventory=Inventaire de fabrication
+section_equipment=Équipement
+section_pouch=Pochette
+section_unknown=Section inconnue
+
+# Inventory Buttons
+button_pressed={0}
+button_error=Erreur lors de l'appui sur le bouton : {0}
+button_sort=Trier
+button_quick_stack=Empilage rapide
+button_lock=Verrouiller/Déverrouiller objets
+button_quick_stack_nearby=Empiler à proximité
+
+# Player Placed Objects
+player_placed={0} (placé)

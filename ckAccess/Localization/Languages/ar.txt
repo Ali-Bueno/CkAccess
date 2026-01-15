@@ -10,10 +10,7 @@ cursor_reset_error=خطأ في إعادة تعيين المؤشر
 limit_reached=تم الوصول إلى الحد
 cursor_limit_reached=Cursor limit reached
 primary_action_error=خطأ في الإجراء الأساسي: {0}
-placing_at_position=الوضع في الموضع x={0}, z={1}
-item_placed_at_position={0} تم وضعه في الموضع x={1}, z={2}
 secondary_action_error=خطأ في الإجراء الثانوي: {0}
-interaction_error=خطأ في التفاعل: {0}
 cursor_not_initialized=المؤشر غير مهيأ
 current_position=الموضع الحالي: x={0}, z={1}
 position_reading_error=خطأ في قراءة موضع اللاعب
@@ -27,23 +24,16 @@ tab_souls=علامة التبويب: الأرواح
 tab_number=علامة التبويب {0}
 navigation_error=خطأ في التنقل بين علامات التبويب: {0}
 selection_error=خطأ في اختيار الكائن: {0}
-empty_slot=فتحة فارغة
 slot_selection_error=خطأ في اختيار الفتحة: {0}
 skill_error=خطأ في فتح المهارة: {0}
-click_simulation_error=خطأ في محاكاة النقر: {0}
 no_element_selected=لم يتم تحديد أي عنصر
 no_element_selected_secondary=لم يتم تحديد أي عنصر للإجراء الثانوي
 secondary_action_error_ui=خطأ في الإجراء الثانوي: {0}
 empty_slot_no_action=فتحة فارغة، لا يوجد إجراء متاح
 secondary_action_performed=تم تنفيذ الإجراء الثانوي
 secondary_slot_error=خطأ في الإجراء الثانوي للفتحة: {0}
-right_click_simulation_error=خطأ في محاكاة النقر بالزر الأيمن: {0}
 talent_action=إجراء على الموهبة: {0}
 talent_selected=تم تحديد الموهبة
-talent_selection_error=خطأ في تحديد الموهبة: {0}
-skills=المهارات
-preset_selection_error=خطأ في تحديد الإعداد المسبق: {0}
-preset_selected=تم تحديد الإعداد المسبق: {0}
 equipment_preset_selected=تم تحديد إعداد المعدات المسبق
 equipment_preset_selected_generic=تم تحديد إعداد المعدات المسبق {0}
 equipment_preset_error=خطأ في إعداد المعدات المسبق: {0}
@@ -52,7 +42,6 @@ stats_window_toggled=تم تبديل نافذة الإحصائيات
 stats=الإحصائيات
 stats_button_activated=تم تفعيل زر الإحصائيات
 stats_error=خطأ في فتح الإحصائيات: {0}
-selected_item=محدد: {0}
 
 # رسائل المهارات والمواهب
 talent_tree_opened=تم فتح شجرة المواهب: {0}
@@ -93,7 +82,6 @@ dangerous_material={0} من {1} (خطر)
 area_not_available=المنطقة غير متاحة
 unknown_position=موضع غير معروف
 unknown=غير معروف
-player_position_error=تعذر الحصول على موضع اللاعب
 cannot_read_player_position=لا يمكن قراءة موضع اللاعب
 position_reading_error_generic=خطأ في قراءة الموضع
 empty_area_around=منطقة فارغة حولك
@@ -110,61 +98,31 @@ available_material={0}: لديك {1}
 and_more_materials=ومواد أخرى
 invalid_recipe=وصفة غير صالحة
 cannot_craft_materials=لا يمكن التصنيع: المواد مفقودة
-inventory_full=المخزون ممتلئ
 crafted_item=تم تصنيع {0}
 crafting_error=خطأ في التصنيع
 
 # رسائل الإجراءات المباشرة
 empty_slot_cannot_equip=فتحة فارغة، لا يمكن التجهيز
 item_not_equippable={0} لا يمكن تجهيزه
-equipment_window_not_open=نافذة المعدات غير مفتوحة
 item_equipped={0} تم تجهيزه
 item_cannot_equip=لا يمكن تجهيز {0}
 equip_error=خطأ في التجهيز
 empty_slot_cannot_use=فتحة فارغة، لا يمكن الاستخدام
-item_not_usable={0} لا يمكن استخدامه
 item_used={0} تم استخدامه
-item_cannot_use=لا يمكن استخدام {0}
 item_placed={0} تم وضعه
 item_action_performed=تم تنفيذ إجراء على {0}
 use_error=خطأ في الاستخدام
-no_crafting_available=لا يوجد تصنيع متاح
-crafting_station_available=محطة تصنيع متاحة، استخدم الوصفات من المخزون
-select_recipe_item=حدد عنصر وصفة
-recipe_item_detected=تم اكتشاف وصفة: {0}
-not_a_recipe=هذا العنصر ليس وصفة
-craft_error=خطأ في التصنيع
 
 # رسائل شريط الاختصارات
-hotbar_changed=تم تحديد شريط الاختصارات {0}
-no_weapon_equipped=لا يوجد سلاح مجهز
 empty_hotbar_slot=فتحة شريط اختصارات فارغة
-unknown=غير معروف
-current_hotbar_item=شريط الاختصارات {0}، الفتحة {1}: {2}
-hotbar_error=خطأ في شريط الاختصارات
-durability_critical=متانة حرجة {0}%
-durability_low=متانة منخفضة {0}%
-durability_normal=متانة {0}%
-durability_full=متانة كاملة
-hotbar_info_available=معلومات شريط الاختصارات متاحة
 hotbar_slot_selected=تم تحديد الفتحة {0}
 
 # حالة الأشياء
 equipped=، مجهز
 
 # عناصر واجهة المستخدم
-stats_button=زر الإحصائيات: {0}
-equipment_preset=إعداد المعدات المسبق: {0}
-crafting_button=زر التصنيع: {0}
-organize_button=زر التنظيم: {0}
-quick_action_button=زر الإجراء السريع: {0}
 button=زر: {0}
 tab=علامة التبويب: {0}
-preset=إعداد مسبق: {0}
-statistics=إحصائيات: {0}
-bag=حقيبة: {0}
-shortcut=اختصار: {0}
-element=عنصر: {0}
 
 # رسائل منبثقة
 hold_to_confirm=اضغط مع الاستمرار للتأكيد
@@ -205,15 +163,6 @@ tile_big_root=جذر كبير
 tile_ground_slime=أثر سلايم
 tile_ancient_crystal=بلورة قديمة
 tile_chrysalis=شرنقة
-
-# فئات البلاط
-category_construction=بناء
-category_liquid=سائل
-category_mineral=معدن
-category_organic=عضوي
-category_stone=حجر
-category_crystal=بلورة
-category_unknown=غير معروف
 
 # فئات مواد البلاط
 material_earth=تراب
@@ -366,3 +315,31 @@ tileset_alien=كائن فضائي
 tileset_oasis=واحة
 tileset_explosive_forest=غابة متفجرة
 tileset_explosive_desert=صحراء متفجرة
+
+# Intro/Outro
+intro_skip_message=اضغط مع الاستمرار على مفتاح المسافة لتخطي المقدمة
+
+# Tutorial Buffer
+session_id=معرف الجلسة
+
+# Inventory Item Actions
+item_grabbed={0} تم الإمساك به
+
+# Inventory Section Names
+section_player_inventory=مخزون اللاعب
+section_chest_inventory=مخزون الصندوق
+section_crafting_inventory=مخزون التصنيع
+section_equipment=المعدات
+section_pouch=الحقيبة
+section_unknown=قسم غير معروف
+
+# Inventory Buttons
+button_pressed={0}
+button_error=خطأ في الضغط على الزر: {0}
+button_sort=ترتيب
+button_quick_stack=تكديس سريع
+button_lock=قفل/فتح العناصر
+button_quick_stack_nearby=تكديس في القريب
+
+# Player Placed Objects
+player_placed={0} (موضوع)
