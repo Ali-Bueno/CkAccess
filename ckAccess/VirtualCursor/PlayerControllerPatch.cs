@@ -64,12 +64,32 @@ namespace ckAccess.VirtualCursor
                 }
 
                 if (aimUI != null) aimUI.UpdateAimPosition();
-                
+
                 // IMPORTANTE: Retornar false para saltar lógica original y usar nuestro aim
                 return false;
             }
 
-            // PRIORIDAD 2: Cursor virtual (si está activo)
+            // PRIORIDAD 2: Asistencia de minería (solo con pico) - apuntar al mineral más cercano.
+            // UpdateAim is a STATIC method, so there is no __instance; use the local player instead.
+            var resourcePos = Patches.Player.MiningAssist.GetResourceTargetPosition(ckAccess.Helpers.LocalPlayerHelper.GetLocalPlayer());
+            if (resourcePos.HasValue)
+            {
+                Vector3 playerPosVec = new Vector3(pos.x, pos.y, pos.z);
+                Vector3 dir = new Vector3(resourcePos.Value.x, resourcePos.Value.y, resourcePos.Value.z) - playerPosVec;
+                dir.y = 0;
+
+                if (dir.sqrMagnitude > 0.001f)
+                {
+                    aimDirection = math.normalizesafe(new float3(dir.x, dir.y, dir.z));
+                    if (math.all(aimDirection == float3.zero))
+                        aimDirection = new float3(0f, 0f, -1f);
+                }
+
+                if (aimUI != null) aimUI.UpdateAimPosition();
+                return false;
+            }
+
+            // PRIORIDAD 3: Cursor virtual (si está activo)
             // Usamos PlayerInputPatch porque es quien tiene la lógica de "Stick Derecho Virtual"
             if (PlayerInputPatch.HasActiveCursor())
             {

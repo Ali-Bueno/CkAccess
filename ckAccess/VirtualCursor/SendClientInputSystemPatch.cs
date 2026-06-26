@@ -46,7 +46,15 @@ namespace ckAccess.VirtualCursor
                     return;
                 }
 
-                // PRIORIDAD 2: Cursor virtual (si está activo y alejado del jugador)
+                // PRIORIDAD 2: Asistencia de minería (solo con pico, apunta al mineral más cercano al aim)
+                var resourcePos = Patches.Player.MiningAssist.GetResourceTargetPosition(playerController);
+                if (resourcePos.HasValue)
+                {
+                    __result = new float2(resourcePos.Value.x, resourcePos.Value.z);
+                    return;
+                }
+
+                // PRIORIDAD 3: Cursor virtual (si está activo y alejado del jugador)
                 if (PlayerInputPatch.HasActiveCursor())
                 {
                     Vector3 virtualCursorPos = PlayerInputPatch.GetVirtualCursorPosition();
