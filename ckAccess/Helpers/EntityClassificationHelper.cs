@@ -132,22 +132,20 @@ namespace ckAccess.Helpers
                 if (IsPlayerMinion(em, entityData))
                     return false;
 
-                // Verificar si tiene componentes de enemigo activo
-                // ChaseStateCD indica que el enemigo está persiguiendo (activo)
-                if (HasComponent(em, entityData, "ChaseStateCD"))
+                // EnemyCD is the game's marker for an enemy (idle OR active) — the reliable signal.
+                // This replaces the June-removed CombatantCD and uses a compile-checked component
+                // (not string reflection), so idle enemies are detected again.
+                if (em.HasComponent<PugComps.EnemyCD>(entityData))
                     return true;
 
-                // Verificar estados de ataque
-                if (HasComponent(em, entityData, "MeleeAttackStateCD") ||
+                // Secondary: active combat states, in case something is mid-fight but somehow untagged.
+                if (HasComponent(em, entityData, "ChaseStateCD") ||
+                    HasComponent(em, entityData, "MeleeAttackStateCD") ||
                     HasComponent(em, entityData, "ChargeAttackStateCD") ||
                     HasComponent(em, entityData, "BeamAttackStateCD"))
                     return true;
 
-                // Verificar si está siendo trackeado como combatiente
-                if (HasComponent(em, entityData, "CombatantCD"))
-                    return true;
-
-                // Fallback a detección por nombre
+                // Fallback to name-based detection.
                 return IsEnemyByName(entity);
             }
             catch

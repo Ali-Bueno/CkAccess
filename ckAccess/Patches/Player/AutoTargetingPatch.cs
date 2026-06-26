@@ -233,22 +233,13 @@ namespace ckAccess.Patches.Player
         {
             try
             {
-                var inventoryHandler = player.playerInventoryHandler;
-                if (inventoryHandler == null)
-                    return AUTO_TARGET_BASE_RANGE;
+                // Use the ACTUALLY equipped/held item (not the first hotbar slot) so ranged/magic weapons get
+                // their proper longer range instead of whatever happens to sit in slot 0.
+                var held = player.GetHeldObject();
+                if (held.objectID != ObjectID.None)
+                    return EntityClassificationHelper.GetWeaponRange(held.objectID);
 
-                // Buscar el primer item equipado en el hotbar
-                for (int i = 0; i < 10; i++)
-                {
-                    var itemData = inventoryHandler.GetContainedObjectData(i);
-                    if (itemData.objectID != ObjectID.None)
-                    {
-                        // Usar el helper centralizado para obtener el rango basado en ObjectType
-                        return EntityClassificationHelper.GetWeaponRange(itemData.objectID);
-                    }
-                }
-
-                return TOOL_RANGE; // Sin items equipados
+                return TOOL_RANGE; // Empty hands
             }
             catch
             {
