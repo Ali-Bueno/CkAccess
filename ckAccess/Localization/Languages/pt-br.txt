@@ -343,3 +343,6 @@ button_quick_stack_nearby=Empilhar em baús próximos
 
 # Player Placed Objects
 player_placed={0} (colocado)
+
+# Biome Announcer
+biome_entered=Entrou em {0}
