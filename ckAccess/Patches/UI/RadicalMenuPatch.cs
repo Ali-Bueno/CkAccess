@@ -157,9 +157,11 @@ namespace ckAccess.Patches.UI
             }
             else
             {
-                int currentIndex = option.customizationTable.GetIndexFromId(option.bodyPartType, option.playerController.GetActiveCustomizableBodypart(option.bodyPartType)) + 1;
-                int maxVariations = option.customizationTable.GetMaxVariations(option.bodyPartType, 0);
-                string valueText = $"Style {currentIndex} of {maxVariations}";
+                // The June game update refactored character customization: the old
+                // option.customizationTable / playerController.GetActiveCustomizableBodypart APIs
+                // no longer exist. The per-body-part style index now lives in private fields on
+                // CharacterCustomizationMenu, which we read via reflection to announce the style.
+                string valueText = GetAppearanceStyleText(option);
 
                 if (valueOnly)
                 {
@@ -168,9 +170,50 @@ namespace ckAccess.Patches.UI
                 else
                 {
                     string labelText = UIManager.GetLocalizedText(option.labelText.GetText());
-                    return $"{labelText}, {valueText}";
+                    return string.IsNullOrEmpty(valueText) ? labelText : $"{labelText}, {valueText}";
                 }
             }
+        }
+
+        /// <summary>
+        /// Builds the spoken "Style N" text for an appearance (non-role) customization option,
+        /// using the June game API where the current index is a private field on the menu.
+        /// </summary>
+        private static string GetAppearanceStyleText(PugOther.CharacterCustomizationOption_Selection option)
+        {
+            try
+            {
+                var menu = option.customizationMenu;
+                if (menu == null) return "";
+
+                // Map the body-part enum (by int value) to its private index field on the menu.
+                // Enum order: Body, SkinColor, Hair, HairColor, EyeColor, ShirtColor, PantsColor.
+                string fieldName = (int)option.bodyPartType switch
+                {
+                    0 => "_bodyIndex",
+                    1 => "_skinColorIndex",
+                    2 => "_hairIndex",
+                    3 => "_hairColorIndex",
+                    4 => "_eyesColorIndex",
+                    5 => "_shirtColorIndex",
+                    6 => "_pantsColorIndex",
+                    _ => null
+                };
+                if (fieldName == null) return "";
+
+                var field = menu.GetType().GetField(fieldName,
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (field != null)
+                {
+                    int index = (int)field.GetValue(menu);
+                    return $"Style {index + 1}";
+                }
+            }
+            catch (System.Exception e)
+            {
+                Logger.LogError($"Error reading appearance style: {e}");
+            }
+            return "";
         }
 
         private static string GetMoreOptionsTranslation()
