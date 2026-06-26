@@ -5,6 +5,7 @@ using HarmonyLib;
 using DavyKager;
 using ckAccess.MapReader;
 using ckAccess.Helpers;
+using ckAccess.Localization;
 using UnityEngine;
 using Vector3 = Core::UnityEngine.Vector3;
 using Mathf = Core::UnityEngine.Mathf;
@@ -22,6 +23,11 @@ namespace ckAccess.VirtualCursor
         private static string _lastAnnouncedTile = null;
         private static Vector3 _lastAnnouncedPosition = new Vector3(float.MinValue, 0, float.MinValue);
         private static Vector3 _lastPlayerPosition = Vector3.zero;
+
+        // Cache del último objeto importante anunciado (para no repetirlo mientras sigue siendo el mismo)
+        private static string _lastPriorityName = null;
+        private static int _lastPriorityKeyX = int.MinValue;
+        private static int _lastPriorityKeyZ = int.MinValue;
 
         // Distancia en frente del jugador (1 tile adelante)
         private const float AHEAD_DISTANCE = 1.0f;
@@ -76,6 +82,14 @@ namespace ckAccess.VirtualCursor
                     return;
                 }
 
+                // PRIORIDAD: si hay un objeto importante en rango (enemigo > interactuable > veta > minable),
+                // anunciarlo en vez del tile normal. El sonar de viento sigue cubriendo las paredes.
+                if (TryAnnouncePriorityObject(playerPos))
+                {
+                    _lastPlayerPosition = playerPos;
+                    return;
+                }
+
                 // El jugador se movió, calcular dirección del movimiento
                 Vector3 movementDirection = new Vector3(movement.x, 0, movement.z).normalized;
 
@@ -123,6 +137,48 @@ namespace ckAccess.VirtualCursor
         }
 
         /// <summary>
+        /// Si hay un objeto importante en rango, lo anuncia (una vez, mientras siga siendo el mismo) y
+        /// devuelve true para que el llamador NO lea el tile normal. Devuelve false si no hay nada
+        /// importante cerca (entonces se lee el tile como siempre).
+        /// </summary>
+        private static bool TryAnnouncePriorityObject(Vector3 playerPos)
+        {
+            // Copiar a local para evitar el falso positivo Harmony003 (acceso a miembros de struct param).
+            Vector3 pos = playerPos;
+            var hit = SimpleWorldReader.GetPriorityNearby(pos.x, pos.z);
+            if (!hit.found)
+            {
+                // Nada importante cerca: limpiar cache para que al reaparecer se vuelva a anunciar.
+                _lastPriorityName = null;
+                _lastPriorityKeyX = int.MinValue;
+                _lastPriorityKeyZ = int.MinValue;
+                return false;
+            }
+
+            int kx = Mathf.RoundToInt(hit.x);
+            int kz = Mathf.RoundToInt(hit.z);
+            bool changed = kx != _lastPriorityKeyX || kz != _lastPriorityKeyZ || hit.name != _lastPriorityName;
+
+            if (changed)
+            {
+                float ddx = hit.x - pos.x;
+                float ddz = hit.z - pos.z;
+                string dir = LocalizationManager.GetText(LineOfSightHelper.GetCardinalDirectionKey(ddx, ddz));
+                int dist = Mathf.RoundToInt(Mathf.Sqrt(ddx * ddx + ddz * ddz));
+                string desc = LocalizationManager.GetText("nearby_object", hit.name, dir, dist.ToString());
+                Tolk.Output(desc, true);
+
+                _lastPriorityName = hit.name;
+                _lastPriorityKeyX = kx;
+                _lastPriorityKeyZ = kz;
+                _lastAnnouncedTile = null; // reiniciar cache del tile para que se relea al despejarse la prioridad
+                _lastAnnounceTime = Time.time;
+            }
+
+            return true; // hay objeto importante: se suprime la lectura normal del tile este paso
+        }
+
+        /// <summary>
         /// Calcula la posición del tile en frente del jugador según la dirección de movimiento
         /// </summary>
         private static Vector3 CalculateAheadPosition(Vector3 playerPos, Vector3 direction)
@@ -147,6 +203,9 @@ namespace ckAccess.VirtualCursor
         {
             _lastAnnouncedTile = null;
             _lastAnnouncedPosition = new Vector3(float.MinValue, 0, float.MinValue);
+            _lastPriorityName = null;
+            _lastPriorityKeyX = int.MinValue;
+            _lastPriorityKeyZ = int.MinValue;
         }
     }
 }

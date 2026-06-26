@@ -347,3 +347,10 @@ player_placed={0} (colocado)
 
 # Anunciador de Biomas
 biome_entered=Entraste a {0}
+
+# Radar de Recursos
+resource_radar_none=No hay recursos cerca
+resource_radar_report={0} recursos cerca, la mayoría {1}. Más cercano: {2}, {3}, a {4} tiles
+
+# Objeto Importante Cercano (prioridad del anunciador al moverse)
+nearby_object={0}, {1}, a {2} tiles

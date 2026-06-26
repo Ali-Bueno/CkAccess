@@ -170,6 +170,28 @@ namespace ckAccess.Helpers
             return angle;
         }
 
+        // 8-way compass buckets, ordered so index = floor(((angle+22.5)%360)/45) with 0deg = east.
+        private static readonly string[] CardinalKeys =
+        {
+            "dir_east", "dir_northeast", "dir_north", "dir_northwest",
+            "dir_west", "dir_southwest", "dir_south", "dir_southeast"
+        };
+
+        /// <summary>
+        /// Devuelve la clave de localización de la dirección cardinal a partir de un delta (dx, dz).
+        /// Usa floats puros para evitar el choque de tipos Vector3 (juego vs nuget) en los llamadores
+        /// que usan el alias Core de UnityEngine.
+        /// </summary>
+        public static string GetCardinalDirectionKey(float dx, float dz)
+        {
+            float angle = Mathf.Atan2(dz, dx) * Mathf.Rad2Deg; // 0 = east, 90 = north
+            if (angle < 0) angle += 360f;
+            int bucket = (int)Mathf.Floor(((angle + 22.5f) % 360f) / 45f);
+            if (bucket < 0) bucket = 0;
+            else if (bucket > 7) bucket = 7;
+            return CardinalKeys[bucket];
+        }
+
         /// <summary>
         /// Obtiene la dirección cardinal como texto localizado.
         /// </summary>

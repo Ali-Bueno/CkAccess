@@ -27,6 +27,9 @@ namespace ckAccess.Patches.Player
         private const float MAGIC_WEAPON_RANGE = 8f; // Rango para armas mágicas
         private const float TOOL_RANGE = 2f; // Rango para herramientas
         private const int FRAMES_BETWEEN_SCANS = 5; // MEJORADO: Escanear cada 5 frames (aprox 80ms) para mejor respuesta
+        // Margen extra al rango del arma para selección: cubre el radio del enemigo y su movimiento,
+        // sin pasarse (un margen grande volvería a fijar enemigos fuera de alcance, como antes).
+        private const float TARGET_SELECT_MARGIN = 0.75f;
 
         // Estado del sistema - SIEMPRE ACTIVO
         private static bool _systemEnabled = true; // Siempre activo, no se puede desactivar
@@ -106,6 +109,9 @@ namespace ckAccess.Patches.Player
                 var entityLookup = PugOther.Manager.memory?.entityMonoLookUp;
                 if (entityLookup == null) return;
 
+                // Rango efectivo del arma equipada (calculado una vez por escaneo) + margen de selección.
+                float effectiveRange = CalculateEffectiveRange(player) + TARGET_SELECT_MARGIN;
+
                 foreach (var kvp in entityLookup)
                 {
                     var entity = kvp.Value;
@@ -114,12 +120,16 @@ namespace ckAccess.Patches.Player
                     // Verificar si es un enemigo
                     if (!IsEnemyEntity(entity)) continue;
 
+                    // No apuntar a partes de cuerpo de jefes (EntityPartCD): el cuerpo principal,
+                    // que sí tiene EnemyCD y HealthCD, se selecciona por sí mismo.
+                    if (EntityClassificationHelper.IsEntityPart(entity)) continue;
+
+                    // No apuntar a enemigos muertos/agonizantes (HealthCD.health <= 0).
+                    if (!EntityClassificationHelper.IsAlive(entity)) continue;
+
                     var entityPos = entity.WorldPosition;
                     var entityWorldPos = new Vector3(entityPos.x, entityPos.y, entityPos.z);
                     var distance = Vector3.Distance(playerPos, entityWorldPos);
-
-                    // Determinar rango efectivo basado en el arma equipada
-                    float effectiveRange = CalculateEffectiveRange(player);
 
                     // Solo considerar enemigos dentro del rango efectivo
                     if (distance <= effectiveRange)
@@ -235,9 +245,11 @@ namespace ckAccess.Patches.Player
             {
                 // Use the ACTUALLY equipped/held item (not the first hotbar slot) so ranged/magic weapons get
                 // their proper longer range instead of whatever happens to sit in slot 0.
+                // Read the weapon's REAL range from its native components (melee collider / mortarTargetRange)
+                // instead of fixed constants, so we never lock onto an enemy the weapon can't actually reach.
                 var held = player.GetHeldObject();
                 if (held.objectID != ObjectID.None)
-                    return EntityClassificationHelper.GetWeaponRange(held.objectID);
+                    return EntityClassificationHelper.GetRealWeaponRange(held.objectID);
 
                 return TOOL_RANGE; // Empty hands
             }
@@ -274,7 +286,8 @@ namespace ckAccess.Patches.Player
                 return target != null &&
                        target.gameObject != null &&
                        target.gameObject.activeInHierarchy &&
-                       IsEnemyEntity(target);
+                       IsEnemyEntity(target) &&
+                       EntityClassificationHelper.IsAlive(target);
             }
             catch
             {
@@ -295,10 +308,12 @@ namespace ckAccess.Patches.Player
             // También verificar si está fuera de rango
             if (_currentTarget != null && TryGetPlayerPosition(player, out Vector3 playerPos))
             {
-                float effectiveRange = CalculateEffectiveRange(player);
+                float effectiveRange = CalculateEffectiveRange(player) + TARGET_SELECT_MARGIN;
                 float distance = GetDistanceToCurrentTarget();
 
-                if (distance > effectiveRange + 2f) // Un poco de margen
+                // Histéresis: soltar el objetivo solo cuando se aleja claramente del rango de selección,
+                // para que no parpadee el lock cuando el enemigo está justo en el borde.
+                if (distance > effectiveRange + 1f)
                 {
                     _currentTarget = null;
                 }

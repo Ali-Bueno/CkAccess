@@ -87,6 +87,25 @@ namespace ckAccess.MapReader
         }
 
         /// <summary>
+        /// Verifica si un tile es un recurso "chunk" cosechable incrustado en el mundo
+        /// (mineral, cristal antiguo, raíz grande, crisálida). Lista canónica compartida por
+        /// el radar de recursos, la asistencia de minería y el detector de objetos importantes.
+        /// </summary>
+        public static bool IsResource(TileType tileType)
+        {
+            switch (tileType)
+            {
+                case TileType.ore:
+                case TileType.ancientCrystal:
+                case TileType.bigRoot:
+                case TileType.chrysalis:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
         /// Verifica si un tile es mineable/destructible.
         /// </summary>
         public static bool IsMineable(TileType tileType)

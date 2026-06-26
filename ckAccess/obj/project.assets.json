@@ -5,7 +5,7 @@
       "BepInEx.Analyzers/1.0.8": {
         "type": "package"
       },
-      "BepInEx.Core/6.0.0-be.738": {
+      "BepInEx.Core/6.0.0-be.784": {
         "type": "package",
         "dependencies": {
           "HarmonyX": "2.10.2",
@@ -29,10 +29,10 @@
           "build/BepInEx.PluginInfoProps.props": {}
         }
       },
-      "BepInEx.Unity.Mono/6.0.0-be.738": {
+      "BepInEx.Unity.Mono/6.0.0-be.784": {
         "type": "package",
         "dependencies": {
-          "BepInEx.Core": "6.0.0-be.738",
+          "BepInEx.Core": "6.0.0-be.784",
           "HarmonyX": "2.10.2",
           "Unity.InputSystem": "1.5.0",
           "UnityEngine": "5.6.1"
@@ -176,13 +176,13 @@
         "tools/uninstall.ps1"
       ]
     },
-    "BepInEx.Core/6.0.0-be.738": {
-      "sha512": "ezLKZx3gm1kWStrvHMYZaUQz6t9Orzc6X6BR9OimQ7FOyr6y/Ty2lE+uz/CezRJAln+EFPVVOiIvjAi3G4j+ig==",
+    "BepInEx.Core/6.0.0-be.784": {
+      "sha512": "pzc1ekodPmoNfM2m4ZkNSz2whMzUCcwTMGKGr8WCS96ZSdGN1HgkzH/HYVVXoIFR+icaJXD1urkGC+fErGekXw==",
       "type": "package",
-      "path": "bepinex.core/6.0.0-be.738",
+      "path": "bepinex.core/6.0.0-be.784",
       "files": [
         ".nupkg.metadata",
-        "bepinex.core.6.0.0-be.738.nupkg.sha512",
+        "bepinex.core.6.0.0-be.784.nupkg.sha512",
         "bepinex.core.nuspec",
         "lib/net35/BepInEx.Core.dll",
         "lib/net35/BepInEx.Core.xml",
@@ -202,13 +202,13 @@
         "build/BepInEx.PluginInfoProps.props"
       ]
     },
-    "BepInEx.Unity.Mono/6.0.0-be.738": {
-      "sha512": "Pb0MWSKJUFzM5OWDqeXiGu52noJFzPUyUe5L6ambqJFchWWtf36t8c+ZzUAbLhzPfO1MEeo4ZjDZBq9/lPUbCQ==",
+    "BepInEx.Unity.Mono/6.0.0-be.784": {
+      "sha512": "xUyVkwtUZTFGI21khmgpeXJJYuGJeGIxQMPdYA4x/bP5C3RodE5oSA+FjsCHA5q5FkHVgsiS5p9feXu9zORVMQ==",
       "type": "package",
-      "path": "bepinex.unity.mono/6.0.0-be.738",
+      "path": "bepinex.unity.mono/6.0.0-be.784",
       "files": [
         ".nupkg.metadata",
-        "bepinex.unity.mono.6.0.0-be.738.nupkg.sha512",
+        "bepinex.unity.mono.6.0.0-be.784.nupkg.sha512",
         "bepinex.unity.mono.nuspec",
         "lib/net35/BepInEx.Unity.Mono.dll",
         "lib/net35/BepInEx.Unity.Mono.xml",
@@ -787,7 +787,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net472": {
@@ -813,7 +813,7 @@
             "version": "[1.0.2, )"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.109\\RuntimeIdentifierGraph.json"
       }
     }
   }

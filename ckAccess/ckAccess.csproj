@@ -77,6 +77,10 @@
       <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Unity.Mathematics.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="Unity.Collections">
+      <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Unity.Collections.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="Rewired_Core">
       <HintPath>D:\games\steam\steamapps\common\Core Keeper\CoreKeeper_Data\Managed\Rewired_Core.dll</HintPath>
       <Private>false</Private>

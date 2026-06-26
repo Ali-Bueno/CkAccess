@@ -132,6 +132,14 @@ namespace ckAccess.Helpers
                 if (IsPlayerMinion(em, entityData))
                     return false;
 
+                // Excluir entidades que el juego nunca trata como enemigos atacables:
+                // ganado (CattleCD), bichos ambientales (CritterCD) y comerciantes (MerchantCD).
+                // Esto evita que el auto-targeting y el audio de proximidad los marquen como enemigos.
+                if (em.HasComponent<PugComps.CattleCD>(entityData) ||
+                    em.HasComponent<PugComps.CritterCD>(entityData) ||
+                    em.HasComponent<PugComps.MerchantCD>(entityData))
+                    return false;
+
                 // EnemyCD is the game's marker for an enemy (idle OR active) — the reliable signal.
                 // This replaces the June-removed CombatantCD and uses a compile-checked component
                 // (not string reflection), so idle enemies are detected again.
@@ -182,6 +190,49 @@ namespace ckAccess.Helpers
                     return false;
 
                 return IsPlayerMinion(entity.world.EntityManager, entity.entity);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Verifica si la entidad sigue viva (HealthCD.health &gt; 0). El juego descarta los objetivos
+        /// muertos/agonizantes en CheckForHit, así que el auto-targeting debe hacer lo mismo.
+        /// Si no hay HealthCD (objeto sin vida), se asume "vivo" para no filtrar de más.
+        /// </summary>
+        public static bool IsAlive(PugOther.EntityMonoBehaviour entity)
+        {
+            try
+            {
+                if (entity?.world == null || entity.entity == default)
+                    return true;
+
+                var em = entity.world.EntityManager;
+                if (em.HasComponent<PugComps.HealthCD>(entity.entity))
+                    return em.GetComponentData<PugComps.HealthCD>(entity.entity).health > 0;
+
+                return true;
+            }
+            catch
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Verifica si la entidad es una "parte" de otra entidad mayor (EntityPartCD), p. ej. una pata
+        /// o segmento de un jefe. Conviene no apuntar a la parte sino al cuerpo principal.
+        /// </summary>
+        public static bool IsEntityPart(PugOther.EntityMonoBehaviour entity)
+        {
+            try
+            {
+                if (entity?.world == null || entity.entity == default)
+                    return false;
+
+                return entity.world.EntityManager.HasComponent<PugComps.EntityPartCD>(entity.entity);
             }
             catch
             {
@@ -335,6 +386,45 @@ namespace ckAccess.Helpers
         public static float GetWeaponRange(ObjectID objectID)
         {
             return GetWeaponRange(GetWeaponCategory(objectID));
+        }
+
+        /// <summary>
+        /// Obtiene el rango REAL del arma leyendo sus componentes nativos desde PugDatabase,
+        /// en vez de usar constantes fijas, para que el auto-targeting respete el alcance que el
+        /// juego usa de verdad para acertar:
+        /// - Melee: baseHitColliderSize + extraHitColliderReachSize (tamaño real del collider de golpe).
+        /// - A distancia/magia: mortarTargetRange (el clamp de alcance que usa RangeWeaponSlot).
+        /// Si el componente no existe o trae un valor inválido, cae a la constante por categoría.
+        /// </summary>
+        public static float GetRealWeaponRange(ObjectID objectID)
+        {
+            try
+            {
+                // Melee: real swing-collider reach.
+                if (PugOther.PugDatabase.TryGetComponent<PugComps.MeleeWeaponCD>(objectID, out var mw))
+                {
+                    float reach = mw.baseHitColliderSize + mw.extraHitColliderReachSize;
+                    if (reach > 0.1f) return reach;
+                }
+
+                // Any projectile weapon (bow, gun, staff, wand) carries RangeWeaponCD — detect by COMPONENT,
+                // not by ObjectType, so staffs/wands with an unmapped ObjectType still get a proper long range
+                // (otherwise they fell back to the base 5-tile range and auto-target failed to engage).
+                // Use mortarTargetRange when meaningful; otherwise the ranged constant, since straight
+                // projectiles have no single "range" field.
+                if (PugOther.PugDatabase.TryGetComponent<PugComps.RangeWeaponCD>(objectID, out var rw))
+                {
+                    if (rw.mortarTargetRange > 0.1f) return rw.mortarTargetRange;
+                    return GetWeaponRange(WeaponCategory.Ranged);
+                }
+
+                // Tools / empty / unknown: category constant.
+                return GetWeaponRange(GetWeaponCategory(objectID));
+            }
+            catch
+            {
+                return GetWeaponRange(GetWeaponCategory(objectID));
+            }
         }
 
         #endregion

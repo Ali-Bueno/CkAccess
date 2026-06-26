@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "bE6zWHg96lA=",
+  "dgSpecHash": "lLcWL/s8CCs=",
   "success": true,
   "projectFilePath": "D:\\code\\unity and such\\Core Keeper Access\\ckAccess\\ckAccess.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ali-b\\.nuget\\packages\\bepinex.analyzers\\1.0.8\\bepinex.analyzers.1.0.8.nupkg.sha512",
-    "C:\\Users\\ali-b\\.nuget\\packages\\bepinex.core\\6.0.0-be.738\\bepinex.core.6.0.0-be.738.nupkg.sha512",
+    "C:\\Users\\ali-b\\.nuget\\packages\\bepinex.core\\6.0.0-be.784\\bepinex.core.6.0.0-be.784.nupkg.sha512",
     "C:\\Users\\ali-b\\.nuget\\packages\\bepinex.plugininfoprops\\2.1.0\\bepinex.plugininfoprops.2.1.0.nupkg.sha512",
-    "C:\\Users\\ali-b\\.nuget\\packages\\bepinex.unity.mono\\6.0.0-be.738\\bepinex.unity.mono.6.0.0-be.738.nupkg.sha512",
+    "C:\\Users\\ali-b\\.nuget\\packages\\bepinex.unity.mono\\6.0.0-be.784\\bepinex.unity.mono.6.0.0-be.784.nupkg.sha512",
     "C:\\Users\\ali-b\\.nuget\\packages\\harmonyx\\2.10.2\\harmonyx.2.10.2.nupkg.sha512",
     "C:\\Users\\ali-b\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
     "C:\\Users\\ali-b\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512",

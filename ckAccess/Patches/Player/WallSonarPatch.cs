@@ -10,11 +10,13 @@ using Vector3 = Core::UnityEngine.Vector3;    // player position / velocity type
 namespace ckAccess.Patches.Player
 {
     /// <summary>
-    /// Ambient, CONTINUOUS wind-like "wall sonar" for blind players, player-relative to movement/facing.
+    /// Ambient, CONTINUOUS wind-like "wall sonar" for blind players, using FIXED WORLD directions (not
+    /// movement-relative), so all four channels sound SIMULTANEOUSLY when the player is surrounded and a
+    /// wall on a given side always sounds on that same side regardless of which way the player is moving.
     /// Four looping wind channels whose VOLUME tracks how close the nearest wall is in each direction:
-    /// - Left / Right walls -> panned (left / right), note A3.
-    /// - Ahead wall         -> centered, higher note G4.
-    /// - Behind wall        -> centered, lower note D3.
+    /// - West / East walls -> panned (left / right), note A3.
+    /// - North wall        -> centered, higher note G4.
+    /// - South wall        -> centered, lower note D3.
     /// An open direction (no wall within range) stays silent, so openings reveal themselves.
     /// The sound is resonant-filtered noise (an airy "wind whistling" at a pitch) instead of a pure tone.
     /// Fully automatic: no keys. MULTIPLAYER-SAFE: only the local player.
@@ -39,9 +41,9 @@ namespace ckAccess.Patches.Player
         private const float NOTE_BEHIND = 146.83f;
 
         // ---- State ----
-        private static int2 _lastForward = new int2(0, -1); // default facing (south) until the player moves
         private static float _lastRaycastTime = 0f;
-        private static float _tAhead, _tBehind, _tLeft, _tRight; // target proximities 0..1
+        // Target proximities 0..1 for the four FIXED world directions.
+        private static float _tNorth, _tSouth, _tWest, _tEast;
 
         // ---- Audio (persistent looping channels) ----
         private static AudioClip _clipSides, _clipAhead, _clipBehind;
@@ -65,26 +67,20 @@ namespace ckAccess.Patches.Player
                 EnsureAudio();
                 if (!_audioReady) return;
 
-                // "Forward" = the direction the player is trying to move; kept stable when standing still.
-                var vel = __instance.targetMovementVelocity;
-                float2 v = new float2(vel.x, vel.z);
-                if (math.length(v) > 0.1f)
-                    _lastForward = ToCardinal(v);
-                int2 forward = _lastForward;
-
-                // Throttled tile scan updates the target proximities.
+                // Throttled tile scan updates the target proximities (fixed world directions).
                 if (Time.time - _lastRaycastTime >= RAYCAST_INTERVAL)
                 {
                     _lastRaycastTime = Time.time;
-                    UpdateTargets(forward);
+                    UpdateTargets();
                 }
 
-                // Every frame: smoothly move each channel's volume toward its target.
+                // Every frame: smoothly move each channel's volume toward its target. All four play at once.
+                // North = higher note (centered), South = lower note (centered), West/East = panned sides.
                 float dt = Time.deltaTime;
-                ApplyChannel(_aheadSrc, _tAhead * AHEAD_MAX_VOL, 0f, dt);
-                ApplyChannel(_behindSrc, _tBehind * BEHIND_MAX_VOL, 0f, dt);
-                ApplyChannel(_leftSrc, _tLeft * SIDE_MAX_VOL, -SIDE_PAN, dt);
-                ApplyChannel(_rightSrc, _tRight * SIDE_MAX_VOL, SIDE_PAN, dt);
+                ApplyChannel(_aheadSrc, _tNorth * AHEAD_MAX_VOL, 0f, dt);
+                ApplyChannel(_behindSrc, _tSouth * BEHIND_MAX_VOL, 0f, dt);
+                ApplyChannel(_leftSrc, _tWest * SIDE_MAX_VOL, -SIDE_PAN, dt);
+                ApplyChannel(_rightSrc, _tEast * SIDE_MAX_VOL, SIDE_PAN, dt);
             }
             catch (System.Exception ex)
             {
@@ -93,25 +89,24 @@ namespace ckAccess.Patches.Player
         }
 
         /// <summary>
-        /// Scans the four player-relative directions and stores the nearest-wall proximity for each.
+        /// Scans the four FIXED world directions (north/south/west/east) and stores the nearest-wall
+        /// proximity for each. Directions never rotate with movement, so all four are independent.
         /// </summary>
-        private static void UpdateTargets(int2 forward)
+        private static void UpdateTargets()
         {
             if (!LocalPlayerHelper.TryGetLocalPlayerPosition(out Vector3 ppos))
             {
-                _tAhead = _tBehind = _tLeft = _tRight = 0f;
+                _tNorth = _tSouth = _tWest = _tEast = 0f;
                 return;
             }
 
             int2 cell = new int2(Mathf.RoundToInt(ppos.x), Mathf.RoundToInt(ppos.z));
-            int2 fwd = forward; // local copy avoids Harmony003 false positive
-            int2 left = Rotate90CCW(fwd);
-            int2 right = Rotate90CW(fwd);
 
-            _tAhead = ScanDir(cell, fwd);
-            _tBehind = ScanDir(cell, new int2(-fwd.x, -fwd.y));
-            _tLeft = ScanDir(cell, left);
-            _tRight = ScanDir(cell, right);
+            // World grid: +x = east, -x = west, +z = north, -z = south.
+            _tNorth = ScanDir(cell, new int2(0, 1));
+            _tSouth = ScanDir(cell, new int2(0, -1));
+            _tWest = ScanDir(cell, new int2(-1, 0));
+            _tEast = ScanDir(cell, new int2(1, 0));
         }
 
         /// <summary>
@@ -170,30 +165,6 @@ namespace ckAccess.Patches.Player
             if (_behindSrc != null) _behindSrc.volume = 0f;
             if (_leftSrc != null) _leftSrc.volume = 0f;
             if (_rightSrc != null) _rightSrc.volume = 0f;
-        }
-
-        /// <summary>
-        /// Snaps an XZ movement vector to the dominant cardinal direction.
-        /// </summary>
-        private static int2 ToCardinal(float2 v)
-        {
-            float2 vv = v; // local copy avoids Harmony003 false positive
-            if (math.abs(vv.x) >= math.abs(vv.y))
-                return new int2(vv.x >= 0 ? 1 : -1, 0);
-            return new int2(0, vv.y >= 0 ? 1 : -1);
-        }
-
-        // 90-degree rotations in the XZ grid. With forward = east (1,0): left = north (0,1), right = south (0,-1).
-        private static int2 Rotate90CCW(int2 d)
-        {
-            int2 dd = d; // local copy avoids Harmony003 false positive
-            return new int2(-dd.y, dd.x);
-        }
-
-        private static int2 Rotate90CW(int2 d)
-        {
-            int2 dd = d; // local copy avoids Harmony003 false positive
-            return new int2(dd.y, -dd.x);
         }
 
         /// <summary>

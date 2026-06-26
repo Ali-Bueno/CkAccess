@@ -67,6 +67,7 @@ namespace ckAccess.VirtualCursor
                    Input.GetKeyDown(KeyCode.O) ||
                    Input.GetKeyDown(KeyCode.T) ||
                    Input.GetKeyDown(KeyCode.M) ||
+                   Input.GetKeyDown(KeyCode.G) ||
                    // Hotbar navigation keys
                    (Input.GetKey(KeyCode.LeftAlt) && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) ||
                     Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.Space))) ||
@@ -98,6 +99,10 @@ namespace ckAccess.VirtualCursor
             else if (Input.GetKeyDown(KeyCode.M) && CanProcessInput(KeyCode.M, currentTime))
             {
                 VirtualCursor.AnnouncePlayerPositionDetailed(); // Posición detallada del jugador
+            }
+            else if (Input.GetKeyDown(KeyCode.G) && CanProcessInput(KeyCode.G, currentTime))
+            {
+                ckAccess.MapReader.ResourceRadar.Scan(); // Radar de recursos: minerales, cristales, árboles, etc.
             }
 
             // U/O ahora son manejados directamente por PlayerInputPatch como triggers

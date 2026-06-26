@@ -347,3 +347,10 @@ player_placed={0} (placed)
 
 # Biome Announcer
 biome_entered=Entered {0}
+
+# Resource Radar
+resource_radar_none=No resources nearby
+resource_radar_report={0} resources nearby, most {1}. Nearest: {2}, {3}, {4} tiles
+
+# Nearby Important Object (movement announcer priority)
+nearby_object={0}, {1}, {2} tiles

@@ -1,8 +1,10 @@
 extern alias PugOther;
 extern alias Core;
+extern alias PugComps;
 
 using System;
 using PugTilemap;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using DavyKager;
@@ -375,6 +377,139 @@ namespace ckAccess.MapReader
             {
                 return LocalizationManager.GetText("unknown_position");
             }
+        }
+
+        /// <summary>
+        /// Resultado del escáner de prioridad: el objeto importante más relevante cerca del jugador.
+        /// </summary>
+        public struct PriorityHit
+        {
+            public bool found;
+            public string name;
+            public float x;
+            public float z;
+        }
+
+        // Rangos (tiles) del detector de objetos importantes al moverse. No son números de diseño del
+        // juego sino umbrales de "qué tan cerca para avisar"; el peligro (enemigo) se vigila más lejos.
+        private const float PRIORITY_ENEMY_RANGE = 10f;
+        private const float PRIORITY_INTERACTABLE_RANGE = 10f;
+        private const float PRIORITY_RESOURCE_RANGE = 8f;
+
+        /// <summary>
+        /// Busca el objeto importante más relevante alrededor del jugador, con prioridad por contexto:
+        /// enemigo (peligro) > interactuable (cofre/puerta/estación) > veta de mineral > entidad minable.
+        /// Devuelve found=false si no hay nada importante en rango (entonces el llamador lee el tile normal).
+        /// Usa floats para la posición y evita el choque de tipos Vector3 (juego vs nuget).
+        /// </summary>
+        public static PriorityHit GetPriorityNearby(float px, float pz)
+        {
+            var result = new PriorityHit { found = false };
+
+            try
+            {
+                PugOther.EntityMonoBehaviour bestEnemy = null, bestInteract = null, bestMineable = null;
+                float dEnemy = float.MaxValue, dInteract = float.MaxValue, dMineable = float.MaxValue;
+
+                float enemySq = PRIORITY_ENEMY_RANGE * PRIORITY_ENEMY_RANGE;
+                float interactSq = PRIORITY_INTERACTABLE_RANGE * PRIORITY_INTERACTABLE_RANGE;
+                float mineableSq = PRIORITY_RESOURCE_RANGE * PRIORITY_RESOURCE_RANGE;
+
+                var entityLookup = PugOther.Manager.memory?.entityMonoLookUp;
+                if (entityLookup != null)
+                {
+                    foreach (var kvp in entityLookup)
+                    {
+                        var entity = kvp.Value;
+                        if (entity?.gameObject?.activeInHierarchy != true) continue;
+
+                        var wp = entity.WorldPosition;
+                        float ddx = wp.x - px;
+                        float ddz = wp.z - pz;
+                        float distSq = ddx * ddx + ddz * ddz;
+
+                        // Enemy (highest priority): alive, real enemy, not a boss body part.
+                        if (distSq <= enemySq &&
+                            EntityClassificationHelper.IsEnemy(entity) &&
+                            EntityClassificationHelper.IsAlive(entity) &&
+                            !EntityClassificationHelper.IsEntityPart(entity))
+                        {
+                            if (distSq < dEnemy) { dEnemy = distSq; bestEnemy = entity; }
+                            continue;
+                        }
+
+                        // Interactable (chests, doors, workstations, NPCs).
+                        var category = ObjectCategoryHelper.GetCategory(entity);
+                        if (distSq <= interactSq &&
+                            (EntityClassificationHelper.IsInteractable(entity) || ObjectCategoryHelper.IsInteractable(category)))
+                        {
+                            if (distSq < dInteract) { dInteract = distSq; bestInteract = entity; }
+                            continue;
+                        }
+
+                        // Mineable entity (trees, boulders, ore boulders).
+                        if (distSq <= mineableSq && entity.world != null && entity.entity != Entity.Null &&
+                            entity.world.EntityManager.HasComponent<PugComps.MineableCD>(entity.entity))
+                        {
+                            if (distSq < dMineable) { dMineable = distSq; bestMineable = entity; }
+                        }
+                    }
+                }
+
+                // Nearest resource vein tile (ore / crystal / root / chrysalis embedded in walls).
+                string veinName = null;
+                float veinX = 0f, veinZ = 0f, dVein = float.MaxValue;
+                var multiMap = PugOther.Manager.multiMap;
+                if (multiMap != null)
+                {
+                    var lookup = multiMap.GetTileLayerLookup();
+                    int pcx = Mathf.RoundToInt(px);
+                    int pcz = Mathf.RoundToInt(pz);
+                    int r = Mathf.CeilToInt(PRIORITY_RESOURCE_RANGE);
+                    for (int dx = -r; dx <= r; dx++)
+                    {
+                        for (int dz = -r; dz <= r; dz++)
+                        {
+                            if (dx == 0 && dz == 0) continue;
+                            float fsq = dx * dx + dz * dz;
+                            if (fsq > mineableSq || fsq >= dVein) continue;
+
+                            int tx = pcx + dx;
+                            int tz = pcz + dz;
+                            var top = lookup.GetTopTile(new int2(tx, tz));
+                            if (!TileTypeHelper.IsResource(top.tileType)) continue;
+
+                            dVein = fsq;
+                            veinName = TileTypeHelper.GetLocalizedName(top.tileType);
+                            veinX = tx;
+                            veinZ = tz;
+                        }
+                    }
+                }
+
+                // Resolve by priority: enemy > interactable > vein > mineable entity.
+                if (bestEnemy != null)
+                    return MakeHit(GetEntityDescription(bestEnemy), bestEnemy);
+                if (bestInteract != null)
+                    return MakeHit(GetEntityDescription(bestInteract), bestInteract);
+                if (veinName != null)
+                    return new PriorityHit { found = true, name = veinName, x = veinX, z = veinZ };
+                if (bestMineable != null)
+                    return MakeHit(GetEntityDescription(bestMineable), bestMineable);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[SimpleWorldReader] Error in priority scan: {e.Message}");
+            }
+
+            return result;
+        }
+
+        /// <summary>Builds a PriorityHit from an entity and its description.</summary>
+        private static PriorityHit MakeHit(string name, PugOther.EntityMonoBehaviour entity)
+        {
+            var wp = entity.WorldPosition;
+            return new PriorityHit { found = true, name = name, x = wp.x, z = wp.z };
         }
 
         /// <summary>
